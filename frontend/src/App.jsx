@@ -15,14 +15,7 @@ import './App.css'
 import './themes.css'
 import './animations.css'
 
-// Вне компонента — создаётся один раз, не пересоздаётся при ре-рендере
-const ELECTRIC_BUS_ROUTES = new Set([
-  'е152','м2','м3','м3к','м5','м6','м16','м17','м23','м31','м32','м44к','м53','м54','м59','м60','м74','м89к','м90',
-  'т21','т29','т36','т53','т59','т59к','т65','т70','т73','т76','т81','т86',
-  '14','20','21','33','40','62','72','73','74','74к','76','78','79','91к','93','94','100','101','103','107','108','111','113','114','119','126','135','136','138','140','146','149','150','154','158','159','164','167','167к','168','170','171','173','184','194','202','204','205','210','211','213','220','221','228','231','232','234','238','239','244','246','248','263','266','271','272','273','276','278','293','297','299','317','325','328','349','350','353','356','359','368','379','382','384','384к','389','393','394','403','405','418','419','442','443','447','451','457','470','477','502','503','519','524','529','534','536','539','538','560','560к','561','563','563а','563в','570','573','586','587','599','604','625','634к','635','637','639','641','645','649','659','661','662','664','674','686','705','706','706а','707','715','720','723','723а','723к','726','733','734','736','760','762','763','764','765','766','773','776','778','780','787','789','791','792','793','796','803','807','808','814','816','831','832','842','849','849р','855','878','878у','885','888','892','895','906','906а','917','922','925','926','930','934','940','952','975','978','987','990','992','993','998','1133а',
-  'Sk1','Sk3','с1','с156','с179','с187','с216','с252','с280','с289','с331','с377','с377у','с482','с511','с543','с613','с633','с694','с711','с755','с768','с790','с806','с809','с811','с856','с891','с914','с916','с918','с924','с929','с949','с951','с953','с954','с963','с973','с988',
-  'н3','н4','н6','н8','н9','н12'
-])
+// СПб: электробусов нет, тип транспорта определяется по полю transport_type ('bus', 'trolley', 'tram')
 
 // Skeleton компоненты вне App — не пересоздаются при каждом ре-рендере
 const SkeletonRouteGrid = () => (
@@ -555,21 +548,18 @@ function App() {
   // Цвет номера маршрута по типу транспорта
   // route_type: 0=трамвай(красный), 3=автобус(зелёный), 4=троллейбус(синий)
   const getRouteTypeClass = (route) => {
-    const t = route?.route_type
-    if (t === 0) return 'route-type-tram'
-    if (t === 5) return 'route-type-trolley'
-    const name = route?.route_short_name?.trim()
-    if (name && ELECTRIC_BUS_ROUTES.has(name)) return 'route-type-electrobus'
+    // СПб: используем transport_type вместо route_type
+    const tt = route?.transport_type
+    if (tt === 'tram' || route?.route_type === 0) return 'route-type-tram'
+    if (tt === 'trolley') return 'route-type-trolley'
     return 'route-type-bus'
   }
 
   // Категория маршрута для фильтрации
   const getRouteCategory = (route) => {
-    const t = route?.route_type
-    if (t === 0) return 'tram'
-    if (t === 5) return 'trolley'
-    const name = route?.route_short_name?.trim()
-    if (name && ELECTRIC_BUS_ROUTES.has(name)) return 'electrobus'
+    const tt = route?.transport_type
+    if (tt === 'tram' || route?.route_type === 0) return 'tram'
+    if (tt === 'trolley') return 'trolley'
     return 'bus'
   }
 
@@ -1217,7 +1207,7 @@ function App() {
         {!selectedRoute && !selectedStop && (
           <header className="header">
             <h1>🚌 Расписание транспорта</h1>
-            <p className="subtitle">Москва</p>
+            <p className="subtitle">Санкт-Петербург</p>
           </header>
         )}
 
@@ -1313,12 +1303,6 @@ function App() {
                 onClick={() => { setRouteTypeFilter(routeTypeFilter === 'bus' ? 'all' : 'bus'); setVisibleRoutesCount(50) }}
               >
                 🟢 Автобус
-              </button>
-              <button
-                className={`route-type-filter-btn filter-electrobus ${routeTypeFilter === 'electrobus' ? 'active' : ''}`}
-                onClick={() => { setRouteTypeFilter(routeTypeFilter === 'electrobus' ? 'all' : 'electrobus'); setVisibleRoutesCount(50) }}
-              >
-                🔋 Электробус
               </button>
               <button
                 className={`route-type-filter-btn filter-tram ${routeTypeFilter === 'tram' ? 'active' : ''}`}
@@ -1645,7 +1629,7 @@ function App() {
                                           navigateToStopSchedule(fav.stopName, route, fav.direction)
                                         }
                                       }}>
-                                        <span className={`favorite-route-number ${getRouteTypeClass(routes.find(r => r.route_short_name === fav.routeName))}`}>{fav.routeName}{(() => { const fr = routes.find(r => r.route_short_name === fav.routeName); return fr && fr.route_type === 3 && ELECTRIC_BUS_ROUTES.has(fav.routeName?.trim()) ? ' 🔋' : '' })()}</span>
+                                        <span className={`favorite-route-number ${getRouteTypeClass(routes.find(r => r.route_short_name === fav.routeName))}`}>{fav.routeName}</span>
                                         <span className="favorite-route-time" style={{flex: 1}}>
                                           {next ? `${next.time}${next.diffMin === 0 ? ' · сейчас' : next.diffMin <= 60 ? ` · через ${next.diffMin} мин` : ''}` : next === undefined ? 'загружаем...' : ''}
                                         </span>
@@ -1787,7 +1771,7 @@ function App() {
                                 const dep = nearbyDepartures[key]
                                 return (
                                   <button key={key} className="nearby-route-chip" onClick={() => navigateToStopSchedule(stop.stop_name, route, route.direction)}>
-                                    <span className={`nearby-route-num ${getRouteTypeClass(route)}`}>{route.route_short_name}{route.route_type === 3 && ELECTRIC_BUS_ROUTES.has(route.route_short_name?.trim()) ? ' 🔋' : ''}</span>
+                                    <span className={`nearby-route-num ${getRouteTypeClass(route)}`}>{route.route_short_name}</span>
                                     <span className="nearby-route-time">
                                       {dep === undefined ? '· загружаем...' : dep === null ? '· нет рейсов' : dep.diffMin === 0 ? `· ${String(dep.time).substring(0, 5)} · сейчас` : dep.diffMin <= 90 ? `· ${String(dep.time).substring(0, 5)} · через ${dep.diffMin} мин` : `· ${String(dep.time).substring(0, 5)}`}
                                     </span>
@@ -1840,7 +1824,6 @@ function App() {
                   } else if (item.routeType !== undefined) {
                     if (item.routeType === 0) typeClass = 'route-type-tram'
                     else if (item.routeType === 5) typeClass = 'route-type-trolley'
-                    else if (ELECTRIC_BUS_ROUTES.has(item.routeName?.trim())) typeClass = 'route-type-electrobus'
                     else typeClass = 'route-type-bus'
                   }
 
@@ -2191,7 +2174,6 @@ function App() {
                       {displayTransfers.map((tr, idx) => {
                         const bgClass = tr.route_type === 0 ? 'transfer-badge-tram'
                           : tr.route_type === 5 ? 'transfer-badge-trolley'
-                          : ELECTRIC_BUS_ROUTES.has(tr.route_short_name?.trim()) ? 'transfer-badge-electrobus'
                           : 'transfer-badge-bus'
                         let destination = tr.route_long_name || ''
                         if (destination.includes(' - ')) { const parts = destination.split(' - '); destination = parts[parts.length - 1] }

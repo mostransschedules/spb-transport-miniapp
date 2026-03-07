@@ -21,7 +21,7 @@ DB_PATH = os.environ.get('DB_PATH', 'gtfs_spb.duckdb')
 # Проверяем существует ли БД
 if not os.path.exists(DB_PATH):
     print(f"⚠️ ВНИМАНИЕ: База данных не найдена по пути {DB_PATH}")
-    print("Создайте БД с помощью init_db.py или загрузите gtfs_spb.duckdb")
+    print("Создайте БД с помощью init_db.py или загрузите gtfs_transport.duckdb")
 
 # =============================================================================
 # ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
@@ -89,7 +89,8 @@ def get_routes_list() -> List[Dict]:
             route_short_name,
             route_long_name,
             route_id,
-            route_type
+            route_type,
+            transport_type
         FROM routes
         ORDER BY 
             CASE 
@@ -107,6 +108,7 @@ def get_routes_list() -> List[Dict]:
     for r in records:
         r['route_id'] = str(r['route_id'])
         r['route_type'] = int(r['route_type']) if r.get('route_type') is not None else 3
+        r['transport_type'] = str(r.get('transport_type', 'bus'))
     return records
 
 def get_stops_for_route(route_short_name: str, direction: int, route_id: str = None) -> List[Dict]:
@@ -623,12 +625,13 @@ def get_nearby_stops(lat: float, lon: float, radius_m: int = 500) -> List[Dict]:
                 r.route_short_name,
                 r.route_id,
                 r.route_type,
+                r.transport_type,
                 t.direction_id
             FROM filtered f
             JOIN stop_times st ON st.stop_id = f.stop_id
             JOIN trips t ON t.trip_id = st.trip_id
             JOIN routes r ON r.route_id = t.route_id
-            GROUP BY f.stop_id, f.stop_name, f.distance_m, r.route_short_name, r.route_id, r.route_type, t.direction_id
+            GROUP BY f.stop_id, f.stop_name, f.distance_m, r.route_short_name, r.route_id, r.route_type, r.transport_type, t.direction_id
             ORDER BY f.distance_m, r.route_short_name
         """, [lat, lat, lon, lat, lat, lon, lon, radius_m]).df()
 
@@ -710,6 +713,7 @@ def get_nearby_stops(lat: float, lon: float, radius_m: int = 500) -> List[Dict]:
                 'route_short_name': str(row['route_short_name']),
                 'route_id': route_id,
                 'route_type': int(row['route_type']) if row['route_type'] is not None else 3,
+                'transport_type': str(row.get('transport_type', 'bus')),
                 'direction': direction,
                 '_next_stops': next_stops_map.get((route_id, str(direction), stop_id), [])
             }
