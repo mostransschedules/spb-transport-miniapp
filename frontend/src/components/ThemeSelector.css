@@ -1,0 +1,126 @@
+.theme-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.theme-modal {
+  background: var(--tg-bg);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.theme-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--tg-hint);
+}
+
+.theme-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.theme-modal-close {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--tg-hint);
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.theme-modal-close:hover {
+  background: var(--tg-secondary-bg);
+  color: var(--tg-text);
+}
+
+.theme-options {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--tg-secondary-bg);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.theme-option:hover {
+  background: var(--tg-secondary-bg);
+  border-color: var(--tg-button);
+  transform: translateX(4px);
+}
+
+.theme-option.active {
+  background: rgba(var(--tg-button-rgb), 0.1);
+  border-color: var(--tg-button);
+}
+
+.theme-option-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.theme-option-text {
+  flex: 1;
+}
+
+.theme-option-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--tg-text);
+  margin-bottom: 4px;
+}
+
+.theme-option-description {
+  font-size: 13px;
+  color: var(--tg-hint);
+}
+
+.theme-option-check {
+  font-size: 20px;
+  color: var(--tg-button);
+  flex-shrink: 0;
+}

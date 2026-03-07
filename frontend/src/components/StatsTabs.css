@@ -1,0 +1,231 @@
+/* =============================================================================
+   STATS TABS STYLES
+   ============================================================================= */
+
+.stats-tabs {
+  margin-top: 20px;
+}
+
+/* Заголовок вкладок */
+.tabs-header {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabs-header button {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: var(--tg-secondary-bg);
+  color: var(--tg-text);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: normal;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  overflow: hidden;
+  line-height: 1.2;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.tabs-header button.active {
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+  border-color: var(--tg-button);
+}
+
+/* Содержимое вкладок */
+.tabs-content {
+  background: var(--tg-secondary-bg);
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 300px;
+}
+
+.tab-panel h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  color: var(--tg-text);
+}
+
+.tab-panel h4 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: var(--tg-text);
+}
+
+/* График */
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chart-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--tg-text);
+}
+
+.reset-zoom-btn {
+  padding: 6px 12px;
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.reset-zoom-btn:active {
+  opacity: 0.8;
+}
+
+.chart-hint {
+  background: rgba(100, 149, 237, 0.1);
+  border-left: 3px solid var(--tg-button);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--tg-hint);
+  border-radius: 4px;
+}
+
+.chart-container {
+  position: relative;
+  height: 300px;
+  margin-top: 16px;
+}
+
+/* Карточки времени рейсов */
+.duration-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.duration-card {
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+}
+
+.duration-card-label {
+  font-size: 12px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.duration-card-value {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.duration-card-time {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 11px;
+  padding: 4px;
+  opacity: 0.9;
+}
+
+.expand-btn:hover {
+  opacity: 1;
+}
+
+.time-ranges-list {
+  margin-top: 6px;
+  font-size: 10px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* Статистика */
+.stats-summary {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.stats-card {
+  background: var(--tg-bg);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  color: var(--tg-hint);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.stat-value {
+  color: var(--tg-button);
+  font-size: 16px;
+  font-weight: 700;
+  text-align: right;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.stat-time {
+  color: var(--tg-hint);
+  font-size: 13px;
+  font-weight: 400;
+  display: block;
+  margin-top: 2px;
+  text-align: right;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .tabs-header button {
+    min-width: 80px;
+    padding: 8px 6px;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  .chart-container {
+    height: 250px;
+  }
+}

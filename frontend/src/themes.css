@@ -1,0 +1,2623 @@
+/* ============================================================
+   THEMES
+   ============================================================ */
+
+/* Black Theme (default) */
+.theme-black {
+  --app-bg: #000000;
+  --app-bg-secondary: #1a1a1a;
+  --app-text: #ffffff;
+  --app-text-secondary: #a0a0a0;
+  --app-border: rgba(255, 255, 255, 0.1);
+  --app-accent: #3390ec;
+  --app-card-bg: #1a1a1a;
+  --app-card-hover: #2a2a2a;
+  --app-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* Force override Telegram vars */
+html.theme-black,
+html.theme-black body,
+html.theme-black #root {
+  --tg-bg: #000000 !important;
+  --tg-text: #ffffff !important;
+  --tg-hint: #666666 !important;
+  --tg-secondary-bg: #1a1a1a !important;
+  --tg-button: #3390ec !important;
+  --tg-button-text: #ffffff !important;
+  --tg-theme-bg-color: #000000 !important;
+  --tg-theme-text-color: #ffffff !important;
+  --tg-theme-hint-color: #666666 !important;
+  --tg-theme-secondary-bg-color: #1a1a1a !important;
+  --tg-theme-button-color: #3390ec !important;
+  --tg-theme-button-text-color: #ffffff !important;
+}
+
+.theme-black body {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Расписание по часам в тёмной теме */
+.theme-black .hour-group {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.theme-black .hour-header {
+  color: #3390ec !important;
+}
+
+.theme-black .time-chip-small {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.theme-black .time-chip-small:hover {
+  background: #1a1a1a !important;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.time-chip-small.nearest {
+  background: #27ae60 !important;
+  color: #ffffff !important;
+  border-color: #27ae60 !important;
+  font-weight: 700;
+  box-shadow: 0 0 8px rgba(39, 174, 96, 0.4);
+}
+
+/* Карточки маршрутов и остановок в тёмной теме */
+.theme-black .route-card,
+.theme-black .route-card-list,
+.theme-black .stop-card {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: #ffffff !important;
+}
+
+.theme-black .route-card:hover,
+.theme-black .route-card-list:hover,
+.theme-black .stop-card:hover {
+  background: #222222 !important;
+}
+
+/* Контрастный текст в тёмной теме */
+.theme-black .route-name-list,
+.theme-black .route-name,
+.theme-black .stop-name,
+.theme-black .favorite-stop,
+.theme-black .favorite-group-stop,
+.theme-black .favorite-route-time,
+.theme-black .stop-next-departure {
+  color: #ffffff !important;
+}
+
+/* Карта в тёмной теме — единый фон */
+.theme-black .map-info {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.theme-black .map-info span,
+.theme-black .map-info * {
+  color: #cccccc !important;
+}
+
+.theme-black .map-legend {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+  border: none !important;
+  margin-top: 0 !important;
+  border-radius: 0 0 8px 8px !important;
+}
+
+.theme-black .legend-item,
+.theme-black .legend-item * {
+  color: #ffffff !important;
+}
+
+/* Избранное в тёмной теме — стрелка */
+.theme-black .expand-toggle {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 16px;
+}
+
+.theme-black .favorites-section {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .favorites-header {
+  background: #1a1a1a !important;
+}
+
+.theme-black .favorites-content {
+  background: #1a1a1a !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .favorites-group h4 {
+  color: #a0a0a0 !important;
+}
+
+.theme-black .favorite-card,
+.theme-black .favorite-card-grouped {
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .favorite-route-item {
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Поиск в тёмной теме */
+.theme-black .search-box input {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-black .search-box input::placeholder {
+  color: #666666 !important;
+}
+.theme-black .tabs-content {
+  background: #1a1a1a !important;
+}
+
+.theme-black .tab-panel h3,
+.theme-black .tab-panel h4 {
+  color: #ffffff !important;
+}
+
+.theme-black .stats-card {
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.theme-black .chart-container {
+  background: #111111 !important;
+  border-radius: 8px;
+}
+
+.theme-black .chart-hint {
+  background: #111111 !important;
+  border-left-color: #3390ec;
+  color: #a0a0a0 !important;
+}
+
+.theme-black .tabs-header button {
+  background: #1a1a1a !important;
+  color: #a0a0a0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .tabs-header button.active {
+  background: #3390ec !important;
+  color: #ffffff !important;
+  border-color: #3390ec !important;
+}
+
+/* White Theme */
+.theme-white {
+  --app-bg: #f5f5f5;
+  --app-bg-secondary: #ffffff;
+  --app-text: #000000;
+  --app-text-secondary: #666666;
+  --app-border: rgba(0, 0, 0, 0.08);
+  --app-accent: #3390ec;
+  --app-card-bg: #ffffff;
+  --app-card-hover: #f9f9f9;
+  --app-shadow: rgba(0, 0, 0, 0.08);
+}
+
+.theme-white body {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+}
+
+/* Карточки в белой теме */
+.theme-white .route-card,
+.theme-white .route-card-list,
+.theme-white .stop-card,
+.theme-white .favorite-card,
+.theme-white .favorite-card-grouped,
+.theme-white .search-box input {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.theme-white .route-card:hover,
+.theme-white .route-card-list:hover,
+.theme-white .stop-card:hover {
+  background: #f9f9f9 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Текст в белой теме */
+.theme-white h1,
+.theme-white h2,
+.theme-white h3,
+.theme-white h4,
+.theme-white .route-number,
+.theme-white .route-name,
+.theme-white .route-number-list,
+.theme-white .route-name-list,
+.theme-white .stop-name,
+.theme-white .favorite-stop,
+.theme-white .favorite-group-stop {
+  color: #000000 !important;
+}
+
+.theme-white .subtitle,
+.theme-white .favorite-meta,
+.theme-white .stop-next-departure,
+.theme-white .route-description,
+.theme-white .favorite-group-meta {
+  color: #666666 !important;
+}
+
+/* Чипсы времени в белой теме */
+
+
+/* Кнопки в белой теме */
+.theme-white .back-button-floating,
+.theme-white .action-button,
+.theme-white .theme-button-flat {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 2px solid rgba(0,0,0,0.1) !important;
+}
+
+.theme-white .favorite-button {
+  background: #ffffff !important;
+  border: 2px solid rgba(0, 0, 0, 0.15) !important;
+  color: #3390ec !important;
+}
+
+.theme-white .favorite-button.active {
+  background: #3390ec !important;
+  border-color: #3390ec !important;
+  color: #FFD700 !important;
+}
+
+.theme-white .share-button {
+  background: #ffffff !important;
+  border: 2px solid rgba(0, 0, 0, 0.15) !important;
+  color: #3390ec !important;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+}
+
+.theme-white .view-toggle-btn {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.theme-white .view-toggle-btn.active {
+  background: #3390ec !important;
+  color: #ffffff !important;
+}
+
+/* Селекторы в белой теме */
+.theme-white .day-type-selector button,
+.theme-white .direction-selector button {
+  background: #ffffff;
+  color: #666666;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-white .day-type-selector button.active,
+.theme-white .direction-selector button.active {
+  background: #3390ec;
+  color: #ffffff;
+  border-color: #3390ec;
+}
+
+/* Избранное в белой теме */
+.theme-white .favorites-section {
+  background: transparent;
+}
+
+.theme-white .favorites-header {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-white .expand-toggle {
+  background: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+}
+
+.theme-white .favorites-content {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-top: none !important;
+  border-radius: 0 0 12px 12px !important;
+}
+
+.theme-white .favorite-route-item {
+  background: #f5f5f5 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-white .favorite-route-time {
+  color: #000000 !important;
+}
+
+.theme-white .favorite-route-remove {
+  color: rgba(0,0,0,0.4) !important;
+}
+
+.theme-white .favorite-group-meta {
+  color: #444444 !important;
+}
+
+/* Поиск в белой теме */
+.theme-white .search-box input::placeholder {
+  color: #999999;
+}
+
+/* Вкладки StatsTabs в белой теме */
+.theme-white .stats-tabs {
+  background: transparent;
+  border: none;
+}
+
+.theme-white .tabs-header button {
+  background: #e8e8e8 !important;
+  color: #444444 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.theme-white .tabs-header button.active {
+  background: #3390ec !important;
+  color: #ffffff !important;
+  border-color: #3390ec !important;
+}
+
+.theme-white .tabs-content {
+  background: #f0f0f0 !important;
+}
+
+/* Контент вкладок в белой теме - серый фон */
+.theme-white .stats-content,
+.theme-white .intervals-section,
+.theme-white .durations-section,
+.theme-white .statistics-section,
+.theme-white .map-section {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+/* Заголовки в статистике */
+.theme-white .stats-content h2,
+.theme-white .stats-content h3,
+.theme-white .intervals-section h2,
+.theme-white .durations-section h2,
+.theme-white .statistics-section h2,
+.theme-white .map-section h2 {
+  color: #000000 !important;
+}
+
+/* Карточка статистики в белой теме — белый фон, тёмный текст */
+.theme-white .stats-card {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-white .stat-label {
+  color: #666666 !important;
+}
+
+.theme-white .stat-value {
+  color: #3390ec !important;
+}
+
+.theme-white .stat-time {
+  color: #666666 !important;
+}
+
+/* Карта в белой теме */
+.theme-white .map-info {
+  background: #f0f0f0 !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.theme-white .map-info span,
+.theme-white .map-info * {
+  color: #444444 !important;
+}
+
+.theme-white .map-legend {
+  background: #f0f0f0 !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.theme-white .legend-item,
+.theme-white .legend-item * {
+  color: #000000 !important;
+}
+
+/* Экран расписания в белой теме */
+.theme-white .schedule {
+  background: #f5f5f5 !important;
+}
+
+.theme-white .schedule-by-hour {
+  background: transparent !important;
+}
+
+.theme-white .time-chip-small {
+  background: #ffffff !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.theme-white .time-chip-small:hover {
+  background: #e8e8e8 !important;
+}
+
+.theme-white .hour-group {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 12px 16px 16px;
+}
+
+.theme-white .hour-header {
+  color: #3390ec !important;
+}
+.theme-white .chart-container {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+}
+
+.theme-white .chart-hint,
+.theme-white .zoom-hint {
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Названия маршрутов в белой теме */
+.theme-white .route-name,
+.theme-white .route-long-name,
+.theme-white .route-name-list {
+  color: #000000 !important;
+}
+
+.theme-white .route-number,
+.theme-white .route-number-list {
+  color: #3390ec !important;
+}
+
+/* История в белой теме */
+.theme-white .history-item {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-white .history-item-stop,
+.theme-white .history-item-route-name {
+  color: #000000 !important;
+}
+
+
+
+/* Glass Theme */
+.theme-glass {
+  --app-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --app-bg-secondary: rgba(255, 255, 255, 0.1);
+  --app-text: #ffffff;
+  --app-text-secondary: rgba(255, 255, 255, 0.7);
+  --app-border: rgba(255, 255, 255, 0.2);
+  --app-accent: #ffffff;
+  --app-card-bg: rgba(255, 255, 255, 0.15);
+  --app-card-hover: rgba(255, 255, 255, 0.25);
+  --app-shadow: rgba(0, 0, 0, 0.2);
+}
+
+html.theme-glass,
+html.theme-glass body,
+html.theme-glass #root {
+  --tg-bg: transparent !important;
+  --tg-text: #ffffff !important;
+  --tg-hint: rgba(255, 255, 255, 0.5) !important;
+  --tg-secondary-bg: rgba(255, 255, 255, 0.1) !important;
+  --tg-button: #ffffff !important;
+  --tg-button-text: #333333 !important;
+  --tg-theme-text-color: #ffffff !important;
+  --tg-theme-hint-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Применяем фон */
+body {
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* Применяем фон */
+body {
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+html.theme-glass {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  min-height: 100%;
+}
+
+.theme-glass body {
+  background: transparent !important;
+}
+
+/* ============================================================
+   GLASS THEME - ПОЛНАЯ СТЕКЛЯННОСТЬ
+   ============================================================ */
+
+/* Все карточки */
+.theme-glass .route-card,
+.theme-glass .route-card-list,
+.theme-glass .stop-card,
+.theme-glass .favorite-card,
+.theme-glass .favorite-card-grouped,
+.theme-glass .favorites-section,
+.theme-glass .search-box input,
+.theme-glass .schedule {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+
+/* Градиентная рамка через псевдоэлемент */
+.theme-glass .route-card::before,
+.theme-glass .route-card-list::before,
+.theme-glass .stop-card::before,
+.theme-glass .favorite-card::before,
+.theme-glass .favorite-card-grouped::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.1) 30%,
+    rgba(180, 160, 255, 0.3) 60%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 4s linear infinite;
+}
+
+@keyframes borderShimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.theme-glass .route-card:hover,
+.theme-glass .route-card-list:hover,
+.theme-glass .stop-card:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-2px);
+}
+
+/* Чипсы времени расписания */
+.theme-glass .time-chip-small {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(255,255,255,0.1);
+  color: #ffffff !important;
+  position: relative;
+}
+.theme-glass .time-chip-small::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(180,160,255,0.2) 50%, rgba(255,255,255,0.35) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.theme-glass .time-chip-small:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  transform: scale(1.05);
+}
+
+/* Секции расписания по часам */
+.theme-glass .hour-group {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -1px 0 rgba(255,255,255,0.05);
+  position: relative;
+}
+.theme-glass .hour-group::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(180,160,255,0.15) 50%, rgba(255,255,255,0.25) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.theme-glass .hour-header {
+  background: transparent !important;
+  color: #ffffff;
+  padding: 0;
+}
+
+/* Кнопки */
+.theme-glass .back-button-floating,
+.theme-glass .action-button,
+.theme-glass .theme-button-flat,
+.theme-glass .view-toggle-btn {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -1px 0 rgba(255,255,255,0.08), 0 4px 12px rgba(0,0,0,0.15);
+  color: #ffffff !important;
+  position: relative;
+}
+.theme-glass .back-button-floating::before,
+.theme-glass .action-button::before,
+.theme-glass .view-toggle-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(180,160,255,0.25) 50%, rgba(255,255,255,0.4) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 4s linear infinite;
+}
+
+.theme-glass .back-button-floating:hover,
+.theme-glass .action-button:hover,
+.theme-glass .theme-button:hover,
+.theme-glass .view-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.theme-glass .view-toggle-btn.active {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Селекторы дня и направления */
+.theme-glass .day-type-selector button,
+.theme-glass .direction-selector button {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(255,255,255,0.06);
+  color: rgba(255, 255, 255, 0.8) !important;
+  position: relative;
+}
+.theme-glass .day-type-selector button::before,
+.theme-glass .direction-selector button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(180,160,255,0.2) 50%, rgba(255,255,255,0.3) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.theme-glass .day-type-selector button.active,
+.theme-glass .direction-selector button.active {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+.theme-glass .day-type-selector button:hover,
+.theme-glass .direction-selector button:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Избранное */
+.theme-glass .favorites-header {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-glass .favorites-content {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-glass .favorite-route-item {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-glass .favorite-route-item:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Модальное окно настроек */
+.theme-glass .theme-modal {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.theme-glass .theme-option {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.theme-glass .theme-option:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.theme-glass .theme-option.active {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Текст */
+.theme-glass h1, 
+.theme-glass h2, 
+.theme-glass h3, 
+.theme-glass h4,
+.theme-glass p,
+.theme-glass span,
+.theme-glass div {
+  color: #ffffff;
+}
+
+.theme-glass .subtitle,
+.theme-glass .favorite-meta,
+.theme-glass .favorite-group-meta {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Кнопка избранного в стеклянной теме */
+.theme-glass .favorite-button {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 12px rgba(0,0,0,0.12) !important;
+  color: #ffffff !important;
+  position: relative;
+}
+.theme-glass .favorite-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(180,160,255,0.3) 50%, rgba(255,255,255,0.5) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 3s linear infinite;
+}
+
+.theme-glass .favorite-button.active {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: #FFD700 !important;
+}
+
+.theme-glass .share-button {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 12px rgba(0,0,0,0.12) !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+  position: relative;
+}
+.theme-glass .share-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(180,160,255,0.3) 50%, rgba(255,255,255,0.5) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 3s linear infinite;
+}
+
+/* Сервисные сообщения в стеклянной теме */
+.theme-glass .warning {
+  background: rgba(255, 200, 100, 0.15) !important;
+  border: 1px solid transparent !important;
+  border-left: 3px solid rgba(255, 190, 50, 0.9) !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,220,100,0.3);
+  color: #ffffff !important;
+}
+
+.theme-glass .error {
+  background: rgba(255, 100, 100, 0.2) !important;
+  border-left: 4px solid rgba(255, 80, 80, 0.8) !important;
+  color: #ffffff !important;
+}
+
+.theme-glass .info {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-left: 4px solid rgba(255, 255, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+/* Номера остановок в стеклянной теме */
+.theme-glass .stop-number {
+  background: rgba(255, 255, 255, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
+}
+
+/* Стрелка избранного в стеклянной теме */
+.theme-glass .expand-toggle {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+/* Убираем фон контейнера и промежутки между элементами */
+.theme-glass .app {
+  background: transparent !important;
+}
+
+.theme-glass .container {
+  background: transparent !important;
+}
+
+.theme-glass .routes-list,
+.theme-glass .stops-list,
+.theme-glass .schedule {
+  background: transparent !important;
+}
+
+.theme-glass .stats-tabs {
+  background: transparent !important;
+  border: none !important;
+}
+
+.theme-glass .day-type-selector,
+.theme-glass .direction-selector {
+  background: transparent !important;
+}
+
+.theme-glass .schedule-by-hour {
+  background: transparent !important;
+}
+
+/* Кнопка сброса масштаба в стеклянной теме */
+.theme-glass .reset-zoom-btn {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  color: #ffffff !important;
+}
+
+.theme-glass .reset-zoom-btn:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Карта в стеклянной теме */
+.theme-glass .map-info {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}
+
+.theme-glass .map-info span,
+.theme-glass .map-info * {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.theme-glass .map-legend {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  margin-top: 0 !important;
+}
+
+.theme-glass .legend-item,
+.theme-glass .legend-item * {
+  color: #ffffff !important;
+}
+
+/* Кнопки зума на карте в стеклянной теме */
+.theme-glass .leaflet-control-zoom a {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+.theme-glass .tabs-header button {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.35), inset 0 -1px 0 rgba(255,255,255,0.06);
+  color: rgba(255, 255, 255, 0.8) !important;
+  position: relative;
+}
+.theme-glass .tabs-header button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(180,160,255,0.2) 50%, rgba(255,255,255,0.3) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 4s linear infinite;
+}
+
+.theme-glass .tabs-header button.active {
+  background: rgba(255, 255, 255, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: #ffffff !important;
+}
+
+.theme-glass .tabs-content {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.theme-glass .stats-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.theme-glass .chart-container {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px;
+}
+
+.theme-glass .chart-hint {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-left: 3px solid rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.theme-glass .duration-card {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* ============================================================
+   УНИВЕРСАЛЬНЫЕ СТИЛИ ДЛЯ ВСЕХ ТЕМ
+   ============================================================ */
+.route-card,
+.stop-card,
+.favorite-card,
+.favorite-card-grouped {
+  background: var(--app-card-bg);
+  color: var(--app-text);
+  border: 1px solid var(--app-border);
+}
+
+.route-card:hover,
+.stop-card:hover {
+  background: var(--app-card-hover);
+}
+
+/* Текст */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--app-text);
+}
+
+p, span, div {
+  color: var(--app-text);
+}
+
+.favorite-meta,
+.favorite-group-meta,
+.stop-next-departure {
+  color: var(--app-text-secondary);
+}
+
+/* ============================================================
+   BLACK GLASS THEME — тёмное стекло на тёмном градиенте
+   ============================================================ */
+
+.theme-black-glass {
+  --app-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --app-bg-secondary: rgba(0, 0, 0, 0.3);
+  --app-text: #ffffff;
+  --app-text-secondary: rgba(255, 255, 255, 0.6);
+  --app-border: rgba(255, 255, 255, 0.08);
+  --app-accent: #7b8cde;
+  --app-card-bg: rgba(0, 0, 0, 0.25);
+  --app-card-hover: rgba(0, 0, 0, 0.35);
+  --app-shadow: rgba(0, 0, 0, 0.5);
+}
+
+html.theme-black-glass,
+html.theme-black-glass body,
+html.theme-black-glass #root {
+  --tg-bg: transparent !important;
+  --tg-text: #ffffff !important;
+  --tg-hint: rgba(255, 255, 255, 0.5) !important;
+  --tg-secondary-bg: rgba(0, 0, 0, 0.3) !important;
+  --tg-button: #7b8cde !important;
+  --tg-button-text: #ffffff !important;
+  --tg-theme-text-color: #ffffff !important;
+  --tg-theme-hint-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+html.theme-black-glass {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  min-height: 100%;
+}
+
+.theme-black-glass body {
+  background: transparent !important;
+  color: #ffffff !important;
+}
+
+/* Все карточки */
+.theme-black-glass .route-card,
+.theme-black-glass .route-card-list,
+.theme-black-glass .stop-card,
+.theme-black-glass .favorite-card,
+.theme-black-glass .favorite-card-grouped,
+.theme-black-glass .favorites-section,
+.theme-black-glass .search-box input,
+.theme-black-glass .schedule {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  color: #ffffff !important;
+  position: relative;
+}
+
+/* Градиентная рамка через псевдоэлемент */
+.theme-black-glass .route-card::before,
+.theme-black-glass .route-card-list::before,
+.theme-black-glass .stop-card::before,
+.theme-black-glass .favorite-card::before,
+.theme-black-glass .favorite-card-grouped::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.2) 0%,
+    rgba(120, 100, 200, 0.15) 30%,
+    rgba(255, 255, 255, 0.04) 60%,
+    rgba(150, 130, 255, 0.2) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 5s linear infinite;
+}
+
+.theme-black-glass .route-card:hover,
+.theme-black-glass .route-card-list:hover,
+.theme-black-glass .stop-card:hover {
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+/* Текст */
+.theme-black-glass h1,
+.theme-black-glass h2,
+.theme-black-glass h3,
+.theme-black-glass h4,
+.theme-black-glass p,
+.theme-black-glass span,
+.theme-black-glass div {
+  color: #ffffff;
+}
+
+.theme-black-glass .subtitle,
+.theme-black-glass .favorite-meta,
+.theme-black-glass .favorite-group-meta,
+.theme-black-glass .route-name,
+.theme-black-glass .route-name-list {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.theme-black-glass .route-number,
+.theme-black-glass .route-number-list,
+.theme-black-glass .favorite-route {
+  color: #7b8cde !important;
+}
+
+/* Чипсы времени */
+.theme-black-glass .time-chip-small {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .time-chip-small:hover {
+  background: rgba(0, 0, 0, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Блоки расписания по часам */
+.theme-black-glass .hour-group {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black-glass .hour-header {
+  background: transparent !important;
+  color: #7b8cde !important;
+}
+
+/* Кнопки */
+.theme-black-glass .back-button-floating,
+.theme-black-glass .action-button,
+.theme-black-glass .theme-button-flat,
+.theme-black-glass .view-toggle-btn {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .view-toggle-btn.active {
+  background: rgba(123, 140, 222, 0.3) !important;
+  border-color: rgba(123, 140, 222, 0.5) !important;
+}
+
+/* Кнопка избранного */
+.theme-black-glass .favorite-button {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 12px rgba(0,0,0,0.25) !important;
+  color: #ffffff !important;
+  position: relative;
+}
+.theme-black-glass .favorite-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(120,100,200,0.18) 50%, rgba(180,160,255,0.22) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 4s linear infinite;
+}
+
+.theme-black-glass .favorite-button.active {
+  background: rgba(123, 140, 222, 0.25) !important;
+  border-color: rgba(123, 140, 222, 0.5) !important;
+  color: #FFD700 !important;
+}
+
+.theme-black-glass .share-button {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 12px rgba(0,0,0,0.25) !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+  position: relative;
+}
+.theme-black-glass .share-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(120,100,200,0.18) 50%, rgba(180,160,255,0.22) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 4s linear infinite;
+}
+
+/* Селекторы */
+.theme-black-glass .day-type-selector button,
+.theme-black-glass .direction-selector button {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.theme-black-glass .day-type-selector button.active,
+.theme-black-glass .direction-selector button.active {
+  background: rgba(123, 140, 222, 0.25);
+  border-color: rgba(123, 140, 222, 0.5);
+  color: #ffffff;
+}
+
+/* Избранное */
+.theme-black-glass .favorites-header {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.theme-black-glass .favorites-content {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+.theme-black-glass .favorite-route-item {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.theme-black-glass .expand-toggle {
+  background: transparent !important;
+  border: none !important;
+  color: #ffffff !important;
+}
+
+/* Порядковые номера остановок */
+.theme-black-glass .stop-number {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 16px rgba(0,0,0,0.3);
+}
+
+/* Вкладки статистики */
+.theme-black-glass .tabs-header button {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.theme-black-glass .tabs-header button.active {
+  background: rgba(123, 140, 222, 0.3) !important;
+  border-color: rgba(123, 140, 222, 0.5) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .tabs-content {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black-glass .stats-card {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-black-glass .chart-container {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+  border-radius: 8px;
+}
+
+.theme-black-glass .chart-hint {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-left-color: rgba(123, 140, 222, 0.7) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.theme-black-glass .duration-card {
+  background: rgba(123, 140, 222, 0.15) !important;
+  border: 1px solid rgba(123, 140, 222, 0.3) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .reset-zoom-btn {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* Карта */
+.theme-black-glass .map-info {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .map-info span,
+.theme-black-glass .map-info * {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.theme-black-glass .map-legend {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-black-glass .legend-item,
+.theme-black-glass .legend-item * {
+  color: #ffffff !important;
+}
+
+/* Сервисные сообщения */
+.theme-black-glass .warning {
+  background: rgba(180, 120, 0, 0.2) !important;
+  border-left: 4px solid rgba(255, 165, 0, 0.7) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .error {
+  background: rgba(180, 0, 0, 0.2) !important;
+  border-left: 4px solid rgba(255, 60, 60, 0.7) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .info {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-left: 4px solid rgba(123, 140, 222, 0.7) !important;
+  color: #ffffff !important;
+}
+
+/* Модальное окно */
+.theme-black-glass .theme-modal {
+  background: rgba(10, 8, 20, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-black-glass .theme-option {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 2px solid rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .theme-option:hover {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(123, 140, 222, 0.4) !important;
+}
+
+.theme-black-glass .theme-option.active {
+  background: rgba(123, 140, 222, 0.2) !important;
+  border-color: rgba(123, 140, 222, 0.6) !important;
+}
+
+/* Прозрачные контейнеры */
+.theme-black-glass .app,
+.theme-black-glass .container,
+.theme-black-glass .routes-list,
+.theme-black-glass .stops-list,
+.theme-black-glass .schedule,
+.theme-black-glass .stats-tabs,
+.theme-black-glass .schedule-by-hour,
+.theme-black-glass .day-type-selector,
+.theme-black-glass .direction-selector {
+  background: transparent !important;
+}
+
+/* История в стеклянной теме */
+.theme-glass .history-item {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* История в black glass теме */
+.theme-black-glass .history-item {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* История в чёрной теме */
+.theme-black .history-item {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* История — кнопка открытия по темам */
+.theme-white .history-open-btn {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #000000 !important;
+}
+
+.theme-black .history-open-btn {
+  background: #1a1a1a !important;
+}
+
+.theme-glass .history-open-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+  color: #ffffff !important;
+  position: relative;
+}
+.theme-glass .history-open-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.5) 0%, rgba(180,160,255,0.25) 50%, rgba(255,255,255,0.4) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 4s linear infinite;
+}
+
+.theme-black-glass .history-open-btn {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+  color: #ffffff !important;
+  position: relative;
+}
+.theme-black-glass .history-open-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(120,100,200,0.15) 50%, rgba(180,160,255,0.2) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 5s linear infinite;
+}
+
+/* История — экран по темам */
+.theme-white .history-screen { background: #f5f5f5 !important; }
+.theme-glass .history-screen {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background-attachment: fixed !important;
+}
+.theme-black-glass .history-screen {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background-attachment: fixed !important;
+}
+
+/* Поиск по остановкам — белая тема */
+.theme-white .stop-search-item {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.theme-white .stop-search-name {
+  color: #000000 !important;
+}
+
+/* Чёрная тема */
+.theme-black .stop-search-item {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Glass */
+.theme-glass .stop-search-item {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Black glass */
+.theme-black-glass .stop-search-item {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Кнопка "наверх" в стеклянных темах */
+.theme-glass .scroll-top-btn {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 16px rgba(0,0,0,0.15) !important;
+  color: #ffffff !important;
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 16px !important;
+}
+.theme-glass .scroll-top-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(180,160,255,0.3) 50%, rgba(255,255,255,0.5) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 3s linear infinite;
+}
+
+.theme-black-glass .scroll-top-btn {
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 4px 16px rgba(0,0,0,0.3) !important;
+  color: #ffffff !important;
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 16px !important;
+}
+.theme-black-glass .scroll-top-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(120,100,200,0.2) 50%, rgba(180,160,255,0.25) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: borderShimmer 4s linear infinite;
+}
+
+/* ============================================================
+   ЦВЕТА ТИПОВ ТРАНСПОРТА — перекрытие для всех тем
+   ============================================================ */
+
+/* Трамвай — красный */
+.route-type-tram,
+.theme-white .route-type-tram,
+.theme-black .route-type-tram,
+.theme-black-glass .route-type-tram,
+.theme-glass .route-type-tram {
+  color: #ff4d4d !important;
+}
+
+/* Автобус / электробус — зелёный */
+.route-type-bus,
+.route-type-electrobus,
+.theme-white .route-type-bus,
+.theme-white .route-type-electrobus,
+.theme-black .route-type-bus,
+.theme-black .route-type-electrobus,
+.theme-black-glass .route-type-bus,
+.theme-black-glass .route-type-electrobus,
+.theme-glass .route-type-bus,
+.theme-glass .route-type-electrobus {
+  color: #4caf74 !important;
+}
+
+/* Badge text must stay white regardless of route-type color */
+.sv2-route-badge.route-type-bus,
+.sv2-route-badge.route-type-electrobus,
+.sv2-route-badge.route-type-tram,
+.sv2-route-badge.route-type-trolley,
+.theme-black .sv2-route-badge.route-type-bus,
+.theme-black .sv2-route-badge.route-type-electrobus,
+.theme-black .sv2-route-badge.route-type-tram,
+.theme-black .sv2-route-badge.route-type-trolley,
+.theme-white .sv2-route-badge.route-type-bus,
+.theme-white .sv2-route-badge.route-type-electrobus,
+.theme-white .sv2-route-badge.route-type-tram,
+.theme-white .sv2-route-badge.route-type-trolley,
+.theme-glass .sv2-route-badge.route-type-bus,
+.theme-glass .sv2-route-badge.route-type-electrobus,
+.theme-glass .sv2-route-badge.route-type-tram,
+.theme-glass .sv2-route-badge.route-type-trolley,
+.theme-black-glass .sv2-route-badge.route-type-bus,
+.theme-black-glass .sv2-route-badge.route-type-electrobus,
+.theme-black-glass .sv2-route-badge.route-type-tram,
+.theme-black-glass .sv2-route-badge.route-type-trolley {
+  color: #ffffff !important;
+}
+
+/* Same for transfer badges */
+.transfer-badge,
+.theme-black .transfer-badge,
+.theme-white .transfer-badge,
+.theme-glass .transfer-badge,
+.theme-black-glass .transfer-badge {
+  color: #ffffff !important;
+}
+
+/* Троллейбус — синий */
+.route-type-trolley,
+.theme-white .route-type-trolley,
+.theme-black .route-type-trolley,
+.theme-black-glass .route-type-trolley,
+.theme-glass .route-type-trolley {
+  color: #4d9fff !important;
+}
+
+/* ============================================================
+   БЛИЖАЙШИЕ ОСТАНОВКИ — все темы (аналог избранного)
+   ============================================================ */
+
+/* --- BLACK --- */
+.theme-black .nearby-section {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .nearby-header {
+  background: #1a1a1a !important;
+}
+
+.theme-black .nearby-content {
+  background: #1a1a1a !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .nearby-stop-card {
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .nearby-route-chip {
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .nearby-route-time {
+  color: #ffffff !important;
+}
+
+.theme-black .nearby-distance {
+  color: #a0a0a0 !important;
+}
+
+/* --- WHITE --- */
+.theme-white .nearby-section {
+  background: transparent !important;
+}
+
+.theme-white .nearby-header {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-radius: 12px !important;
+}
+
+.theme-white .nearby-content {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  border-top: none !important;
+  border-radius: 0 0 12px 12px !important;
+}
+
+.theme-white .nearby-stop-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+.theme-white .nearby-route-chip {
+  background: #f8f8f8 !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.theme-white .nearby-route-time,
+.theme-white .nearby-stop-name {
+  color: #000000 !important;
+}
+
+.theme-white .nearby-route-arrow {
+  color: rgba(0,0,0,0.4) !important;
+}
+
+.theme-white .nearby-distance,
+.theme-white .nearby-status {
+  color: #666666 !important;
+}
+
+/* --- GLASS --- */
+.theme-glass .nearby-section {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.theme-glass .nearby-header {
+  background: transparent !important;
+}
+
+.theme-glass .nearby-content {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.theme-glass .nearby-stop-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+.theme-glass .nearby-route-chip {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.theme-glass .nearby-route-chip:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+.theme-glass .nearby-route-time {
+  color: #ffffff !important;
+}
+
+.theme-glass .nearby-distance,
+.theme-glass .nearby-status {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* --- BLACK GLASS --- */
+.theme-black-glass .nearby-section {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.theme-black-glass .nearby-header {
+  background: transparent !important;
+}
+
+.theme-black-glass .nearby-content {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.theme-black-glass .nearby-stop-card {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.theme-black-glass .nearby-route-chip {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.theme-black-glass .nearby-route-chip:hover {
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+.theme-black-glass .nearby-route-time {
+  color: #ffffff !important;
+}
+
+.theme-black-glass .nearby-distance,
+.theme-black-glass .nearby-status {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ============================================================
+   РАСПИСАНИЕ V2 — темы
+   ============================================================ */
+
+/* --- BLACK --- */
+.theme-black .sv2-pill-toggle {
+  background: #1a1a1a !important;
+}
+
+.theme-black .sv2-pill-btn.active {
+  background: #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+.theme-black .sv2-time-chip {
+  background: #1a1a1a !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-black .sv2-nearest-card {
+  background: rgba(39, 174, 96, 0.15) !important;
+  border-color: rgba(39, 174, 96, 0.35) !important;
+}
+
+.theme-black .sv2-nearest-card.first {
+  background: #27ae60 !important;
+  border-color: #27ae60 !important;
+}
+
+.theme-black .sv2-hour-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .sv2-hour-label {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+/* --- WHITE --- */
+.theme-white .sv2-topbar-title {
+  color: #000000 !important;
+}
+
+.theme-white .sv2-back {
+  color: #3390ec !important;
+}
+
+.theme-white .sv2-stop-name {
+  color: #000000 !important;
+}
+
+.theme-white .sv2-stop-meta,
+.theme-white .sv2-route-dir,
+.theme-white .sv2-section-label {
+  color: #666666 !important;
+}
+
+.theme-white .sv2-pill-toggle {
+  background: #f0f0f0 !important;
+}
+
+.theme-white .sv2-pill-btn.active {
+  background: #ffffff !important;
+  color: #000000 !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.theme-white .sv2-pill-btn {
+  color: #666666 !important;
+}
+
+.theme-white .sv2-time-chip {
+  background: #f5f5f5 !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.theme-white .sv2-nearest-card {
+  background: rgba(39, 174, 96, 0.08) !important;
+  border-color: rgba(39, 174, 96, 0.25) !important;
+}
+
+.theme-white .sv2-nearest-card.first {
+  background: #27ae60 !important;
+  border-color: #27ae60 !important;
+}
+
+.theme-white .sv2-nearest-time {
+  color: #000000 !important;
+}
+
+.theme-white .sv2-nearest-card.first .sv2-nearest-time {
+  color: #ffffff !important;
+}
+
+.theme-white .sv2-nearest-diff {
+  color: #27ae60 !important;
+}
+
+.theme-white .sv2-nearest-card.first .sv2-nearest-diff {
+  color: rgba(255,255,255,0.85) !important;
+}
+
+.theme-white .sv2-hour-label {
+  color: #999999 !important;
+}
+
+.theme-white .sv2-hour-row {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.theme-white .sv2-topbar-btn {
+  color: #999999 !important;
+}
+
+/* --- GLASS --- */
+.theme-glass .sv2-pill-toggle {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.theme-glass .sv2-pill-btn.active {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+.theme-glass .sv2-time-chip {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.theme-glass .sv2-nearest-card {
+  background: rgba(39, 174, 96, 0.15) !important;
+  border-color: rgba(39, 174, 96, 0.3) !important;
+}
+
+.theme-glass .sv2-nearest-card.first {
+  background: #27ae60 !important;
+  border-color: #27ae60 !important;
+}
+
+.theme-glass .sv2-hour-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+/* --- BLACK GLASS --- */
+.theme-black-glass .sv2-pill-toggle {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+.theme-black-glass .sv2-pill-btn.active {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+.theme-black-glass .sv2-time-chip {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.theme-black-glass .sv2-nearest-card {
+  background: rgba(39, 174, 96, 0.12) !important;
+  border-color: rgba(39, 174, 96, 0.25) !important;
+}
+
+.theme-black-glass .sv2-nearest-card.first {
+  background: #27ae60 !important;
+  border-color: #27ae60 !important;
+}
+
+.theme-black-glass .sv2-hour-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ============================================================
+   ПЕРЕСАДКИ — темы
+   ============================================================ */
+
+/* --- BLACK --- */
+.theme-black .transfers-section {
+  background: #1a1a1a !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .transfer-card {
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+}
+
+.theme-black .transfer-card:active {
+  background: #1a1a1a !important;
+}
+
+.theme-black .transfers-count {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #a0a0a0 !important;
+}
+
+.theme-black .transfer-time-chip {
+  background: rgba(51, 144, 236, 0.15) !important;
+  color: #3390ec !important;
+}
+
+.theme-black .transfer-time-chip.first {
+  background: #27ae60 !important;
+  color: #ffffff !important;
+}
+
+/* --- WHITE --- */
+.theme-white .transfers-section {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04) !important;
+}
+
+.theme-white .transfers-title {
+  color: #000000 !important;
+}
+
+.theme-white .transfers-count {
+  background: rgba(0, 0, 0, 0.06) !important;
+  color: #666666 !important;
+}
+
+.theme-white .transfers-show-btn {
+  color: #3390ec !important;
+}
+
+.theme-white .transfer-card {
+  background: #f8f8f8 !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+.theme-white .transfer-card:active {
+  background: #eeeeee !important;
+}
+
+.theme-white .transfer-destination {
+  color: #000000 !important;
+}
+
+.theme-white .transfer-time-chip {
+  background: rgba(51, 144, 236, 0.1) !important;
+  color: #3390ec !important;
+}
+
+.theme-white .transfer-time-chip.first {
+  background: #27ae60 !important;
+  color: #ffffff !important;
+}
+
+.theme-white .transfer-wait {
+  color: #666666 !important;
+}
+
+.theme-white .transfer-arrow {
+  color: #999999 !important;
+}
+
+.theme-white .transfers-loading,
+.theme-white .transfers-empty {
+  color: #666666 !important;
+}
+
+/* --- GLASS --- */
+.theme-glass .transfers-section {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.theme-glass .transfer-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+.theme-glass .transfer-card:active {
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+
+.theme-glass .transfers-count {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.theme-glass .transfer-destination {
+  color: #ffffff !important;
+}
+
+.theme-glass .transfer-time-chip {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.theme-glass .transfer-time-chip.first {
+  background: #27ae60 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.theme-glass .transfer-wait {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.theme-glass .transfer-arrow {
+  color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.theme-glass .transfers-loading,
+.theme-glass .transfers-empty {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* --- BLACK GLASS --- */
+.theme-black-glass .transfers-section {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid transparent !important;
+  background-clip: padding-box;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.3);
+}
+
+.theme-black-glass .transfer-card {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
+}
+
+.theme-black-glass .transfer-card:active {
+  background: rgba(0, 0, 0, 0.45) !important;
+}
+
+.theme-black-glass .transfers-count {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.theme-black-glass .transfer-destination {
+  color: #ffffff !important;
+}
+
+.theme-black-glass .transfer-time-chip {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-black-glass .transfer-time-chip.first {
+  background: #27ae60 !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+.theme-black-glass .transfer-wait {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.theme-black-glass .transfer-arrow {
+  color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.theme-black-glass .transfers-loading,
+.theme-black-glass .transfers-empty {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* ============================================================
+   REDESIGN V2 — общие переопределения тем
+   ============================================================ */
+
+/* --- BLACK: уже совпадает с дефолтом v2, минимальные правки --- */
+.theme-black .app { background: #000 !important; }
+.theme-black .stop-number { background: #000 !important; border-color: rgba(255,255,255,0.12) !important; }
+.theme-black .stop-card:not(:last-child) .stop-number::after { background: rgba(255,255,255,0.06) !important; }
+.theme-black .bottom-tab-bar { background: rgba(0,0,0,0.92) !important; }
+.theme-black .bottom-search-btn,
+.theme-black .scroll-top-btn { background: rgba(0,0,0,0.92) !important; }
+
+/* --- WHITE --- */
+.theme-white .app { background: #f5f5f5 !important; }
+
+.theme-white .day-type-selector,
+.theme-white .direction-selector,
+.theme-white .sv2-pill-toggle { background: #e8e8e8 !important; }
+
+.theme-white .day-type-selector button.active,
+.theme-white .direction-selector button.active,
+.theme-white .sv2-pill-btn.active { background: #fff !important; color: #000 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.1) !important; }
+
+.theme-white .day-type-selector button,
+.theme-white .direction-selector button,
+.theme-white .sv2-pill-btn { color: #999 !important; }
+
+.theme-white .route-card,
+.theme-white .route-card-list,
+.theme-white .stop-card,
+.theme-white .favorite-card,
+.theme-white .favorite-card-grouped,
+.theme-white .favorites-section,
+.theme-white .nearby-stop-card,
+.theme-white .nearby-section,
+.theme-white .history-item,
+.theme-white .transfer-card,
+.theme-white .transfers-section { background: #fff !important; border-color: rgba(0,0,0,0.06) !important; }
+
+.theme-white .route-card:active,
+.theme-white .route-card-list:active,
+.theme-white .transfer-card:active,
+.theme-white .history-item:active { background: #f0f0f0 !important; }
+
+.theme-white .route-number-list,
+.theme-white .route-number { font-weight: 700; }
+
+.theme-white .route-name-list,
+.theme-white .route-name,
+.theme-white .transfer-destination,
+.theme-white .stop-name,
+.theme-white .favorite-group-stop,
+.theme-white .nearby-stop-name,
+.theme-white .fav-stop-name { color: #000 !important; }
+.theme-white .nearby-direction-label { color: rgba(0,0,0,0.4) !important; }
+
+.theme-white .route-favorite-btn,
+.theme-white .stop-favorite-btn,
+.theme-white .transfer-arrow { color: #ccc !important; }
+
+.theme-white .header h1,
+.theme-white .sv2-topbar-title,
+.theme-white .sv2-stop-name,
+.theme-white .transfers-title,
+.theme-white .stops-list h2 { color: #000 !important; }
+
+.theme-white .subtitle,
+.theme-white .route-description,
+.theme-white .sv2-stop-meta,
+.theme-white .sv2-route-dir,
+.theme-white .sv2-section-label,
+.theme-white .favorite-group-meta,
+.theme-white .nearby-distance,
+.theme-white .transfers-count,
+.theme-white .transfer-wait,
+.theme-white .next-departures-loading,
+.theme-white .sv2-hour-label { color: #999 !important; }
+
+.theme-white .stop-number { background: #f5f5f5 !important; border-color: rgba(0,0,0,0.15) !important; color: rgba(0,0,0,0.5) !important; }
+.theme-white .stop-card:not(:last-child) .stop-number::after { background: rgba(0,0,0,0.08) !important; }
+.theme-white .stop-card { border-color: rgba(0,0,0,0.04) !important; }
+.theme-white .sv2-hour-row { border-color: rgba(0,0,0,0.06) !important; }
+
+.theme-white .sv2-time-chip { background: #f0f0f0 !important; color: #000 !important; border-color: rgba(0,0,0,0.06) !important; }
+.theme-white .sv2-nearest-card { background: rgba(76,175,116,0.08) !important; border-color: rgba(76,175,116,0.2) !important; }
+.theme-white .sv2-nearest-time { color: #000 !important; }
+.theme-white .sv2-nearest-card.first .sv2-nearest-time { color: #fff !important; }
+.theme-white .sv2-nearest-diff { color: #27ae60 !important; }
+.theme-white .sv2-nearest-card.first .sv2-nearest-diff { color: rgba(255,255,255,0.85) !important; }
+
+.theme-white .route-type-filter-btn { border-color: rgba(0,0,0,0.08) !important; color: #999 !important; }
+.theme-white .view-toggle-btn { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; color: #999 !important; }
+.theme-white .view-toggle-btn.active { background: #e8e8e8 !important; color: #000 !important; }
+
+.theme-white .bottom-tab-bar { background: rgba(255,255,255,0.92) !important; border-color: rgba(0,0,0,0.06) !important; }
+.theme-white .bottom-tab { color: rgba(0,0,0,0.35) !important; }
+.theme-white .bottom-tab.active { color: #3390ec !important; }
+.theme-white .bottom-search-btn,
+.theme-white .scroll-top-btn { background: rgba(255,255,255,0.92) !important; border-color: rgba(0,0,0,0.08) !important; color: #666 !important; }
+
+.theme-white .transfer-time-chip { background: rgba(51,144,236,0.08) !important; color: #3390ec !important; }
+.theme-white .transfers-loading, .theme-white .transfers-empty { color: #999 !important; }
+
+.theme-white .cache-warning { background: rgba(245,166,35,0.08) !important; border-color: rgba(245,166,35,0.15) !important; }
+.theme-white .error { background: rgba(255,92,92,0.08) !important; border-color: rgba(255,92,92,0.15) !important; }
+
+.theme-white .action-button,
+.theme-white .tab-load-btn { background: #fff !important; border-color: rgba(0,0,0,0.08) !important; color: #666 !important; }
+
+.theme-white .share-modal,
+.theme-white .theme-modal { background: #fff !important; }
+
+.theme-white .bottom-search-input-wrap { background: rgba(0,0,0,0.04) !important; }
+.theme-white .bottom-search-input { color: #000 !important; }
+.theme-white .bottom-search-bar { background: rgba(255,255,255,0.92) !important; border-color: rgba(0,0,0,0.06) !important; }
+
+/* --- GLASS: полупрозрачные карточки с blur --- */
+.theme-glass .route-card,
+.theme-glass .route-card-list,
+.theme-glass .favorite-card,
+.theme-glass .favorite-card-grouped,
+.theme-glass .favorites-section,
+.theme-glass .nearby-stop-card,
+.theme-glass .nearby-section,
+.theme-glass .history-item,
+.theme-glass .transfer-card,
+.theme-glass .transfers-section,
+.theme-glass .stop-search-card { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,255,255,0.12) !important; }
+
+.theme-glass .route-card:active,
+.theme-glass .route-card-list:active,
+.theme-glass .transfer-card:active,
+.theme-glass .history-item:active { background: rgba(255,255,255,0.18) !important; }
+
+.theme-glass .day-type-selector,
+.theme-glass .direction-selector,
+.theme-glass .sv2-pill-toggle { background: rgba(255,255,255,0.08) !important; }
+
+.theme-glass .day-type-selector button.active,
+.theme-glass .direction-selector button.active,
+.theme-glass .sv2-pill-btn.active { background: rgba(255,255,255,0.18) !important; color: #fff !important; }
+
+.theme-glass .sv2-time-chip { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,255,255,0.12) !important; }
+.theme-glass .sv2-hour-row { border-color: rgba(255,255,255,0.06) !important; }
+.theme-glass .stop-card { border-color: rgba(255,255,255,0.06) !important; }
+.theme-glass .stop-number { background: transparent !important; border-color: rgba(255,255,255,0.2) !important; }
+.theme-glass .stop-card:not(:last-child) .stop-number::after { background: rgba(255,255,255,0.1) !important; }
+
+.theme-glass .route-type-filter-btn { border-color: rgba(255,255,255,0.1) !important; }
+
+.theme-glass .bottom-tab-bar { background: rgba(100,80,160,0.4) !important; backdrop-filter: blur(20px) !important; border-color: rgba(255,255,255,0.08) !important; }
+.theme-glass .bottom-search-btn,
+.theme-glass .scroll-top-btn { background: rgba(100,80,160,0.4) !important; backdrop-filter: blur(20px) !important; }
+.theme-glass .bottom-search-bar { background: rgba(100,80,160,0.4) !important; backdrop-filter: blur(20px) !important; }
+
+.theme-glass .action-button,
+.theme-glass .tab-load-btn { background: rgba(255,255,255,0.1) !important; border-color: rgba(255,255,255,0.12) !important; }
+
+.theme-glass .share-modal,
+.theme-glass .theme-modal { background: rgba(40,30,60,0.95) !important; backdrop-filter: blur(20px) !important; }
+
+/* --- BLACK GLASS: тёмные полупрозрачные карточки --- */
+.theme-black-glass .route-card,
+.theme-black-glass .route-card-list,
+.theme-black-glass .favorite-card,
+.theme-black-glass .favorite-card-grouped,
+.theme-black-glass .favorites-section,
+.theme-black-glass .nearby-stop-card,
+.theme-black-glass .nearby-section,
+.theme-black-glass .history-item,
+.theme-black-glass .transfer-card,
+.theme-black-glass .transfers-section,
+.theme-black-glass .stop-search-card { background: rgba(0,0,0,0.25) !important; border-color: rgba(255,255,255,0.06) !important; }
+
+.theme-black-glass .route-card:active,
+.theme-black-glass .route-card-list:active,
+.theme-black-glass .transfer-card:active,
+.theme-black-glass .history-item:active { background: rgba(0,0,0,0.4) !important; }
+
+.theme-black-glass .day-type-selector,
+.theme-black-glass .direction-selector,
+.theme-black-glass .sv2-pill-toggle { background: rgba(0,0,0,0.25) !important; }
+
+.theme-black-glass .day-type-selector button.active,
+.theme-black-glass .direction-selector button.active,
+.theme-black-glass .sv2-pill-btn.active { background: rgba(255,255,255,0.1) !important; color: #fff !important; }
+
+.theme-black-glass .sv2-time-chip { background: rgba(0,0,0,0.25) !important; border-color: rgba(255,255,255,0.06) !important; }
+.theme-black-glass .sv2-hour-row { border-color: rgba(255,255,255,0.12) !important; }
+.theme-black-glass .stop-card { border-color: rgba(255,255,255,0.04) !important; }
+.theme-black-glass .stop-number { background: transparent !important; border-color: rgba(255,255,255,0.12) !important; }
+.theme-black-glass .stop-card:not(:last-child) .stop-number::after { background: rgba(255,255,255,0.06) !important; }
+
+.theme-black-glass .bottom-tab-bar { background: rgba(0,0,0,0.6) !important; backdrop-filter: blur(20px) !important; border-color: rgba(255,255,255,0.06) !important; }
+.theme-black-glass .bottom-search-btn,
+.theme-black-glass .scroll-top-btn { background: rgba(0,0,0,0.6) !important; backdrop-filter: blur(20px) !important; }
+.theme-black-glass .bottom-search-bar { background: rgba(0,0,0,0.6) !important; backdrop-filter: blur(20px) !important; }
+
+.theme-black-glass .action-button,
+.theme-black-glass .tab-load-btn { background: rgba(0,0,0,0.25) !important; border-color: rgba(255,255,255,0.06) !important; }
+
+.theme-black-glass .share-modal,
+.theme-black-glass .theme-modal { background: rgba(10,10,15,0.95) !important; backdrop-filter: blur(20px) !important; }
+
+/* ============================================================
+   НИЖНЕЕ МЕНЮ — темы
+   ============================================================ */
+
+/* BLACK */
+.theme-black .bottom-tab-bar {
+  background: #111111 !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+.theme-black .bottom-tab.active .bottom-tab-label {
+  color: #3390ec !important;
+}
+
+.theme-black .bottom-tab.active::after {
+  background: #3390ec !important;
+}
+
+/* WHITE */
+.theme-white .bottom-tab-bar {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+.theme-white .bottom-tab-label {
+  color: #999999 !important;
+}
+
+.theme-white .bottom-tab.active .bottom-tab-label {
+  color: #3390ec !important;
+}
+
+/* GLASS */
+.theme-glass .bottom-tab-bar {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.theme-glass .bottom-tab-label {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.theme-glass .bottom-tab.active .bottom-tab-label {
+  color: #ffffff !important;
+}
+
+.theme-glass .bottom-tab.active::after {
+  background: #ffffff !important;
+}
+
+.theme-glass .bottom-tab-badge {
+  background: rgba(255,255,255,0.4) !important;
+  color: #ffffff !important;
+}
+
+/* BLACK GLASS */
+.theme-black-glass .bottom-tab-bar {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.theme-black-glass .bottom-tab-label {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.theme-black-glass .bottom-tab.active .bottom-tab-label {
+  color: #ffffff !important;
+}
+
+.theme-black-glass .bottom-tab.active::after {
+  background: #7b8cde !important;
+}
+
+/* ============================================================
+   КНОПКА ПОИСКА И СТРОКА ПОИСКА — темы
+   ============================================================ */
+
+/* BLACK */
+.theme-black .route-type-filter-btn {
+  background: #1a1a1a !important;
+}
+
+.theme-black .tab-action-btn {
+  background: #1a1a1a !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-black .bottom-search-btn,
+.theme-black .bottom-search-close,
+.theme-black .bottom-search-input-wrap {
+  background: #111111 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* WHITE */
+.theme-white .route-type-filter-btn {
+  background: #f0f0f0 !important;
+  color: #333 !important;
+}
+
+.theme-white .route-type-filter-btn.active {
+  background: #ffffff !important;
+}
+
+.theme-white .tab-action-btn {
+  background: #f0f0f0 !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.theme-white .bottom-search-btn,
+.theme-white .bottom-search-close,
+.theme-white .bottom-search-input-wrap {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+.theme-white .bottom-search-close {
+  color: #333 !important;
+}
+
+.theme-white .bottom-search-input {
+  color: #333 !important;
+}
+
+.theme-white .bottom-search-input::placeholder {
+  color: #999 !important;
+}
+
+.theme-white .scroll-top-btn {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #333 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* GLASS */
+.theme-glass .route-type-filter-btn {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.theme-glass .tab-action-btn {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.theme-glass .bottom-search-btn,
+.theme-glass .bottom-search-close,
+.theme-glass .bottom-search-input-wrap {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+}
+
+.theme-glass .scroll-top-btn {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.4) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+
+.theme-glass .bottom-search-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* BLACK GLASS */
+.theme-black-glass .route-type-filter-btn {
+  background: rgba(0, 0, 0, 0.3) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.theme-black-glass .tab-action-btn {
+  background: rgba(0, 0, 0, 0.35) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.theme-black-glass .bottom-search-btn,
+.theme-black-glass .bottom-search-close,
+.theme-black-glass .bottom-search-input-wrap {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+}
+
+.theme-black-glass .scroll-top-btn {
+  background: rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}

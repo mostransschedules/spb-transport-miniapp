@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+  <!-- Важные мета-теги для Telegram Mini App -->
+  <meta name="theme-color" content="#3390ec" />
+  <meta name="color-scheme" content="light dark" />
+  
+  <title>Расписание транспорта Москвы</title>
+  
+  <!-- Telegram Web App SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  
+  <style>
+    /* Базовые стили для быстрой загрузки */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+    
+    /* Экран загрузки */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: var(--tg-theme-bg-color, #ffffff);
+      z-index: 9999;
+    }
+    
+    .loader {
+      width: 50px;
+      height: 50px;
+      border: 4px solid var(--tg-theme-hint-color, #e0e0e0);
+      border-top: 4px solid var(--tg-theme-button-color, #3390ec);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      margin-top: 20px;
+      color: var(--tg-theme-text-color, #000000);
+      font-size: 16px;
+    }
+    
+    .loading-subtext {
+      margin-top: 10px;
+      color: var(--tg-theme-hint-color, #999999);
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Экран загрузки (показывается до загрузки React) -->
+  <div id="loading-screen">
+    <div class="loader"></div>
+    <div class="loading-text">Загружаем приложение...</div>
+    <div class="loading-subtext" id="loading-status">Подключение к серверу</div>
+  </div>
+  
+  <!-- Корневой элемент для React -->
+  <div id="root"></div>
+  
+  <!-- Подключаем главный JavaScript файл -->
+  <script type="module" src="/src/main.jsx"></script>
+  
+  <script>
+    const statusEl = document.getElementById('loading-status');
+
+    // Показать ошибку поверх всего — даже если loading-screen уже удалён
+    function showFatalError(title, details) {
+      // Удаляем предыдущий оверлей если есть
+      var existing = document.getElementById('fatal-error-overlay');
+      if (existing) existing.remove();
+
+      var overlay = document.createElement('div');
+      overlay.id = 'fatal-error-overlay';
+      overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99999;overflow:auto;padding:20px;';
+      overlay.innerHTML =
+        '<div style="font-family:monospace;font-size:13px;color:#e74c3c;max-width:90vw;word-break:break-word;">' +
+        '<b style="font-size:16px;">' + title + '</b><br><br>' +
+        '<span style="color:#ccc;">' + details + '</span>' +
+        '</div>';
+      document.body.appendChild(overlay);
+    }
+
+    // Глобальный перехват JS-ошибок
+    window.onerror = function(msg, src, line, col, err) {
+      showFatalError('💥 Ошибка:', msg + '<br><br>' + (src||'') + ':' + (line||'') + ':' + (col||'') + '<br><br>' + (err && err.stack ? err.stack : ''));
+    };
+
+    window.addEventListener('unhandledrejection', function(e) {
+      showFatalError('💥 Promise rejection:', String(e.reason) + '<br><br>' + (e.reason && e.reason.stack ? e.reason.stack : ''));
+    });
+
+    setTimeout(() => { if (statusEl) statusEl.textContent = 'Запуск приложения...'; }, 1000);
+    setTimeout(() => { if (statusEl) statusEl.textContent = 'Почти готово...'; }, 2000);
+    setTimeout(() => {
+      if (document.getElementById('loading-screen') && statusEl) {
+        statusEl.textContent = 'Сервер просыпается... ~30 сек';
+        statusEl.style.color = '#ff9800';
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

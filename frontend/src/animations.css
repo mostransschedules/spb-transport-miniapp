@@ -1,0 +1,573 @@
+/* ============================================================
+   АНИМАЦИИ — iOS 26 STYLE
+   ============================================================ */
+
+/* ============================================================
+   1. SPRING KEYFRAMES — iOS 26 physics
+   ============================================================ */
+
+/* Появление снизу с упругостью (как iOS sheet) */
+@keyframes springUp {
+  0%   { opacity: 0; transform: translateY(24px) scale(0.96); }
+  40%  { opacity: 1; transform: translateY(-6px) scale(1.015); }
+  65%  { transform: translateY(2px) scale(0.997); }
+  80%  { transform: translateY(-1px) scale(1.003); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Появление с лёгким масштабом (как iOS pop) */
+@keyframes springPop {
+  0%   { opacity: 0; transform: scale(0.82); }
+  40%  { opacity: 1; transform: scale(1.06); }
+  65%  { transform: scale(0.975); }
+  80%  { transform: scale(1.01); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Slide-in справа (как push navigation в iOS) */
+@keyframes slideInRight {
+  0%   { opacity: 0; transform: translateX(50px); }
+  40%  { opacity: 1; transform: translateX(-6px); }
+  65%  { transform: translateX(3px); }
+  80%  { transform: translateX(-1px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Slide-in слева (back) */
+@keyframes slideInLeft {
+  0%   { opacity: 0; transform: translateX(-50px); }
+  40%  { opacity: 1; transform: translateX(6px); }
+  65%  { transform: translateX(-3px); }
+  80%  { transform: translateX(1px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* Fade + tiny scale (мягкое появление) */
+@keyframes fadeScale {
+  0%   { opacity: 0; transform: scale(0.94) translateY(8px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Пульс избранного */
+@keyframes favPulse {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.35) rotate(-8deg); }
+  50%  { transform: scale(0.92) rotate(4deg); }
+  75%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Shimmer загрузки */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Пульс для загрузки */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* Спиннер */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Ripple */
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* Раскрытие вниз — iOS 26 spring */
+@keyframes expandDown {
+  0%   { opacity: 0; max-height: 0; transform: scaleY(0.7); }
+  50%  { opacity: 1; transform: scaleY(1.02); }
+  75%  { transform: scaleY(0.99); }
+  100% { opacity: 1; max-height: 1000px; transform: scaleY(1); }
+}
+
+/* Сворачивание вверх */
+@keyframes collapseUp {
+  0%   { opacity: 1; max-height: 1000px; transform: scaleY(1); }
+  100% { opacity: 0; max-height: 0; transform: scaleY(0.7); }
+}
+
+/* Модальное окно */
+@keyframes modalSlideUp {
+  0%   { opacity: 0; transform: translateY(60px) scale(0.92); }
+  40%  { transform: translateY(-8px) scale(1.015); }
+  65%  { transform: translateY(3px) scale(0.997); }
+  80%  { transform: translateY(-1px) scale(1.002); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Bounce маленький (для уведомлений) */
+@keyframes nudge {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-4px); }
+  40%       { transform: translateX(3px); }
+  60%       { transform: translateX(-2px); }
+  80%       { transform: translateX(1px); }
+}
+
+/* ============================================================
+   iOS 26 — SEARCH BAR ANIMATIONS
+   ============================================================ */
+
+/* Таб-бар расширяется в поиск */
+@keyframes searchBarExpand {
+  0%   { opacity: 0; transform: scaleX(0.6) scaleY(0.85); border-radius: 30px; }
+  40%  { opacity: 1; transform: scaleX(1.02) scaleY(1.01); }
+  65%  { transform: scaleX(0.995) scaleY(0.998); }
+  100% { opacity: 1; transform: scaleX(1) scaleY(1); }
+}
+
+/* Поиск сворачивается в таб-бар */
+@keyframes searchBarCollapse {
+  0%   { opacity: 1; transform: scaleX(1) scaleY(1); }
+  100% { opacity: 0; transform: scaleX(0.6) scaleY(0.85); }
+}
+
+/* Кнопка поиска — bounce при нажатии */
+@keyframes searchBtnBounce {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(0.85); }
+  60%  { transform: scale(1.1); }
+  80%  { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+/* Tab screen transitions — iOS 26 morph */
+@keyframes tabFadeIn {
+  0%   { opacity: 0; transform: translateY(12px) scale(0.98); }
+  50%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes tabFadeOut {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-8px) scale(0.98); }
+}
+
+/* Filter chip selection */
+@keyframes chipSelect {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.92); }
+  70%  { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Nearby / favorite card stagger */
+@keyframes cardSlideIn {
+  0%   { opacity: 0; transform: translateX(-16px) scale(0.97); }
+  50%  { opacity: 1; transform: translateX(3px) scale(1.005); }
+  75%  { transform: translateX(-1px) scale(0.999); }
+  100% { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+
+/* ============================================================
+   2. ПЕРЕХОДЫ МЕЖДУ ЭКРАНАМИ — iOS 26
+   ============================================================ */
+
+.screen-enter {
+  animation: slideInRight 0.48s cubic-bezier(0.32, 1.25, 0.62, 1) both;
+}
+
+.screen-back {
+  animation: slideInLeft 0.42s cubic-bezier(0.32, 1.2, 0.62, 1) both;
+}
+
+
+/* ============================================================
+   3. КАРТОЧКИ — STAGGER SPRING
+   ============================================================ */
+
+.route-card,
+.route-card-list,
+.stop-card,
+.favorite-card,
+.favorite-card-grouped,
+.nearby-stop-card {
+  animation: springUp 0.5s cubic-bezier(0.32, 1.35, 0.62, 1) both;
+}
+
+/* Stagger — до 12 карточек */
+.route-card:nth-child(1),  .route-card-list:nth-child(1),  .stop-card:nth-child(1)  { animation-delay: 0.00s; }
+.route-card:nth-child(2),  .route-card-list:nth-child(2),  .stop-card:nth-child(2)  { animation-delay: 0.04s; }
+.route-card:nth-child(3),  .route-card-list:nth-child(3),  .stop-card:nth-child(3)  { animation-delay: 0.08s; }
+.route-card:nth-child(4),  .route-card-list:nth-child(4),  .stop-card:nth-child(4)  { animation-delay: 0.12s; }
+.route-card:nth-child(5),  .route-card-list:nth-child(5),  .stop-card:nth-child(5)  { animation-delay: 0.15s; }
+.route-card:nth-child(6),  .route-card-list:nth-child(6),  .stop-card:nth-child(6)  { animation-delay: 0.18s; }
+.route-card:nth-child(7),  .route-card-list:nth-child(7),  .stop-card:nth-child(7)  { animation-delay: 0.20s; }
+.route-card:nth-child(8),  .route-card-list:nth-child(8),  .stop-card:nth-child(8)  { animation-delay: 0.22s; }
+.route-card:nth-child(9),  .route-card-list:nth-child(9),  .stop-card:nth-child(9)  { animation-delay: 0.24s; }
+.route-card:nth-child(10), .route-card-list:nth-child(10), .stop-card:nth-child(10) { animation-delay: 0.26s; }
+.route-card:nth-child(11), .route-card-list:nth-child(11), .stop-card:nth-child(11) { animation-delay: 0.27s; }
+.route-card:nth-child(12), .route-card-list:nth-child(12), .stop-card:nth-child(12) { animation-delay: 0.28s; }
+
+
+/* ============================================================
+   4. ТАКТИЛЬНЫЙ ОТКЛИК (iOS 26 press)
+   ============================================================ */
+
+/* Все интерактивные элементы — iOS 26 spring transition */
+button,
+.route-card,
+.route-card-list,
+.stop-card,
+.favorite-card,
+.favorite-card-grouped,
+.favorite-route-item,
+.nearby-route-chip,
+.nearby-stop-card,
+.time-chip-small,
+.view-toggle-btn,
+.route-type-filter-btn,
+.day-type-selector button,
+.direction-selector button,
+.tab-action-btn,
+input {
+  transition:
+    transform 0.22s cubic-bezier(0.32, 1.4, 0.62, 1),
+    box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    opacity 0.18s ease;
+}
+
+/* Press down — мгновенный и физичный */
+.route-card:active,
+.route-card-list:active,
+.stop-card:active,
+.favorite-card:active,
+.nearby-stop-card:active {
+  transform: scale(0.97) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important;
+  transition: transform 0.06s ease, box-shadow 0.06s ease !important;
+}
+
+.time-chip-small:active {
+  transform: scale(0.91) !important;
+  transition: transform 0.06s ease !important;
+}
+
+.route-type-filter-btn:active {
+  transform: scale(0.93) !important;
+  transition: transform 0.06s ease !important;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.94) !important;
+  transition: transform 0.06s ease !important;
+}
+
+/* Hover — только на десктопе */
+@media (hover: hover) {
+  .route-card:hover,
+  .route-card-list:hover,
+  .stop-card:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 10px 32px rgba(0,0,0,0.15);
+  }
+
+  .time-chip-small:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+
+  button:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+
+  .favorite-card:hover,
+  .favorite-card-grouped:hover,
+  .nearby-stop-card:hover {
+    transform: translateY(-2px) scale(1.005);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+
+  .route-type-filter-btn:hover {
+    transform: translateY(-1px);
+  }
+}
+
+
+/* ============================================================
+   5. ЧИПСЫ ВРЕМЕНИ — STAGGER
+   ============================================================ */
+
+.time-chip-small {
+  animation: springPop 0.35s cubic-bezier(0.34, 1.5, 0.64, 1) both;
+}
+
+.hour-times .time-chip-small:nth-child(1)  { animation-delay: 0.00s; }
+.hour-times .time-chip-small:nth-child(2)  { animation-delay: 0.03s; }
+.hour-times .time-chip-small:nth-child(3)  { animation-delay: 0.06s; }
+.hour-times .time-chip-small:nth-child(4)  { animation-delay: 0.09s; }
+.hour-times .time-chip-small:nth-child(5)  { animation-delay: 0.11s; }
+.hour-times .time-chip-small:nth-child(6)  { animation-delay: 0.13s; }
+.hour-times .time-chip-small:nth-child(7)  { animation-delay: 0.15s; }
+.hour-times .time-chip-small:nth-child(8)  { animation-delay: 0.17s; }
+.hour-times .time-chip-small:nth-child(9)  { animation-delay: 0.19s; }
+.hour-times .time-chip-small:nth-child(10) { animation-delay: 0.20s; }
+
+
+/* ============================================================
+   6. БЛОКИ ЧАСОВ — STAGGER
+   ============================================================ */
+
+.hour-group {
+  animation: fadeScale 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.hour-group:nth-child(1)  { animation-delay: 0.00s; }
+.hour-group:nth-child(2)  { animation-delay: 0.05s; }
+.hour-group:nth-child(3)  { animation-delay: 0.09s; }
+.hour-group:nth-child(4)  { animation-delay: 0.12s; }
+.hour-group:nth-child(5)  { animation-delay: 0.15s; }
+.hour-group:nth-child(6)  { animation-delay: 0.17s; }
+.hour-group:nth-child(7)  { animation-delay: 0.19s; }
+.hour-group:nth-child(8)  { animation-delay: 0.20s; }
+
+
+/* ============================================================
+   7. ИЗБРАННОЕ + РЯДОМ — iOS 26
+   ============================================================ */
+
+.favorites-content {
+  animation: expandDown 0.45s cubic-bezier(0.32, 1.25, 0.62, 1) both;
+  transform-origin: top;
+}
+
+.favorite-route-item,
+.nearby-route-chip {
+  animation: cardSlideIn 0.4s cubic-bezier(0.32, 1.35, 0.62, 1) both;
+}
+
+.favorite-route-item:nth-child(1), .nearby-route-chip:nth-child(1) { animation-delay: 0.00s; }
+.favorite-route-item:nth-child(2), .nearby-route-chip:nth-child(2) { animation-delay: 0.04s; }
+.favorite-route-item:nth-child(3), .nearby-route-chip:nth-child(3) { animation-delay: 0.07s; }
+.favorite-route-item:nth-child(4), .nearby-route-chip:nth-child(4) { animation-delay: 0.10s; }
+.favorite-route-item:nth-child(5), .nearby-route-chip:nth-child(5) { animation-delay: 0.12s; }
+.favorite-route-item:nth-child(6), .nearby-route-chip:nth-child(6) { animation-delay: 0.14s; }
+
+/* Анимация звезды при добавлении в избранное */
+.favorite-button.just-added {
+  animation: favPulse 0.5s cubic-bezier(0.32, 1.4, 0.62, 1);
+}
+
+/* Expand toggle поворот */
+.expand-toggle {
+  transition: transform 0.35s cubic-bezier(0.32, 1.4, 0.62, 1) !important;
+}
+
+.expand-toggle.open {
+  transform: rotate(180deg);
+}
+
+/* Группы раскрытие */
+.favorite-group-routes {
+  overflow: hidden;
+  animation: expandDown 0.4s cubic-bezier(0.32, 1.25, 0.62, 1) both;
+  transform-origin: top;
+}
+
+
+/* ============================================================
+   8. МОДАЛЬНОЕ ОКНО
+   ============================================================ */
+
+.theme-modal-overlay {
+  animation: overlayFadeIn 0.25s ease both;
+}
+
+.theme-modal {
+  animation: modalSlideUp 0.45s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+}
+
+.theme-option {
+  animation: springPop 0.35s cubic-bezier(0.34, 1.5, 0.64, 1) both;
+}
+
+.theme-option:nth-child(1) { animation-delay: 0.05s; }
+.theme-option:nth-child(2) { animation-delay: 0.10s; }
+.theme-option:nth-child(3) { animation-delay: 0.14s; }
+.theme-option:nth-child(4) { animation-delay: 0.17s; }
+
+
+/* ============================================================
+   9. ПЛАВАЮЩИЕ КНОПКИ
+   ============================================================ */
+
+.floating-buttons {
+  animation: springUp 0.5s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation-delay: 0.1s;
+}
+
+.back-button-floating {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s ease,
+              background 0.2s ease !important;
+}
+
+@media (hover: hover) {
+  .back-button-floating:hover {
+    transform: translateX(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+}
+
+.back-button-floating:active {
+  transform: scale(0.93) !important;
+}
+
+
+/* ============================================================
+   10. КНОПКА ТЕМЫ
+   ============================================================ */
+
+.theme-button-flat {
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s ease,
+              background 0.2s ease !important;
+}
+
+@media (hover: hover) {
+  .theme-button-flat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+}
+
+
+/* ============================================================
+   11. RIPPLE НА КНОПКАХ
+   ============================================================ */
+
+/* Ripple targets — только карточки, не вложенные кнопки */
+.route-card,
+.route-card-list,
+.stop-card,
+.time-chip-small,
+.tab-load-btn,
+.day-type-selector button,
+.direction-selector button {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  width: 60px;
+  height: 60px;
+  margin-top: -30px;
+  margin-left: -30px;
+  animation: ripple 0.55s ease-out forwards;
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   12. ЗАГРУЗКА — SKELETON SHIMMER
+   ============================================================ */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--tg-secondary-bg) 25%,
+    rgba(255,255,255,0.08) 50%,
+    var(--tg-secondary-bg) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+.favorite-route-loading,
+.next-departures-loading {
+  animation: pulse 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.spinner {
+  animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+
+/* ============================================================
+   13. УВЕДОМЛЕНИЯ / ПРЕДУПРЕЖДЕНИЯ
+   ============================================================ */
+
+.warning,
+.error,
+.info {
+  animation: springUp 0.4s cubic-bezier(0.34, 1.3, 0.64, 1) both;
+}
+
+
+/* ============================================================
+   14. ВКЛАДКИ СТАТИСТИКИ
+   ============================================================ */
+
+.tabs-header button {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s ease,
+              color 0.2s ease,
+              border-color 0.2s ease !important;
+}
+
+.tabs-header button:active {
+  transform: scale(0.94) !important;
+}
+
+.tab-panel {
+  animation: fadeScale 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+
+/* ============================================================
+   15. SMOOTH SCROLL + PERFORMANCE
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Hint браузеру об анимируемых свойствах */
+.route-card,
+.route-card-list,
+.stop-card,
+.time-chip-small,
+.hour-group,
+.favorite-route-item {
+  will-change: transform, opacity;
+}
+
+/* Убираем will-change после анимации (экономим память) */
+.route-card,
+.route-card-list,
+.stop-card {
+  animation-fill-mode: both;
+}
+
+/* Уменьшаем анимации если пользователь просит */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,199 @@
+/* =============================================================================
+   ROUTE MAP STYLES
+   ============================================================================= */
+
+.route-map-container {
+  margin-top: 16px;
+}
+
+/* Информация над картой */
+.map-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--tg-secondary-bg);
+  padding: 12px;
+  border-radius: 8px 8px 0 0;
+  font-size: 13px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.map-info span {
+  color: var(--tg-text);
+}
+
+/* Контейнер карты */
+.route-map {
+  height: 500px;
+  width: 100%;
+  border-radius: 0 0 8px 8px;
+  z-index: 1;
+}
+
+/* Placeholder когда нет данных */
+.map-placeholder {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tg-secondary-bg);
+  border-radius: 12px;
+  color: var(--tg-hint);
+  font-size: 16px;
+}
+
+/* Кастомные маркеры */
+.custom-marker-wrapper {
+  background: transparent;
+  border: none;
+}
+
+.custom-marker {
+  font-size: 24px;
+  text-align: center;
+  line-height: 30px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+  animation: markerAppear 0.3s ease-out;
+}
+
+@keyframes markerAppear {
+  from {
+    transform: scale(0) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.custom-marker.selected {
+  font-size: 32px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Popup стили */
+.stop-popup {
+  text-align: center;
+  padding: 4px;
+}
+
+.stop-popup strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--tg-text);
+}
+
+.stop-meta {
+  font-size: 12px;
+  color: var(--tg-hint);
+  margin-top: 4px;
+}
+
+.stop-coords {
+  font-size: 10px;
+  color: var(--tg-hint);
+  font-family: monospace;
+  margin-top: 2px;
+}
+
+.selected-badge {
+  margin-top: 6px;
+  padding: 4px 8px;
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+  border-radius: 4px;
+  font-size: 11px;
+  display: inline-block;
+}
+
+/* Легенда */
+.map-legend {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--tg-secondary-bg);
+  border-radius: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--tg-text);
+}
+
+.legend-icon {
+  font-size: 18px;
+}
+
+/* Адаптивность */
+@media (max-width: 480px) {
+  .route-map {
+    height: 400px;
+  }
+  
+  .map-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .map-legend {
+    gap: 8px;
+  }
+  
+  .legend-item {
+    font-size: 12px;
+  }
+}
+
+/* Переопределение стилей Leaflet для темы */
+.leaflet-container {
+  background: var(--tg-bg);
+  font-family: inherit;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--tg-bg);
+  color: var(--tg-text);
+  border-radius: 8px;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.4);
+}
+
+.leaflet-popup-tip {
+  background: var(--tg-bg);
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--tg-text);
+}
+
+.leaflet-control-zoom a {
+  background: var(--tg-secondary-bg);
+  color: var(--tg-text);
+  border-color: var(--tg-hint);
+}
+
+.leaflet-control-zoom a:hover {
+  background: var(--tg-button);
+  color: var(--tg-button-text);
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
+}
