@@ -17,4 +17,4 @@ gtfs_data/
 
 # IDE
 .vscode/
-.idea/
+.idea/*.duckdb  *.duckdb.wal  *.zip  backend/feed/  backend/gtfs_data/  node_modules/  dist/  __pycache__/  .env  .env.local 
