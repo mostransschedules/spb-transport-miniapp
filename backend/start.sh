@@ -1,8 +1,7 @@
 #!/bin/bash
 
-DB_FILE="gtfs_transport.duckdb"
-# ЗАМЕНИТЕ на реальную ссылку после создания Release!
-DB_URL="https://github.com/mostransschedules/gtfs-telegram-miniapp/releases/download/v1.0/gtfs_transport.duckdb"
+DB_FILE="gtfs_spb.duckdb"
+DB_URL="https://github.com/mostransschedules/spb-transport-miniapp/releases/download/v1.0/gtfs_spb.duckdb"
 
 MIN_SIZE=100000000  # 100 MB минимум
 

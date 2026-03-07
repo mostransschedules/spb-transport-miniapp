@@ -29,8 +29,8 @@ from database import (
 # =============================================================================
 
 app = FastAPI(
-    title="GTFS Moscow API",
-    description="API для расписания общественного транспорта Москвы",
+    title="GTFS SPB API",
+    description="API для расписания общественного транспорта Санкт-Петербурга",
     version="1.0.0"
 )
 
@@ -75,7 +75,7 @@ async def root():
     Главная страница API - просто проверка что сервер работает
     """
     return {
-        "message": "GTFS Moscow API is running",
+        "message": "GTFS SPB API is running",
         "status": "ok",
         "timestamp": datetime.now().isoformat()
     }
