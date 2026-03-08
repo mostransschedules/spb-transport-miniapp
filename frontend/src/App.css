@@ -221,554 +221,220 @@
 .nearby-route-num.route-type-electrobus::after { content: '' !important; display: none !important; }
 .nearby-route-arrow { font-size: 13px; color: rgba(255,255,255,0.5); width: 18px; flex-shrink: 0; text-align: center; }
 .nearby-route-time { flex: 1; font-size: 14px; color: rgba(255,255,255,0.7); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.nearby-show-more { padding: 8px 16px; text-align: center; color: var(--accent); font-size: 13px; font-weight: 500; background: transparent; border: none; cursor: pointer; width: 100%; }
-.nearby-status { padding: 16px; text-align: center; font-size: 14px; color: var(--text-muted); }
-.nearby-section { margin: 0 16px 16px; background: var(--card); border-radius: 14px; border: 0.5px solid var(--card-border); overflow: hidden; }
-.nearby-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; cursor: pointer; }
-.nearby-header h3 { font-size: 16px; font-weight: 600; color: var(--text); }
-.nearby-content { border-top: 0.5px solid var(--divider); }
 
-/* ═══ HISTORY TAB ═══ */
-.history-list { padding: 0 16px; display: flex; flex-direction: column; gap: 4px; }
-.history-item { display: flex; align-items: center; padding: 12px 16px; background: var(--card); border-radius: 12px; border: 0.5px solid var(--card-border); gap: 12px; cursor: pointer; transition: .15s; }
-.history-item:active { background: var(--card-hover); }
-.history-item-info { flex: 1; min-width: 0; }
-.history-item-main { display: flex; align-items: center; gap: 10px; }
-.history-item-number { font-size: 16px; font-weight: 700; flex-shrink: 0; min-width: 36px; }
-.history-item-route-name { font-size: 13px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
-.history-item-number.route-type-electrobus::after { font-size: 12px; }
-.history-item-arrow { color: rgba(255,255,255,0.12); font-size: 18px; flex-shrink: 0; }
 
-/* ═══ BOTTOM BAR — iOS Telegram-style (original) ═══ */
-.bottom-bar-wrapper { position: fixed; bottom: calc(42px + env(safe-area-inset-bottom)); left: 12px; right: 12px; z-index: 100; display: flex; align-items: stretch; gap: 10px; height: 60px; }
-.bottom-tab-bar { flex: 1; display: flex; align-items: stretch; height: 60px; background: var(--tg-secondary-bg, #1a1a1a); border: 1px solid rgba(128,128,128,0.12); border-radius: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
-.bottom-search-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--tg-secondary-bg, #1a1a1a); border: 1px solid rgba(128,128,128,0.12); box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 22px; transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1); -webkit-tap-highlight-color: transparent; }
-.bottom-search-btn:active { transform: scale(0.88) !important; }
-
-.bottom-search-bar { flex: 1; display: flex; align-items: center; gap: 10px; height: 60px; animation: searchBarExpand 0.45s cubic-bezier(0.32,1.25,0.62,1) both; transform-origin: right center; }
-.bottom-search-input-wrap { flex: 1; display: flex; align-items: center; gap: 10px; height: 60px; background: var(--tg-secondary-bg, #1a1a1a); border: 1px solid rgba(128,128,128,0.12); border-radius: 20px; padding: 0 18px; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); }
-.bottom-search-icon { font-size: 18px; opacity: 0.5; flex-shrink: 0; }
-.bottom-search-input { flex: 1; border: none; background: none; outline: none; color: var(--tg-text, #fff); font-size: 16px; font-family: inherit; padding: 0; min-width: 0; }
-.bottom-search-input::placeholder { color: var(--tg-hint, #666); }
-.bottom-search-close { width: 60px; height: 60px; border-radius: 50%; background: var(--tg-secondary-bg, #1a1a1a); border: 1px solid rgba(128,128,128,0.12); box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; font-size: 18px; color: var(--tg-text, #fff); transition: transform 0.22s cubic-bezier(0.32,1.4,0.62,1); -webkit-tap-highlight-color: transparent; }
-.bottom-search-close:active { transform: scale(0.88) !important; }
-
-.bottom-tab { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: none; border: none; cursor: pointer; padding: 6px 4px; position: relative; transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1); -webkit-tap-highlight-color: transparent; }
-.bottom-tab:active { transform: scale(0.88) !important; }
-.bottom-tab-icon { font-size: 22px; line-height: 1; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
-.bottom-tab.active .bottom-tab-icon { transform: scale(1.15) translateY(-1px); }
-.bottom-tab-label { font-size: 10px; font-weight: 500; color: var(--tg-hint, #666); transition: color 0.2s ease; white-space: nowrap; }
-.bottom-tab.active .bottom-tab-label { color: var(--tg-button, #3390ec); font-weight: 600; }
-.bottom-tab.active::after { content: ''; position: absolute; bottom: 0; left: 20%; right: 20%; height: 2px; background: var(--tg-button, #3390ec); border-radius: 2px 2px 0 0; }
-.bottom-tab-badge { position: absolute; top: 4px; right: calc(50% - 18px); background: var(--tg-button, #3390ec); color: #fff; font-size: 10px; font-weight: 700; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; display: flex; align-items: center; justify-content: center; line-height: 1; }
-
-.scroll-top-btn { position: fixed; bottom: calc(112px + env(safe-area-inset-bottom)); right: 12px; width: 60px; height: 44px; border-radius: 22px; background: var(--tg-secondary-bg, #1a1a1a); color: var(--tg-text, #fff); border: 1px solid rgba(128,128,128,0.12); font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 101; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.15s ease; -webkit-tap-highlight-color: transparent; }
-.scroll-top-btn:active { transform: scale(0.9) !important; }
-
-/* ═══ SEARCH RESULTS ═══ */
-.stop-search-header { font-size: 14px; font-weight: 600; color: var(--text-secondary); padding: 12px 20px 8px; }
-.stop-search-card, .stop-search-item { margin: 0 16px 8px; background: var(--card); border-radius: 12px; border: 0.5px solid var(--card-border); overflow: visible; }
-.stop-search-card:active, .stop-search-item:active { background: var(--card-hover); }
-.stop-search-name { font-size: 16px; font-weight: 600; color: #fff; padding: 12px 16px 6px; }
-.stop-search-route-badge { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 8px; background: var(--card); border: 1px solid var(--card-border); cursor: pointer; }
-.search-results-text { font-size: 13px; color: var(--text-muted); }
-
-/* ═══ SHARE / MODALS ═══ */
-.theme-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: flex-end; justify-content: center; }
-.theme-modal, .share-modal { background: #1a1a22; border-radius: 20px 20px 0 0; max-width: 500px; width: 100%; padding: 20px; max-height: 80vh; overflow-y: auto; }
-.theme-modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.theme-modal-header h3 { font-size: 18px; font-weight: 600; }
-.theme-modal-close { background: var(--card); border: none; color: var(--text-secondary); font-size: 18px; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; }
-.share-preview { background: var(--card); border-radius: 12px; padding: 12px 16px; margin-bottom: 16px; }
-.share-preview-label { font-size: 14px; font-weight: 600; }
-.share-preview-stop { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
-.share-preview-times { font-size: 13px; color: var(--green); margin-top: 4px; }
-.share-options { display: flex; flex-direction: column; gap: 8px; }
-.share-option-btn { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; cursor: pointer; color: #fff; transition: .15s; }
-.share-option-btn:active { background: var(--card-hover); }
-.share-option-icon { font-size: 20px; }
-.share-option-text { flex: 1; }
-.share-option-title { font-size: 15px; font-weight: 500; }
-.share-option-desc { font-size: 12px; color: var(--text-muted); }
-.share-option-arrow { color: rgba(255,255,255,0.15); font-size: 18px; }
-.share-toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: #fff; padding: 10px 24px; border-radius: 12px; font-size: 14px; z-index: 300; }
-
-/* ═══ ERRORS ═══ */
-.error { background: rgba(255,92,92,0.1); border: 1px solid rgba(255,92,92,0.2); color: #ff8a8a; padding: 10px 16px; border-radius: 10px; font-size: 14px; margin: 8px 16px; }
-.error-content { display: flex; align-items: center; justify-content: space-between; }
-.error-close { background: none; border: none; color: #ff8a8a; font-size: 16px; cursor: pointer; padding: 4px 8px; opacity: 0.7; }
-.warning { background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.2); color: #f5c842; padding: 10px 16px; border-radius: 10px; font-size: 14px; margin: 8px 16px; }
-.cache-warning { background: rgba(245,166,35,0.1); border: 1px solid rgba(245,166,35,0.2); color: #f5c842; padding: 10px 16px; border-radius: 10px; font-size: 14px; margin: 8px 16px; display: flex; align-items: center; justify-content: space-between; }
-.cache-warning-close { background: none; border: none; color: #f5c842; font-size: 16px; cursor: pointer; padding: 4px 8px; opacity: 0.7; }
-.cache-warning-close:hover { opacity: 1; }
-.info { padding: 16px 20px; color: var(--text-secondary); font-size: 14px; text-align: center; }
-
-/* ═══ SKELETONS ═══ */
-.skeleton { background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.04) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 8px; }
-@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
-.skeleton-route-card { background: var(--card); border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
-.skeleton-route-number { height: 24px; width: 40px; }
-.skeleton-route-name { height: 14px; width: 80%; }
-.skeleton-route-list-item { display: flex; align-items: center; gap: 12px; padding: 14px 0; }
-.skeleton-list-number { height: 22px; width: 36px; }
-.skeleton-list-name { height: 16px; width: 70%; flex: 1; }
-.skeleton-list-star { height: 18px; width: 18px; border-radius: 50%; }
-.skeleton-stop-card { display: flex; align-items: center; padding: 12px 20px; gap: 14px; }
-.skeleton-stop-number { width: 12px; height: 12px; border-radius: 50%; }
-.skeleton-stop-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
-.skeleton-stop-name { height: 16px; width: 65%; }
-.skeleton-stop-time { height: 13px; width: 40%; }
-.skeleton-hour-group { padding: 8px 0; display: flex; flex-direction: column; gap: 8px; }
-.skeleton-hour-header { height: 16px; width: 40px; }
-.skeleton-chips { display: flex; gap: 6px; }
-.skeleton-chip { height: 28px; width: 56px; border-radius: 8px; }
-
-/* ═══ MISC ═══ */
-.mb-3 { margin-bottom: 12px; }
-.mb-4 { margin-bottom: 16px; }
-.mt-2 { margin-top: 8px; }
-.mt-3 { margin-top: 12px; }
-.pull-indicator { text-align: center; padding: 8px; font-size: 20px; }
-.global-search-results { padding: 0; }
-.schedule-header, .schedule-header-actions { display: none; }
-.schedule { padding: 0; }
-
-/* Цветные бейджи маршрутов в поиске остановок */
-.stop-search-route-chip {
-  font-size: 13px !important;
-  font-weight: 800 !important;
-  padding: 5px 10px !important;
-  border-radius: 8px !important;
-  border: none !important;
-  cursor: pointer !important;
-  color: #ffffff !important;
-  background: #27ae60 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 3px !important;
-  white-space: nowrap !important;
-  line-height: 1.4 !important;
-  min-height: 28px !important;
-  -webkit-font-smoothing: antialiased !important;
-  text-shadow: none !important;
-  -webkit-text-fill-color: #ffffff !important;
+/* Легенда внизу */
+.nearby-legend {
+  padding: 16px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin-top: 8px;
 }
-.stop-search-route-chip * {
-  color: #ffffff !important;
-  -webkit-text-fill-color: #ffffff !important;
-}
-.stop-search-route-chip .chip-arrow {
-  opacity: 0.8;
+.nearby-legend-line {
   font-size: 11px;
-}
-.stop-search-route-chip.route-type-bus,
-.stop-search-route-chip.route-type-bus:hover { background: #27ae60 !important; color: #fff !important; }
-.stop-search-route-chip.route-type-tram,
-.stop-search-route-chip.route-type-tram:hover { background: #e74c3c !important; color: #fff !important; }
-.stop-search-route-chip.route-type-trolley,
-.stop-search-route-chip.route-type-trolley:hover { background: #3498db !important; color: #fff !important; }
-.stop-search-route-group {
-  display: inline-flex;
-  gap: 3px;
-  align-items: center;
-}
-.stop-search-routes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 4px 16px 12px;
-  align-items: center;
-}
-
-
-/* ── Избранное: расписание + GPS строчки ── */
-.fav-with-gps {
-  align-items: flex-start !important;
-  padding: 8px 12px !important;
-  gap: 10px !important;
-}
-.fav-with-gps .favorite-route-number {
-  margin-top: 2px;
-}
-
-/* ── Рядом: чип с GPS ── */
-.nearby-chip-with-gps {
-  flex-direction: column !important;
-  align-items: flex-start !important;
-  height: auto !important;
-  padding: 6px 10px !important;
-  gap: 2px !important;
-}
-.nearby-route-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.nearby-sched {
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
-}
-.nearby-label {
-  font-size: 9px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
   color: rgba(255,255,255,0.3);
-  margin-right: 4px;
-}
-.gps-label {
-  color: #4caf50 !important;
-  background: rgba(39,174,96,0.08);
-  border-radius: 3px;
-  padding: 0 3px;
-  border: 1px solid rgba(39,174,96,0.2);
-}
-.nearby-gps-inline {
-  font-size: 12px;
-  color: #4caf74;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.nearby-gps-countdown {
-  color: rgba(255,255,255,0.4);
-  font-size: 10px;
-}
-
-
-/* ── Избранное: дизайн как у пересадок ─────────────────────────────────── */
-.fav-transfer-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.fav-transfer-row:last-child { border-bottom: none; }
-.fav-transfer-row:active { background: rgba(255,255,255,0.04); }
-.fav-transfer-info {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-.fav-transfer-times {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.fav-transfer-right {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  white-space: nowrap;
-}
-
-
-/* ── Остановки рядом: дизайн мокапа (прибытие) ─────────────────────────── */
-.nearby-arrival-list {
-  display: flex;
-  flex-direction: column;
-}
-.nearby-arrival-card {
-  padding: 10px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  cursor: pointer;
-  transition: background 0.15s;
-}
-.nearby-arrival-card:last-child { border-bottom: none; }
-.nearby-arrival-card:active { background: rgba(255,255,255,0.04); border-radius: 8px; }
-
-.nearby-arrival-top {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.nearby-arrival-badge {
-  font-size: 13px;
-  font-weight: 800;
-  padding: 3px 8px;
-  border-radius: 6px;
-  color: #fff !important;
-  -webkit-text-fill-color: #fff !important;
-  white-space: nowrap;
-  flex-shrink: 0;
-  min-width: 32px;
-  text-align: center;
-}
-.nearby-arrival-badge.route-type-bus    { background: #27ae60; }
-.nearby-arrival-badge.route-type-tram   { background: #e74c3c; }
-.nearby-arrival-badge.route-type-trolley { background: #3498db; }
-
-.nearby-arrival-dest {
-  flex: 1;
-  font-size: 13px;
-  color: rgba(255,255,255,0.75);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-weight: 500;
-}
-.nearby-arrival-min {
-  font-size: 14px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.9);
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-.nearby-arrival-chevron {
-  color: rgba(255,255,255,0.3);
-  font-size: 16px;
-  font-weight: 400;
-  margin-left: 2px;
-}
-
-/* GPS строчка под маршрутом */
-.nearby-gps-row {
+  margin-bottom: 3px;
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 4px;
-  padding-left: 2px;
 }
-.nearby-gps-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #4caf50;
-  box-shadow: 0 0 4px #4caf5088;
-  flex-shrink: 0;
-}
-.nearby-gps-vehicle {
-  font-size: 12px;
-  color: rgba(255,255,255,0.55);
-  font-weight: 500;
-}
-.nearby-gps-sep {
-  font-size: 11px;
-  color: rgba(255,255,255,0.2);
-}
-.nearby-gps-time {
-  font-size: 13px;
-  color: rgba(255,255,255,0.7);
-  font-weight: 600;
-}
-.nearby-gps-tag {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-}
-.nearby-gps-tag.gps-tag {
-  color: #4caf50;
-  background: rgba(39,174,96,0.12);
-  border: 1px solid rgba(39,174,96,0.25);
-}
-.nearby-gps-row.sched .nearby-gps-tag {
-  color: rgba(255,255,255,0.4);
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.nearby-gps-row.sched { opacity: 0.75; }
-.nearby-gps-row .nearby-gps-tag.sched { /* same as .sched above */ }
-.nearby-gps-text {
-  font-size: 12px;
-  color: rgba(255,255,255,0.4);
-}
+.nearby-legend-gps { color: #4caf50; font-weight: 700; }
+.nearby-legend-sched { color: #ff9800; font-weight: 700; }
 
 
-/* ── Остановки рядом: новый дизайн по мокапу ──────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════
+   ОСТАНОВКИ РЯДОМ — точный дизайн по мокапу
+   ═══════════════════════════════════════════════════════════════ */
+
 .nearby-screen {
-  padding: 0;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
 }
-.nearby-header-row {
+
+/* Шапка */
+.nearby-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 16px 8px;
+  padding: 16px 16px 12px;
 }
 .nearby-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 700;
   margin: 0;
+  color: #fff;
 }
-.nearby-refresh-btn {
+.nearby-refresh {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   background: rgba(255,255,255,0.08);
   border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  color: rgba(255,255,255,0.8);
+  font-size: 20px;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  color: rgba(255,255,255,0.7);
   transition: background 0.15s;
 }
-.nearby-refresh-btn:active { background: rgba(255,255,255,0.15); }
+.nearby-refresh:active { background: rgba(255,255,255,0.16); }
 
-.nearby-stops-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
+/* Секция одной остановки */
+.nearby-section {
+  margin-bottom: 24px;
 }
-.nearby-stop-section {
-  padding: 0 0 12px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  margin-bottom: 4px;
-}
-.nearby-stop-section:last-child { border-bottom: none; }
-
-.nearby-stop-header2 {
+.nearby-section-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: 14px 16px 2px;
+  padding: 0 16px 2px;
 }
-.nearby-stop-name2 {
+.nearby-section-name {
   font-size: 15px;
   font-weight: 700;
-  color: rgba(255,255,255,0.95);
+  color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.4px;
 }
-.nearby-stop-dist2 {
+.nearby-section-dist {
   font-size: 12px;
   color: rgba(255,255,255,0.35);
-  flex-shrink: 0;
   margin-left: 8px;
+  flex-shrink: 0;
 }
-.nearby-card-subtitle {
+.nearby-section-sub {
   font-size: 11px;
   color: rgba(255,255,255,0.3);
-  padding: 0 16px 8px;
-  letter-spacing: 0.2px;
+  padding: 0 16px 10px;
 }
 
-.nearby-routes-cards {
+/* Блок карточек */
+.nearby-cards {
   display: flex;
   flex-direction: column;
-  gap: 1px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 12px;
-  margin: 0 12px;
-  overflow: hidden;
+  gap: 6px;
+  padding: 0 12px;
 }
-.nearby-route-card {
-  background: var(--card-bg, #1a1a2e);
-  padding: 12px 14px;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  transition: background 0.12s;
-}
-.nearby-route-card:last-child { border-bottom: none; }
-.nearby-route-card:active { background: rgba(255,255,255,0.06); }
 
-.nearby-route-top {
+/* Одна карточка маршрута */
+.nearby-card {
+  background: #141928;
+  border-radius: 12px;
+  padding: 13px 14px 11px;
+  cursor: pointer;
+  transition: background 0.12s;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.nearby-card:active { background: rgba(255,255,255,0.07); }
+
+/* Верхняя строка карточки */
+.nearby-card-top {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
-.nearby-route-badge {
+
+/* Чип маршрута */
+.nearby-chip {
   font-size: 13px;
   font-weight: 700;
-  border-radius: 6px;
-  padding: 3px 8px;
-  min-width: 36px;
+  border-radius: 7px;
+  padding: 4px 10px;
+  min-width: 38px;
   text-align: center;
   flex-shrink: 0;
   color: #fff;
 }
-.nearby-route-dest {
+.nearby-chip.route-type-bus     { background: #27ae60; }
+.nearby-chip.route-type-tram    { background: #e74c3c; }
+.nearby-chip.route-type-trolley { background: #3498db; }
+
+/* Конечная остановка */
+.nearby-card-dest {
   flex: 1;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  color: rgba(255,255,255,0.85);
+  color: rgba(255,255,255,0.9);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.nearby-route-min {
+
+/* Время "N мин ›" */
+.nearby-card-min {
   font-size: 14px;
   font-weight: 700;
-  color: rgba(255,255,255,0.9);
+  color: rgba(255,255,255,0.95);
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-shrink: 0;
 }
-.nearby-route-chevron {
-  font-size: 16px;
-  color: rgba(255,255,255,0.3);
+.nearby-card-chevron {
+  font-size: 14px;
   font-weight: 400;
+  color: rgba(255,255,255,0.3);
 }
 
-/* GPS/РАСПИСАНИЕ строки под маршрутом */
-.nearby-gps-row {
+/* GPS строка */
+.ngps-row {
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 5px;
-  padding-left: 2px;
+  margin-top: 7px;
 }
-.nearby-gps-dot {
-  width: 7px;
-  height: 7px;
+.ngps-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: #4caf50;
   box-shadow: 0 0 5px #4caf5099;
   flex-shrink: 0;
 }
-.nearby-gps-vehicle {
+.ngps-vehicle {
   font-size: 12px;
   font-weight: 600;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.55);
+  letter-spacing: 0.3px;
 }
-.nearby-gps-sep {
+.ngps-sep {
   font-size: 11px;
   color: rgba(255,255,255,0.2);
 }
-.nearby-gps-time {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.8);
+.ngps-time {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
 }
-.nearby-gps-tag {
+.ngps-tag {
+  margin-left: auto;
   font-size: 10px;
   font-weight: 700;
   border-radius: 4px;
-  padding: 1px 6px;
+  padding: 2px 7px;
   letter-spacing: 0.5px;
 }
-.nearby-gps-tag.gps-tag {
-  background: rgba(76,175,80,0.2);
+.ngps-tag.gps {
+  background: rgba(76,175,80,0.18);
   color: #4caf50;
 }
-.nearby-gps-row.sched .nearby-gps-tag {
-  background: rgba(255,152,0,0.18);
+.ngps-row.sched .ngps-tag {
+  background: rgba(255,152,0,0.16);
   color: #ff9800;
 }
-.nearby-gps-text {
+.ngps-label {
   font-size: 12px;
-  color: rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.35);
 }
 
-.nearby-show-more {
-  background: none;
-  border: none;
-  color: var(--accent, #42a5f5);
-  font-size: 13px;
-  cursor: pointer;
-  padding: 8px 16px 0;
+/* "Показать ещё" */
+.nearby-more-btn {
   display: block;
   width: 100%;
+  background: none;
+  border: none;
+  color: #42a5f5;
+  font-size: 13px;
+  padding: 10px 16px 0;
+  cursor: pointer;
   text-align: center;
 }

@@ -1,15 +1,8 @@
-// =============================================================================
-// NearbyGpsRow — GPS строчка под маршрутом в "Остановках рядом"
-// =============================================================================
-// Показывает:
-//   • [бортовой] · [расстояние] [GPS]     — если есть GPS данные
-//   • РАСПИСАНИЕ  по графику               — если GPS нет
-// =============================================================================
+// NearbyGpsRow — GPS строчка под маршрутом (дизайн по мокапу)
 import { useState, useEffect } from 'react'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-// Общий кэш по stopId
 const _cache = {}
 const _listeners = {}
 
@@ -37,7 +30,7 @@ const subscribe = (stopId, cb) => {
   return () => { _listeners[stopId]?.delete(cb); clearInterval(iv) }
 }
 
-function NearbyGpsRow({ stopId, routeId, schedDep }) {
+function NearbyGpsRow({ stopId, routeId, direction, schedDep }) {
   const [forecasts, setForecasts] = useState(undefined)
   const [, setTick] = useState(0)
 
@@ -50,39 +43,34 @@ function NearbyGpsRow({ stopId, routeId, schedDep }) {
 
   const now = Math.floor(Date.now() / 1000)
 
-  // Ещё загружается
-  if (forecasts === undefined) {
+  // Загружается — сразу показываем РАСПИСАНИЕ
+  if (forecasts === undefined || forecasts === null) {
     return (
-      <div className="nearby-gps-row sched">
-        <span className="nearby-gps-tag sched">РАСПИСАНИЕ</span>
-        <span className="nearby-gps-text">
-          {schedDep == null ? 'нет рейсов' : schedDep.diffMin === 0 ? 'сейчас' : 'по графику'}
-        </span>
+      <div className="ngps-row sched">
+        <span className="ngps-tag sched">РАСПИСАНИЕ</span>
+        <span className="ngps-label">по графику</span>
       </div>
     )
   }
 
-  // GTFS-RT недоступен
-  if (forecasts === null) {
-    return (
-      <div className="nearby-gps-row sched">
-        <span className="nearby-gps-tag sched">РАСПИСАНИЕ</span>
-        <span className="nearby-gps-text">по графику</span>
-      </div>
-    )
-  }
-
-  // Ищем ближайший GPS рейс для этого маршрута
+  // Ищем ближайший GPS рейс
   const gpsReis = forecasts
-    .filter(f => f.arrival_time > now && String(f.route_id) === String(routeId))
+    .filter(f => {
+      if (f.arrival_time <= now) return false
+      if (String(f.route_id) !== String(routeId)) return false
+      if (direction !== undefined && direction !== null
+          && f.direction_id !== undefined && f.direction_id !== null) {
+        if (Number(f.direction_id) !== Number(direction)) return false
+      }
+      return true
+    })
     .sort((a, b) => a.arrival_time - b.arrival_time)
 
   if (gpsReis.length === 0) {
-    // Нет GPS — показываем "РАСПИСАНИЕ по графику"
     return (
-      <div className="nearby-gps-row sched">
-        <span className="nearby-gps-tag sched">РАСПИСАНИЕ</span>
-        <span className="nearby-gps-text">по графику</span>
+      <div className="ngps-row sched">
+        <span className="ngps-tag sched">РАСПИСАНИЕ</span>
+        <span className="ngps-label">по графику</span>
       </div>
     )
   }
@@ -93,14 +81,14 @@ function NearbyGpsRow({ stopId, routeId, schedDep }) {
   const vehicleId = first.vehicle_id || ''
 
   return (
-    <div className="nearby-gps-row gps">
-      <span className="nearby-gps-dot" />
-      {vehicleId && <span className="nearby-gps-vehicle">{vehicleId}</span>}
-      {vehicleId && <span className="nearby-gps-sep">·</span>}
-      <span className="nearby-gps-time">
+    <div className="ngps-row gps">
+      <span className="ngps-dot" />
+      {vehicleId && <span className="ngps-vehicle">{vehicleId}</span>}
+      {vehicleId && <span className="ngps-sep">·</span>}
+      <span className="ngps-time">
         {sec < 60 ? `${sec} с` : `${min} мин`}
       </span>
-      <span className="nearby-gps-tag gps-tag">GPS</span>
+      <span className="ngps-tag gps">GPS</span>
     </div>
   )
 }
