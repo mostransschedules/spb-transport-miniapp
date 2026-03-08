@@ -345,7 +345,12 @@
   min-width: 38px;
   text-align: center;
   flex-shrink: 0;
-  color: #fff;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.nearby-chip * {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
 }
 .nearby-chip.route-type-bus     { background: #27ae60; }
 .nearby-chip.route-type-tram    { background: #e74c3c; }
@@ -400,6 +405,14 @@
 .ngps-sep {
   font-size: 11px;
   color: rgba(255,255,255,0.2);
+}
+.ngps-model {
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
 }
 .ngps-time {
   font-size: 12px;
@@ -464,3 +477,48 @@
 .bottom-tab.active .bottom-tab-label { color: var(--tg-button, #3390ec); font-weight: 600; }
 .bottom-tab.active::after { content: ''; position: absolute; bottom: 0; left: 20%; right: 20%; height: 2px; background: var(--tg-button, #3390ec); border-radius: 2px 2px 0 0; }
 .bottom-tab-badge { position: absolute; top: 4px; right: calc(50% - 18px); background: var(--tg-button, #3390ec); color: #fff; font-size: 10px; font-weight: 700; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; display: flex; align-items: center; justify-content: center; line-height: 1; }
+
+.nearby-show-more {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  color: #42a5f5;
+  font-size: 13px;
+  padding: 10px 16px 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+
+/* ── Stop Search Styles ────────────────────────────────────────────────── */
+.stop-search-header { font-size: 14px; font-weight: 600; color: var(--text-secondary); padding: 12px 20px 8px; }
+.stop-search-item { margin: 0 16px 8px; background: var(--card); border-radius: 12px; border: 0.5px solid var(--card-border); overflow: visible; }
+.stop-search-name { font-size: 16px; font-weight: 600; color: #fff; padding: 12px 16px 6px; }
+.stop-search-routes { display: flex; flex-wrap: wrap; gap: 6px; padding: 6px 16px 12px; }
+.stop-search-route-badge { font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 8px; background: var(--card); border: 1px solid var(--card-border); cursor: pointer; }
+.stop-search-route-chip {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: #27ae60;
+  display: inline-block;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+.stop-search-route-chip * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.stop-search-route-chip.route-type-bus     { background: #27ae60; }
+.stop-search-route-chip.route-type-tram    { background: #e74c3c; }
+.stop-search-route-chip.route-type-trolley { background: #3498db; }
+.stop-search-route-group {
+  display: inline-flex;
+  gap: 2px;
+}

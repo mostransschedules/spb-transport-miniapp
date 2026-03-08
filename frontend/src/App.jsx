@@ -1723,12 +1723,12 @@ function App() {
                                     )
                                   })}
                                         {hasMoreRoutes && !isRoutesExpanded && (
-                                          <button className="nearby-show-more" onClick={() => setExpandedFavRoutes(prev => [...prev, gKey])}>
+                                          <button className="nearby-more-btn" onClick={() => setExpandedFavRoutes(prev => [...prev, gKey])}>
                                             Показать ещё {hiddenCount} {hiddenCount === 1 ? 'маршрут' : hiddenCount < 5 ? 'маршрута' : 'маршрутов'}
                                           </button>
                                         )}
                                         {hasMoreRoutes && isRoutesExpanded && (
-                                          <button className="nearby-show-more" onClick={() => setExpandedFavRoutes(prev => prev.filter(k => k !== gKey))}>
+                                          <button className="nearby-more-btn" onClick={() => setExpandedFavRoutes(prev => prev.filter(k => k !== gKey))}>
                                             Скрыть
                                           </button>
                                         )}
@@ -1848,6 +1848,7 @@ function App() {
                               routeId={String(route.route_id)}
                               direction={route.direction}
                               schedDep={dep}
+                              transportType={route.transport_type}
                             />
                           )}
                         </div>

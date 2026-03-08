@@ -1,5 +1,6 @@
-// NearbyGpsRow — GPS строчка под маршрутом (дизайн по мокапу)
+// NearbyGpsRow — GPS/РАСПИСАНИЕ строка (дизайн по мокапу)
 import { useState, useEffect } from 'react'
+import vehiclesDb from '../vehicles.json'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -30,7 +31,21 @@ const subscribe = (stopId, cb) => {
   return () => { _listeners[stopId]?.delete(cb); clearInterval(iv) }
 }
 
-function NearbyGpsRow({ stopId, routeId, direction, schedDep }) {
+// Ищем модель ТС по бортовому номеру
+const getVehicleModel = (vehicleId, typeHint) => {
+  if (!vehicleId) return ''
+  const id = String(vehicleId).trim()
+  // Пробуем по типу
+  const dicts = typeHint === 'tram' ? [vehiclesDb.tram]
+    : typeHint === 'trolley' ? [vehiclesDb.trolley]
+    : [vehiclesDb.bus, vehiclesDb.tram, vehiclesDb.trolley]
+  for (const d of dicts) {
+    if (d && d[id]) return d[id].model || ''
+  }
+  return ''
+}
+
+function NearbyGpsRow({ stopId, routeId, direction, schedDep, transportType }) {
   const [forecasts, setForecasts] = useState(undefined)
   const [, setTick] = useState(0)
 
@@ -43,7 +58,6 @@ function NearbyGpsRow({ stopId, routeId, direction, schedDep }) {
 
   const now = Math.floor(Date.now() / 1000)
 
-  // Загружается — сразу показываем РАСПИСАНИЕ
   if (forecasts === undefined || forecasts === null) {
     return (
       <div className="ngps-row sched">
@@ -53,7 +67,6 @@ function NearbyGpsRow({ stopId, routeId, direction, schedDep }) {
     )
   }
 
-  // Ищем ближайший GPS рейс
   const gpsReis = forecasts
     .filter(f => {
       if (f.arrival_time <= now) return false
@@ -76,18 +89,15 @@ function NearbyGpsRow({ stopId, routeId, direction, schedDep }) {
   }
 
   const first = gpsReis[0]
-  const sec = first.arrival_time - now
-  const min = Math.floor(sec / 60)
   const vehicleId = first.vehicle_id || ''
+  const model = getVehicleModel(vehicleId, transportType)
 
   return (
     <div className="ngps-row gps">
       <span className="ngps-dot" />
       {vehicleId && <span className="ngps-vehicle">{vehicleId}</span>}
-      {vehicleId && <span className="ngps-sep">·</span>}
-      <span className="ngps-time">
-        {sec < 60 ? `${sec} с` : `${min} мин`}
-      </span>
+      {model && <span className="ngps-sep">·</span>}
+      {model && <span className="ngps-model">{model}</span>}
       <span className="ngps-tag gps">GPS</span>
     </div>
   )
