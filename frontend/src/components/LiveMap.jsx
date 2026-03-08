@@ -19,7 +19,13 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 // =============================================================================
 // vehicles.json теперь структурирован: { bus: {...}, tram: {...}, trolley: {...} }
 // =============================================================================
-const normPlate = (s) => (s || '').replace(/\s+/g, '').toUpperCase()
+// Нормализация гос.номера: убираем пробелы + Latin омонимы → Cyrillic
+// GTFS-RT может отдавать латинские P/H/E/K/M/C/O/A — визуально идентичны кириллическим
+const LATIN_TO_CYR = {A:'А',B:'В',E:'Е',K:'К',M:'М',H:'Н',O:'О',P:'Р',C:'С',T:'Т',Y:'У',X:'Х'}
+const normPlate = (s) => {
+  if (!s) return ''
+  return (s + '').replace(/\s+/g, '').toUpperCase().split('').map(c => LATIN_TO_CYR[c] || c).join('')
+}
 
 // Plate → info: используем предвычисленный индекс из vehicles.json
 const getPlateIdx = () => vehiclesDb.bus_plates || {}
@@ -52,11 +58,7 @@ const lookupByLabel = (label, typeHint) => {
 // transport_type из backend (уже обогащён по route_id)
 // =============================================================================
 const lookupVehicle = (vehicleId, label, licensePlate, typeHint) => {
-  // 1. По бортовому номеру с hint типа
-  const byLabel = lookupByLabel(label, typeHint) || lookupByLabel(vehicleId, typeHint)
-  if (byLabel) return byLabel
-
-  // 2. По гос.номеру из GTFS (только автобусы)
+  // 1. Гос.номер из GTFS-RT — самый точный (конкретная машина прямо сейчас)
   if (licensePlate) {
     const norm = normPlate(licensePlate)
     if (norm.length > 3) {
@@ -64,7 +66,8 @@ const lookupVehicle = (vehicleId, label, licensePlate, typeHint) => {
       if (found) return found
     }
   }
-  return null
+  // 2. По бортовому номеру с hint типа
+  return lookupByLabel(label, typeHint) || lookupByLabel(vehicleId, typeHint) || null
 }
 
 const COLORS = { bus: '#27ae60', trolley: '#3498db', tram: '#e74c3c' }

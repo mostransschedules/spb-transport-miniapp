@@ -15,6 +15,7 @@ import LiveMap from './components/LiveMap'
 import ForecastBlock from './components/ForecastBlock'
 import FavForecast from './components/FavForecast'
 import FavForecastLabeled from './components/FavForecastLabeled'
+import NearbyGpsRow from './components/NearbyGpsRow'
 import './App.css'
 import './themes.css'
 import './animations.css'
@@ -90,6 +91,12 @@ function App() {
   const [searchType, setSearchType] = useState('route') // 'route' | 'stop'
   const [isSearchingStops, setIsSearchingStops] = useState(false)
   const [nearbyStops, setNearbyStops] = useState([])
+  // ── Таб Прибытие ────────────────────────────────────────────────────────────
+  const [arrivalQuery, setArrivalQuery] = useState('')
+  const [arrivalResults, setArrivalResults] = useState([])
+  const [arrivalSelectedStop, setArrivalSelectedStop] = useState(null)
+  const [arrivalForecasts, setArrivalForecasts] = useState(null)
+  const [arrivalLoading, setArrivalLoading] = useState(false)
   const [nearbyLoading, setNearbyLoading] = useState(false)
   const [nearbyError, setNearbyError] = useState(null)
   const [nearbyExpanded, setNearbyExpanded] = useState(false)
@@ -1670,7 +1677,7 @@ function App() {
                                         {visibleFavRoutes.map(fav => {
                                     const next = favNextDepartures[fav.id]
                                     return (
-                                      <div key={fav.id} className="fav-transfer-row" onClick={() => {
+                                      <div key={fav.id} className="transfer-card" onClick={() => {
                                         const route = routes.find(r => String(r.route_id) === String(fav.routeId) || r.route_short_name === fav.routeName)
                                         if (route) {
                                           handleTabChange('routes')
@@ -1678,33 +1685,32 @@ function App() {
                                         }
                                       }}>
                                         {(() => {
-                                          const typeClass = fav.transportType
-                                            ? getTypeClassByMeta(fav.routeType, fav.transportType)
-                                            : 'route-type-bus'
-                                          return <span className={`transfer-badge ${typeClass}`} style={{color:'#fff'}}>{fav.routeName}</span>
+                                          const bgClass = fav.transportType === 'tram' ? 'transfer-badge-tram'
+                                            : fav.transportType === 'trolley' ? 'transfer-badge-trolley'
+                                            : 'transfer-badge-bus'
+                                          return <span className={`transfer-badge ${bgClass}`} style={{color:'#fff'}}>{fav.routeName}</span>
                                         })()}
-                                        <div className="fav-transfer-info">
+                                        <div className="transfer-info">
+                                          <div className="transfer-destination">→ {fav.stopName}</div>
                                           {/* 3 ближайших рейса по расписанию */}
                                           {favSchedules[fav.id] && (() => {
                                             const times = getNextDepartures(favSchedules[fav.id], 3)
-                                            if (!times.length) return <span style={{color:'rgba(255,255,255,0.25)',fontSize:12}}>нет рейсов</span>
+                                            if (!times.length) return null
                                             return (
-                                              <div className="fav-transfer-times">
+                                              <div className="transfer-times">
                                                 {times.map((t, i) => (
                                                   <span key={i} className={`transfer-time-chip ${i===0?'first':''}`}>{t.time}</span>
                                                 ))}
                                               </div>
                                             )
                                           })()}
-                                          {/* GPS */}
+                                          {/* GPS — для остановки в избранном direction не нужен (stopId уже специфичен) */}
                                           {fav.stopId && (
                                             <FavForecast stopId={String(fav.stopId)} routeId={String(fav.routeId)} direction={fav.direction} compact={true} />
                                           )}
                                         </div>
-                                        <div className="fav-transfer-right">
-                                          {next && <span className="transfer-wait">{next.diffMin === 0 ? 'сейчас' : `${next.diffMin} мин`}</span>}
-                                          <span className="transfer-arrow">›</span>
-                                        </div>
+                                        <span className="transfer-wait">{next?.diffMin === 0 ? 'сейчас' : next ? `${next.diffMin} мин` : ''}</span>
+                                        <span className="transfer-arrow">›</span>
                                         <button className="favorite-route-remove" onClick={(e) => {
                                           e.stopPropagation()
                                           removeFavorite(fav.id)
@@ -1829,39 +1835,38 @@ function App() {
                         <div className="nearby-stop-name">{stop.stop_name}</div>
                         <div className="nearby-distance">{stop.distance_m}м</div>
                       </div>
-                      <div className="nearby-routes">
-                        {sortedGroupKeys.map(gKey => {
-                          if (routesRemaining <= 0) return null
+                      <div className="nearby-arrival-list">
+                        {sortedGroupKeys.flatMap(gKey => {
+                          if (routesRemaining <= 0) return []
                           const groupRoutes = dirGroups[gKey]
                           const visibleInGroup = groupRoutes.slice(0, routesRemaining)
                           routesRemaining -= visibleInGroup.length
-                          return (
-                            <div key={gKey} className="nearby-direction-group">
-                              <div className="nearby-direction-label">к {gKey}</div>
-                              {visibleInGroup.map(route => {
-                                const key = `${stop.stop_name}|${route.route_id}|${route.direction}`
-                                const dep = nearbyDepartures[key]
-                                return (
-                                  <button key={key} className="nearby-route-chip nearby-chip-with-gps" onClick={() => navigateToStopSchedule(stop.stop_name, route, route.direction)}>
-                                    <span className={`nearby-route-num ${getRouteTypeClass(route)}`}>{route.route_short_name}</span>
-                                    <span className="nearby-route-info">
-                                      <span className="nearby-sched"><span className="nearby-label">расп.</span>{dep === undefined ? '...' : dep === null ? 'нет рейсов' : dep.diffMin === 0 ? `${String(dep.time).substring(0,5)} · сейчас` : dep.diffMin <= 90 ? `${String(dep.time).substring(0,5)} · ${dep.diffMin} мин` : String(dep.time).substring(0,5)}</span>
-                                      {stop.stop_id && <FavForecastLabeled stopId={String(stop.stop_id)} routeId={String(route.route_id)} inline={true} />}
-                                    </span>
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          )
+                          return visibleInGroup.map(route => {
+                            const key = `${stop.stop_name}|${route.route_id}|${route.direction}`
+                            const dep = nearbyDepartures[key]
+                            const diffMin = dep?.diffMin ?? null
+                            const typeClass = getRouteTypeClass(route)
+                            return (
+                              <div key={key} className="nearby-arrival-card"
+                                onClick={() => navigateToStopSchedule(stop.stop_name, route, route.direction)}>
+                                <div className="nearby-arrival-top">
+                                  <span className={`nearby-arrival-badge ${typeClass}`}>{route.route_short_name}</span>
+                                  <span className="nearby-arrival-dest">→ {gKey}</span>
+                                  <span className="nearby-arrival-min">
+                                    {diffMin === null ? '...' : diffMin === 0 ? 'сейчас' : `${diffMin} мин`}
+                                    <span className="nearby-arrival-chevron">›</span>
+                                  </span>
+                                </div>
+                                {stop.stop_id && (
+                                  <NearbyGpsRow stopId={String(stop.stop_id)} routeId={String(route.route_id)} schedDep={dep} />
+                                )}
+                              </div>
+                            )
+                          })
                         })}
                         {hasMore && !isStopExpanded && <button className="nearby-show-more" onClick={() => setNearbyExpandedStops(prev => [...prev, stopKey])}>Показать ещё {hiddenCount} {hiddenCount === 1 ? 'маршрут' : hiddenCount < 5 ? 'маршрута' : 'маршрутов'}</button>}
                         {hasMore && isStopExpanded && <button className="nearby-show-more" onClick={() => setNearbyExpandedStops(prev => prev.filter(k => k !== stopKey))}>Скрыть</button>}
                       </div>
-                      {stop.stop_id && (
-                        <div style={{marginTop: 6, paddingTop: 6, borderTop: '1px solid rgba(255,255,255,0.05)'}}>
-                          <FavForecast stopId={String(stop.stop_id)} compact={true} />
-                        </div>
-                      )}
                     </div>
                   )
                 })}
@@ -2447,6 +2452,13 @@ function App() {
                   <span className="bottom-tab-icon">🕐</span>
                   <span className="bottom-tab-label">История</span>
                   {history.length > 0 && <span className="bottom-tab-badge">{history.length}</span>}
+                </button>
+                <button
+                  className={`bottom-tab ${activeTab === 'arrival' ? 'active' : ''}`}
+                  onClick={() => handleTabChange('arrival')}
+                >
+                  <span className="bottom-tab-icon">🛎️</span>
+                  <span className="bottom-tab-label">Прибытие</span>
                 </button>
               </nav>
               <button className="bottom-search-btn" onClick={handleSearchToggle}>

@@ -1,3 +1,4 @@
+import React from 'react'
 // =============================================================================
 // FavForecast — Компактный GPS-прогноз для пересадок
 // =============================================================================
@@ -70,13 +71,19 @@ function FavForecast({ stopId, routeId, direction, compact = true }) {
   if (upcoming.length === 0) return null
 
   return (
-    <div className="favforecast-compact">
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 3, flexWrap: 'wrap' }}>
+      <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#4caf50',
+        boxShadow: '0 0 4px #4caf5088', flexShrink: 0, display: 'inline-block' }} />
       {upcoming.map((f, i) => (
-        <span key={i} className="favforecast-chip">
-          <span className="favforecast-dot" />
-          <span className="favforecast-time">{f.timeStr}</span>
-          <span className="favforecast-diff">{f.sec < 60 ? `${f.sec}с` : `${f.min}м`}</span>
-        </span>
+        <React.Fragment key={i}>
+          {i > 0 && <span style={{ color: 'rgba(255,255,255,0.2)', fontSize: 11 }}>·</span>}
+          <span style={{ fontSize: 13, color: '#4caf74', fontWeight: 600, whiteSpace: 'nowrap' }}>
+            {f.timeStr}{' '}
+            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.4)', fontWeight: 400 }}>
+              {f.sec < 60 ? `${f.sec}с` : `${f.min}м`}
+            </span>
+          </span>
+        </React.Fragment>
       ))}
     </div>
   )
