@@ -64,8 +64,9 @@ function FavForecastLabeled({ stopId, routeId, inline = false }) {
     ? forecasts.filter(f => f.arrival_time > now && String(f.route_id) === String(routeId))
     : forecasts.filter(f => f.arrival_time > now)
 
-  // Если для маршрута ничего нет — показываем все рейсы с остановки (до 2)
-  const sourceList = byRoute.length > 0 ? byRoute : (routeId ? [] : forecasts.filter(f => f.arrival_time > now))
+  // Если для маршрута ничего нет — показываем ближайший GPS с остановки
+  const allUpcoming = forecasts.filter(f => f.arrival_time > now)
+  const sourceList = byRoute.length > 0 ? byRoute : allUpcoming
 
   const upcoming = sourceList
     .sort((a, b) => a.arrival_time - b.arrival_time)
@@ -82,13 +83,15 @@ function FavForecastLabeled({ stopId, routeId, inline = false }) {
 
   const first = upcoming[0]
   const countdownStr = first.sec < 60 ? `${first.sec}с` : `${first.min} мин`
+  // Если GPS рейс не для нашего маршрута — показываем номер маршрута
+  const isForeignRoute = byRoute.length === 0 && routeId
 
   if (inline) {
     return (
       <span className="nearby-gps-inline">
         <span className="nearby-label gps-label">GPS</span>
-        {first.routeName && byRoute.length === 0 && (
-          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 10 }}>{first.routeName} · </span>
+        {isForeignRoute && first.routeName && (
+          <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 10 }}>{first.routeName} </span>
         )}
         {first.timeStr}
         {' '}
@@ -107,6 +110,9 @@ function FavForecastLabeled({ stopId, routeId, inline = false }) {
         whiteSpace: 'nowrap'
       }}>GPS</span>
       <span style={{ fontSize: 13, display: 'flex', alignItems: 'center', gap: 5 }}>
+        {isForeignRoute && first.routeName && (
+          <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 11 }}>({first.routeName})</span>
+        )}
         <span style={{ color: '#4caf74', fontWeight: 600 }}>{first.timeStr}</span>
         <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 11 }}>· {countdownStr}</span>
         {upcoming[1] && (

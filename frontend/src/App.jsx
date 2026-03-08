@@ -1654,8 +1654,12 @@ function App() {
                                         }
                                       }}>
                                         {(() => {
-                                          const rr = routes.find(r => String(r.route_id) === String(fav.routeId) || r.route_short_name === fav.routeName)
-                                          return <span className={`favorite-route-number ${rr ? getRouteTypeClass(rr) : getTypeClassByMeta(fav.routeType, fav.transportType)}`}>{fav.routeName}</span>
+                                          const rr = fav.routeId ? routes.find(r => String(r.route_id) === String(fav.routeId)) : null
+                                          // fav.transportType сохранён в момент добавления — приоритет над данными БД
+                                          const typeClass = fav.transportType
+                                            ? getTypeClassByMeta(fav.routeType, fav.transportType)
+                                            : rr ? getRouteTypeClass(rr) : 'route-type-bus'
+                                          return <span className={`favorite-route-number ${typeClass}`}>{fav.routeName}</span>
                                         })()}
                                         <div style={{flex: 1, minWidth: 0}}>
                                           {/* Расписание */}

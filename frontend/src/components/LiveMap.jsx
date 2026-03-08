@@ -98,12 +98,12 @@ const resolveType = (v) => {
 // =============================================================================
 // Иконка маркера с номером маршрута
 // =============================================================================
-const createVehicleIcon = (type, bearing = 0, selected = false, routeNum = '', dimmed = false) => {
+const createVehicleIcon = (type, bearing = 0, selected = false, routeNum = '') => {
   const color = COLORS[type] || COLORS.bus
   const size = selected ? 36 : 28
   const fs = routeNum.length > 3 ? 7 : routeNum.length > 2 ? 9 : 10
   return L.divIcon({
-    html: `<div style="position:relative;width:${size}px;height:${size+8}px;opacity:${dimmed?0.15:1}">
+    html: `<div style="position:relative;width:${size}px;height:${size+8}px;opacity:1">
       <div style="position:absolute;top:-5px;left:50%;transform:translateX(-50%) rotate(${bearing}deg);
         width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;
         border-bottom:7px solid ${color};opacity:0.85"></div>
@@ -307,11 +307,13 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
             const type = resolveType(v)
             const vId = v.entity_id || v.vehicle_id
             const routeNum = v.route_short_name || routeName || ''
-            const dimmed = !!filterRoute && routeNum !== filterRoute.num
+            const isFiltered = !!filterRoute && routeNum !== filterRoute.num
             const isSelected = selectedVehicle === vId
+            // Полностью скрываем ТС других маршрутов при фильтре
+            if (isFiltered) return null
             return (
               <Marker key={vId} position={[v.lat, v.lon]}
-                icon={createVehicleIcon(type, v.bearing, isSelected, routeNum, dimmed)}
+                icon={createVehicleIcon(type, v.bearing, isSelected, routeNum, false)}
                 eventHandlers={{ click: () => {
                   setSelectedVehicle(isSelected ? null : vId)
                   if (!routeId && routeNum) handleFilterByRoute(routeNum, v.route_id || '')
