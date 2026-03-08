@@ -322,6 +322,26 @@ async def rt_vehicles(
         vehicles = realtime.get_vehicles_for_route(route_id)
     else:
         vehicles = realtime.get_all_vehicles()
+
+    # Обогащаем route_short_name из БД по route_id
+    try:
+        from database import get_connection
+        con = get_connection()
+        route_ids = list({v["route_id"] for v in vehicles if v.get("route_id")})
+        if route_ids:
+            placeholders = ",".join(["?" for _ in route_ids])
+            df = con.execute(
+                f"SELECT route_id, route_short_name FROM routes WHERE CAST(route_id AS VARCHAR) IN ({placeholders})",
+                route_ids
+            ).df()
+            con.close()
+            rmap = {str(row["route_id"]): str(row["route_short_name"]) for _, row in df.iterrows()}
+            for v in vehicles:
+                if v.get("route_id") and str(v["route_id"]) in rmap:
+                    v["route_short_name"] = rmap[str(v["route_id"])]
+    except Exception as e:
+        print(f"⚠️ route_short_name enrich error: {e}")
+
     return {
         "vehicles": vehicles,
         "count": len(vehicles),

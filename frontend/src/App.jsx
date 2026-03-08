@@ -13,6 +13,7 @@ import StatsTabs from './components/StatsTabs'
 import ThemeSelector from './components/ThemeSelector'
 import LiveMap from './components/LiveMap'
 import ForecastBlock from './components/ForecastBlock'
+import FavForecast from './components/FavForecast'
 import './App.css'
 import './themes.css'
 import './animations.css'
@@ -554,10 +555,20 @@ function App() {
   // Цвет номера маршрута по типу транспорта
   // route_type: 0=трамвай(красный), 3=автобус(зелёный), 4=троллейбус(синий)
   const getRouteTypeClass = (route) => {
-    // СПб: используем transport_type вместо route_type
+    if (!route) return 'route-type-bus'
     const tt = route?.transport_type
     if (tt === 'tram' || route?.route_type === 0) return 'route-type-tram'
     if (tt === 'trolley') return 'route-type-trolley'
+    return 'route-type-bus'
+  }
+
+  // Определить класс по сохранённым routeType/transportType (для истории и избранного)
+  const getTypeClassByMeta = (routeType, transportType) => {
+    if (transportType === 'tram') return 'route-type-tram'
+    if (transportType === 'trolley') return 'route-type-trolley'
+    if (transportType === 'bus') return 'route-type-bus'
+    if (routeType === 0) return 'route-type-tram'
+    if (routeType === 5 || routeType === 11) return 'route-type-trolley'
     return 'route-type-bus'
   }
 
@@ -721,9 +732,12 @@ function App() {
       routeLongName: selectedRoute.route_long_name,
       routeId: selectedRoute.route_id,
       stopName: selectedStop.stop_name,
+      stopId: selectedStop.stop_id,
       direction: direction,
       dayType: dayType,
-      type: 'stop'
+      type: 'stop',
+      routeType: selectedRoute.route_type,
+      transportType: selectedRoute.transport_type || 'bus'
     }
 
     const isCurrentlyFavorite = isFavorite(
@@ -771,6 +785,8 @@ function App() {
           routeLongName: route.route_long_name,
           routeId: rId,
           type: 'route',
+          routeType: route.route_type,
+          transportType: route.transport_type || 'bus',
           timestamp: Date.now(),
           id: newId
         })
@@ -1563,7 +1579,7 @@ function App() {
                           }}
                         >
                           <div className="favorite-header">
-                            <span className={`favorite-route ${getRouteTypeClass(route)}`}>{fav.routeName}</span>
+                            <span className={`favorite-route ${route ? getRouteTypeClass(route) : getTypeClassByMeta(fav.routeType, fav.transportType)}`}>{fav.routeName}</span>
                             <button className="favorite-remove" onClick={(e) => { e.stopPropagation(); removeFavorite(fav.id); setFavorites(getFavorites()) }}>✕</button>
                           </div>
                           <div className="favorite-details">
@@ -1636,10 +1652,31 @@ function App() {
                                           navigateToStopSchedule(fav.stopName, route, fav.direction)
                                         }
                                       }}>
-                                        <span className={`favorite-route-number ${getRouteTypeClass(routes.find(r => r.route_short_name === fav.routeName))}`}>{fav.routeName}</span>
-                                        <span className="favorite-route-time" style={{flex: 1}}>
-                                          {next ? `${next.time}${next.diffMin === 0 ? ' · сейчас' : next.diffMin <= 60 ? ` · через ${next.diffMin} мин` : ''}` : next === undefined ? 'загружаем...' : ''}
-                                        </span>
+                                        {(() => {
+                                          const rr = routes.find(r => String(r.route_id) === String(fav.routeId) || r.route_short_name === fav.routeName)
+                                          return <span className={`favorite-route-number ${rr ? getRouteTypeClass(rr) : getTypeClassByMeta(fav.routeType, fav.transportType)}`}>{fav.routeName}</span>
+                                        })()}
+                                        <div style={{flex: 1, minWidth: 0}}>
+                                          <span className="favorite-route-time">
+                                            {next ? (
+                                              <>
+                                                <span style={{color: '#4caf50', fontWeight: 600}}>{next.time}</span>
+                                                {next.diffMin === 0 ? (
+                                                  <span style={{color: '#4caf50'}}> · сейчас</span>
+                                                ) : next.diffMin <= 60 ? (
+                                                  <span style={{color: 'rgba(255,255,255,0.5)'}}> · {next.diffMin} мин</span>
+                                                ) : null}
+                                              </>
+                                            ) : next === undefined ? (
+                                              <span style={{color: 'rgba(255,255,255,0.3)', fontSize: 11}}>загружаем...</span>
+                                            ) : (
+                                              <span style={{color: 'rgba(255,255,255,0.3)', fontSize: 11}}>нет рейсов</span>
+                                            )}
+                                          </span>
+                                          {fav.stopId && (
+                                            <FavForecast stopId={fav.stopId} routeId={fav.routeId} compact={true} />
+                                          )}
+                                        </div>
                                         <button className="favorite-route-remove" onClick={(e) => {
                                           e.stopPropagation()
                                           removeFavorite(fav.id)
@@ -1791,6 +1828,11 @@ function App() {
                         {hasMore && !isStopExpanded && <button className="nearby-show-more" onClick={() => setNearbyExpandedStops(prev => [...prev, stopKey])}>Показать ещё {hiddenCount} {hiddenCount === 1 ? 'маршрут' : hiddenCount < 5 ? 'маршрута' : 'маршрутов'}</button>}
                         {hasMore && isStopExpanded && <button className="nearby-show-more" onClick={() => setNearbyExpandedStops(prev => prev.filter(k => k !== stopKey))}>Скрыть</button>}
                       </div>
+                      {stop.stop_id && (
+                        <div style={{marginTop: 6, paddingTop: 6, borderTop: '1px solid rgba(255,255,255,0.05)'}}>
+                          <FavForecast stopId={String(stop.stop_id)} compact={true} />
+                        </div>
+                      )}
                     </div>
                   )
                 })}
@@ -1829,9 +1871,7 @@ function App() {
                   if (route) {
                     typeClass = getRouteTypeClass(route)
                   } else if (item.routeType !== undefined) {
-                    if (item.routeType === 0) typeClass = 'route-type-tram'
-                    else if (item.routeType === 5) typeClass = 'route-type-trolley'
-                    else typeClass = 'route-type-bus'
+                    typeClass = getTypeClassByMeta(item.routeType, item.transportType)
                   }
 
                   return (
@@ -1967,7 +2007,10 @@ function App() {
                               routeLongName: selectedRoute.route_long_name,
                               routeId: selectedRoute.route_id,
                               stopName: stop.stop_name,
+                              stopId: stop.stop_id,
                               direction, dayType, type: 'stop',
+                              routeType: selectedRoute.route_type,
+                              transportType: selectedRoute.transport_type || 'bus',
                               timestamp: Date.now(),
                               id: stopId
                             })

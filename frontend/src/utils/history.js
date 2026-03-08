@@ -30,6 +30,7 @@ export const addRouteToHistory = (route) => {
       routeLong: route.route_long_name || '',
       routeId: route.route_id,
       routeType: route.route_type,
+      transportType: route.transport_type || 'bus',
       timestamp: Date.now()
     }
     // Удаляем дубликат если есть (по новому и старому формату ID)
@@ -52,6 +53,7 @@ export const addStopToHistory = (route, stop, direction, dayType) => {
       routeLong: route.route_long_name || '',
       routeId: route.route_id,
       routeType: route.route_type,
+      transportType: route.transport_type || 'bus',
       stopName: stop.stop_name,
       direction,
       dayType,

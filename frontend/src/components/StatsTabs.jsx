@@ -18,6 +18,7 @@ import {
 } from 'chart.js'
 import { getIntervals, getDurations } from '../utils/api'
 import RouteMap from './RouteMap'
+import LiveMap from './LiveMap'
 import './StatsTabs.css'
 
 ChartJS.register(
@@ -446,6 +447,30 @@ function StatsTabs({ route, stop, direction, dayType, schedule, stops, onStopCli
               <div className="tab-panel">
                 <h3>Карта маршрута</h3>
                 <RouteMap stops={stops || []} selectedStop={stop} onStopClick={onStopClick} />
+                {route?.route_id && (
+                  <div style={{ marginTop: 16 }}>
+                    <div style={{
+                      fontSize: 11, fontWeight: 600, color: 'var(--tg-hint)',
+                      textTransform: 'uppercase', letterSpacing: '0.5px',
+                      marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6
+                    }}>
+                      <span style={{
+                        width: 7, height: 7, borderRadius: '50%', background: '#4caf50',
+                        display: 'inline-block', boxShadow: '0 0 5px #4caf50'
+                      }} />
+                      Транспорт на маршруте сейчас
+                    </div>
+                    <div style={{ borderRadius: 12, overflow: 'hidden' }}>
+                      <LiveMap
+                        routeId={route.route_id}
+                        routeName={route.route_short_name}
+                        transportType={route.transport_type}
+                        stops={stops}
+                        onClose={null}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </>
