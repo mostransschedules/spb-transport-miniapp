@@ -335,19 +335,28 @@
 .schedule { padding: 0; }
 
 /* Цветные бейджи маршрутов в поиске остановок */
+.stop-search-route-chip {
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background: #27ae60;
+  display: inline-block;
+}
 .stop-search-route-chip.route-type-bus {
   background: #27ae60;
-  color: #fff;
-  border-color: #27ae60;
 }
 .stop-search-route-chip.route-type-tram {
   background: #e74c3c;
-  color: #fff;
-  border-color: #e74c3c;
 }
 .stop-search-route-chip.route-type-trolley {
   background: #3498db;
-  color: #fff;
-  border-color: #3498db;
+}
+.stop-search-route-group {
+  display: inline-flex;
+  gap: 2px;
 }
 

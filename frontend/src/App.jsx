@@ -1485,7 +1485,7 @@ function App() {
                                   className={`stop-search-route-chip ${typeClass}`}
                                   onClick={() => { setSearchOpen(false); setSearchQuery(''); navigateToStopSchedule(stop.stop_name, route, 1) }}
                                 >
-                                  →{route.route_short_name} ←
+                                  {route.route_short_name} ←
                                 </button>
                               </span>
                             )
