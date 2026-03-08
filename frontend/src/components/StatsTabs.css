@@ -17,19 +17,17 @@
 
 .tabs-header button {
   flex: 1;
-  min-width: 120px;
-  padding: 12px 16px;
+  min-width: 70px;
+  padding: 10px 12px;
   border-radius: 8px;
   background: var(--tg-secondary-bg);
   color: var(--tg-text);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
-  white-space: normal;
+  white-space: nowrap;
   border: 2px solid transparent;
   transition: all 0.2s;
-  overflow: hidden;
-  line-height: 1.2;
-  min-height: 44px;
+  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,13 +54,101 @@
   color: var(--tg-text);
 }
 
-.tab-panel h4 {
-  margin: 0 0 12px 0;
-  font-size: 16px;
+/* ── Карточки статистики (вкладка Стат.) ── */
+.stats-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.stats-info-card {
+  background: var(--tg-bg);
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stats-info-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.stats-info-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--tg-button);
+  line-height: 1.1;
+}
+
+.stats-info-label {
+  font-size: 10px;
+  color: var(--tg-hint);
+  line-height: 1.2;
+}
+
+/* Час пик */
+.stats-peak-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--tg-bg);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+}
+
+.stats-peak-label {
+  font-size: 13px;
+  color: var(--tg-hint);
+}
+
+.stats-peak-value {
+  font-size: 13px;
+  font-weight: 600;
   color: var(--tg-text);
 }
 
-/* График */
+/* Мин/макс время рейса */
+.stats-duration-row {
+  display: flex;
+  align-items: center;
+  background: var(--tg-bg);
+  border-radius: 10px;
+  padding: 12px 14px;
+  gap: 12px;
+}
+
+.stats-duration-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stats-duration-label {
+  font-size: 11px;
+  color: var(--tg-hint);
+}
+
+.stats-duration-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--tg-button);
+}
+
+.stats-duration-sep {
+  width: 1px;
+  height: 32px;
+  background: rgba(128, 128, 128, 0.2);
+  flex-shrink: 0;
+}
+
+/* ── График ── */
 .chart-header {
   display: flex;
   justify-content: space-between;
@@ -78,41 +164,16 @@
   color: var(--tg-text);
 }
 
-.reset-zoom-btn {
-  padding: 6px 12px;
-  background: var(--tg-button);
-  color: var(--tg-button-text);
-  border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.reset-zoom-btn:active {
-  opacity: 0.8;
-}
-
-.chart-hint {
-  background: rgba(100, 149, 237, 0.1);
-  border-left: 3px solid var(--tg-button);
-  padding: 8px 12px;
-  margin-bottom: 12px;
-  font-size: 13px;
-  color: var(--tg-hint);
-  border-radius: 4px;
-}
-
 .chart-container {
   position: relative;
   height: 300px;
   margin-top: 16px;
 }
 
-/* Карточки времени рейсов */
+/* ── Карточки времени рейсов ── */
 .duration-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px;
   margin-bottom: 20px;
 }
@@ -121,24 +182,24 @@
   background: var(--tg-button);
   color: var(--tg-button-text);
   border-radius: 12px;
-  padding: 16px;
+  padding: 14px;
   text-align: center;
 }
 
 .duration-card-label {
-  font-size: 12px;
+  font-size: 11px;
   opacity: 0.9;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .duration-card-value {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
 .duration-card-time {
-  font-size: 11px;
+  font-size: 10px;
   opacity: 0.8;
 }
 
@@ -152,10 +213,6 @@
   opacity: 0.9;
 }
 
-.expand-btn:hover {
-  opacity: 1;
-}
-
 .time-ranges-list {
   margin-top: 6px;
   font-size: 10px;
@@ -163,14 +220,7 @@
   line-height: 1.6;
 }
 
-/* Статистика */
-.stats-summary {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-
+/* ── Старая секция Статистика (теперь не используется как таб) ── */
 .stats-card {
   background: var(--tg-bg);
   border-radius: 8px;
@@ -186,9 +236,7 @@
   border-bottom: 1px solid rgba(128, 128, 128, 0.1);
 }
 
-.stat-item:last-child {
-  border-bottom: none;
-}
+.stat-item:last-child { border-bottom: none; }
 
 .stat-label {
   color: var(--tg-hint);
@@ -219,13 +267,21 @@
 /* Адаптивность */
 @media (max-width: 480px) {
   .tabs-header button {
-    min-width: 80px;
+    min-width: 60px;
     padding: 8px 6px;
     font-size: 12px;
-    line-height: 1.3;
+  }
+
+  .stats-cards-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .stats-info-value {
+    font-size: 16px;
   }
 
   .chart-container {
-    height: 250px;
+    height: 240px;
   }
 }

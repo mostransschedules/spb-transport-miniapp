@@ -7,8 +7,23 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import './LiveMap.css'
+import vehiclesDb from '../vehicles.json'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+
+// Поиск модели ТС по vehicle_id или label
+const lookupVehicle = (vehicleId, label) => {
+  // Пробуем сначала label (бортовой номер), потом vehicle_id
+  const candidates = [label, vehicleId].filter(Boolean)
+  for (const id of candidates) {
+    const key = String(id).trim()
+    if (vehiclesDb[key]) return vehiclesDb[key]
+    // Попытка без ведущих нулей
+    const stripped = key.replace(/^0+/, '')
+    if (vehiclesDb[stripped]) return vehiclesDb[stripped]
+  }
+  return null
+}
 
 // Иконки для разных типов транспорта
 const createVehicleIcon = (transportType, bearing = 0, isSelected = false) => {
@@ -48,12 +63,33 @@ const createVehicleIcon = (transportType, bearing = 0, isSelected = false) => {
 }
 
 // Компонент для обновления вида карты
-function MapUpdater({ center, zoom }) {
+function MapUpdater({ center }) {
   const map = useMap()
   useEffect(() => {
-    if (center) map.setView(center, zoom || map.getZoom())
-  }, [center])
+    if (center) map.setView(center, map.getZoom())
+  }, [center]) // eslint-disable-line
   return null
+}
+
+// Попап с данными ТС + модель
+function VehiclePopup({ v, transportType }) {
+  const info = lookupVehicle(v.vehicle_id, v.label)
+  const tt = info?.type || transportType || 'bus'
+  const typeLabel = tt === 'tram' ? 'Трамвай' : tt === 'trolley' ? 'Троллейбус' : 'Автобус'
+
+  return (
+    <div className="vehicle-popup">
+      <div className="vehicle-popup-id">{v.label || v.vehicle_id}</div>
+      <div className="vehicle-popup-speed">{v.speed} км/ч · ▲{Math.round(v.bearing)}°</div>
+      {info?.model && (
+        <div className="vehicle-popup-model">{info.model}</div>
+      )}
+      {(v.license_plate || info?.plate) && (
+        <div className="vehicle-popup-plate">{v.license_plate || info?.plate}</div>
+      )}
+      <div className="vehicle-popup-type">{typeLabel}</div>
+    </div>
+  )
 }
 
 // Основной компонент
@@ -91,14 +127,13 @@ function LiveMap({ routeId, routeName, transportType, stops, onClose }) {
   useEffect(() => {
     fetchVehicles()
     if (autoRefresh) {
-      intervalRef.current = setInterval(fetchVehicles, 10000) // каждые 10 сек
+      intervalRef.current = setInterval(fetchVehicles, 10000)
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
   }, [fetchVehicles, autoRefresh])
 
-  // Центр карты по первому ТС или по остановкам
   const mapCenter = vehicles.length > 0
     ? [vehicles[0].lat, vehicles[0].lon]
     : stops && stops.length > 0
@@ -158,7 +193,7 @@ function LiveMap({ routeId, routeName, transportType, stops, onClose }) {
           />
           <MapUpdater center={mapCenter} />
 
-          {/* Stop markers (if provided) */}
+          {/* Stop markers */}
           {stops && stops.map((stop, i) => (
             <Marker
               key={`stop-${stop.stop_id}`}
@@ -171,41 +206,36 @@ function LiveMap({ routeId, routeName, transportType, stops, onClose }) {
               })}
             >
               <Popup>
-                <div style={{textAlign:'center',fontSize:12}}>
+                <div style={{ textAlign: 'center', fontSize: 12 }}>
                   <strong>{stop.stop_name}</strong>
-                  <div style={{color:'#888',marginTop:2}}>Остановка {i + 1}</div>
+                  <div style={{ color: '#888', marginTop: 2 }}>Остановка {i + 1}</div>
                 </div>
               </Popup>
             </Marker>
           ))}
 
           {/* Vehicle markers */}
-          {vehicles.map(v => (
-            <Marker
-              key={v.entity_id || v.vehicle_id}
-              position={[v.lat, v.lon]}
-              icon={createVehicleIcon(
-                transportType || 'bus',
-                v.bearing,
-                selectedVehicle === v.entity_id
-              )}
-              eventHandlers={{
-                click: () => setSelectedVehicle(
-                  selectedVehicle === v.entity_id ? null : v.entity_id
-                ),
-              }}
-            >
-              <Popup>
-                <div className="vehicle-popup">
-                  <div className="vehicle-popup-id">{v.label || v.vehicle_id}</div>
-                  <div className="vehicle-popup-speed">{v.speed} км/ч · ▲{Math.round(v.bearing)}°</div>
-                  {v.license_plate && (
-                    <div className="vehicle-popup-plate">{v.license_plate}</div>
-                  )}
-                </div>
-              </Popup>
-            </Marker>
-          ))}
+          {vehicles.map(v => {
+            // Тип транспорта: из vehicles.json или из пропса
+            const info = lookupVehicle(v.vehicle_id, v.label)
+            const tt = info?.type || transportType || 'bus'
+            return (
+              <Marker
+                key={v.entity_id || v.vehicle_id}
+                position={[v.lat, v.lon]}
+                icon={createVehicleIcon(tt, v.bearing, selectedVehicle === v.entity_id)}
+                eventHandlers={{
+                  click: () => setSelectedVehicle(
+                    selectedVehicle === v.entity_id ? null : v.entity_id
+                  ),
+                }}
+              >
+                <Popup>
+                  <VehiclePopup v={v} transportType={tt} />
+                </Popup>
+              </Marker>
+            )
+          })}
         </MapContainer>
       )}
 
@@ -213,19 +243,25 @@ function LiveMap({ routeId, routeName, transportType, stops, onClose }) {
       {vehicles.length > 0 && (
         <div className="livemap-vehicles-list">
           <div className="livemap-list-header">Машины на линии ({vehicles.length})</div>
-          {vehicles.slice(0, 20).map(v => (
-            <div
-              key={v.entity_id || v.vehicle_id}
-              className={`livemap-vehicle-item ${selectedVehicle === v.entity_id ? 'selected' : ''}`}
-              onClick={() => setSelectedVehicle(
-                selectedVehicle === v.entity_id ? null : v.entity_id
-              )}
-            >
-              <span className="livemap-vehicle-id">{v.label || v.vehicle_id}</span>
-              <span className="livemap-vehicle-speed">{v.speed} км/ч</span>
-              <span className="livemap-vehicle-bearing">▲{Math.round(v.bearing)}°</span>
-            </div>
-          ))}
+          {vehicles.slice(0, 20).map(v => {
+            const info = lookupVehicle(v.vehicle_id, v.label)
+            return (
+              <div
+                key={v.entity_id || v.vehicle_id}
+                className={`livemap-vehicle-item ${selectedVehicle === v.entity_id ? 'selected' : ''}`}
+                onClick={() => setSelectedVehicle(
+                  selectedVehicle === v.entity_id ? null : v.entity_id
+                )}
+              >
+                <span className="livemap-vehicle-id">{v.label || v.vehicle_id}</span>
+                {info?.model && (
+                  <span className="livemap-vehicle-model">{info.model}</span>
+                )}
+                <span className="livemap-vehicle-speed">{v.speed} км/ч</span>
+                <span className="livemap-vehicle-bearing">▲{Math.round(v.bearing)}°</span>
+              </div>
+            )
+          })}
         </div>
       )}
     </div>

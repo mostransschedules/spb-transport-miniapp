@@ -361,4 +361,97 @@
   display: inline-flex;
   gap: 2px;
 }
+/* =============================================================================
+   APP.CSS PATCH — Бейджи маршрутов в поиске остановок (п.3)
+   Добавить в конец App.css
+   ============================================================================= */
 
+/* ── Бейджи маршрутов в результатах поиска остановок ── */
+/* Приводим к стилю sv2-route-badge из страницы расписания */
+
+.stop-search-route-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  color: #fff !important;
+  transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.2px;
+  min-width: 32px;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.stop-search-route-chip:active {
+  transform: scale(0.95);
+  opacity: 0.85;
+}
+
+/* Цвета по типу транспорта — идентичны sv2-route-badge */
+.stop-search-route-chip.route-type-bus {
+  background: #27ae60;
+}
+
+.stop-search-route-chip.route-type-tram {
+  background: #e74c3c;
+}
+
+.stop-search-route-chip.route-type-trolley {
+  background: #3498db;
+}
+
+/* Контейнер группы маршрутов (прямой + обратный) */
+.stop-search-route-group {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* Обёртка всех бейджей для одной остановки */
+.stop-search-routes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+/* Название остановки */
+.stop-search-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tg-text);
+  line-height: 1.3;
+}
+
+/* Карточка остановки */
+.stop-search-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+}
+
+.stop-search-item:last-child {
+  border-bottom: none;
+}
+
+/* Заголовок секции (🚌 Маршруты / 📍 Остановки) */
+.stop-search-header {
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tg-hint);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(128, 128, 128, 0.06);
+  border-radius: 8px;
+  margin-bottom: 4px;
+}
+
+/* Блок результатов */
+.stop-search-results {
+  margin-top: 8px;
+}

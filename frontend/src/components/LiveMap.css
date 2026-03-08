@@ -116,7 +116,7 @@
 .livemap-vehicles-list {
   background: rgba(255,255,255,0.03);
   border-top: 1px solid rgba(255,255,255,0.06);
-  max-height: 200px;
+  max-height: 220px;
   overflow-y: auto;
 }
 
@@ -131,6 +131,7 @@
 .livemap-vehicle-item {
   display: flex;
   align-items: center;
+  gap: 8px;
   padding: 8px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.04);
   cursor: pointer;
@@ -145,14 +146,23 @@
 .livemap-vehicle-id {
   color: #fff;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
+  min-width: 40px;
+}
+
+/* Модель ТС в списке */
+.livemap-vehicle-model {
+  color: rgba(255,255,255,0.4);
+  font-size: 11px;
   flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .livemap-vehicle-speed {
   color: rgba(255,255,255,0.5);
   font-size: 12px;
-  margin-right: 12px;
 }
 
 .livemap-vehicle-bearing {
@@ -163,25 +173,49 @@
 /* Vehicle popup */
 .vehicle-popup {
   text-align: center;
-  padding: 4px;
+  padding: 4px 2px;
+  min-width: 130px;
 }
 
 .vehicle-popup-id {
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   margin-bottom: 4px;
+  color: #fff;
 }
 
 .vehicle-popup-speed {
   font-size: 12px;
-  color: #888;
+  color: #aaa;
+  margin-bottom: 4px;
+}
+
+/* Модель ТС в попапе */
+.vehicle-popup-model {
+  font-size: 12px;
+  color: #ccc;
+  margin-bottom: 3px;
+  font-style: italic;
 }
 
 .vehicle-popup-plate {
   font-size: 11px;
   color: #aaa;
-  margin-top: 4px;
+  margin-top: 3px;
   font-family: monospace;
+  letter-spacing: 0.5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 1px 6px;
+  display: inline-block;
+}
+
+.vehicle-popup-type {
+  font-size: 10px;
+  color: #888;
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* Marker overrides */
