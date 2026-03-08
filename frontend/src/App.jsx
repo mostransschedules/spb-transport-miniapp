@@ -909,7 +909,7 @@ function App() {
 
   const [showShareModal, setShowShareModal] = useState(false)
 
-  const getNextDepartures = (count) => {
+  const getShareNextDepartures = (count) => {
     if (!schedule.length) return []
     const now = new Date()
     const nowH = now.getHours()
@@ -935,7 +935,7 @@ function App() {
     const dirLabel = direction === 0 ? 'Прямое' : 'Обратное'
 
     if (mode === 'next') {
-      const next = getNextDepartures(3)
+      const next = getShareNextDepartures(3)
       if (!next.length) return `🚌 Маршрут ${route}\n📍 ${stop}\n⏰ Ближайших рейсов нет`
       return `🚌 Маршрут ${route}\n📍 ${stop}\n🕐 Ближайшие: ${next.join(', ')}`
     }
@@ -2331,9 +2331,9 @@ function App() {
               <div className="share-preview">
                 <div className="share-preview-label">Маршрут {selectedRoute?.route_short_name}</div>
                 <div className="share-preview-stop">📍 {selectedStop?.stop_name}</div>
-                {getNextDepartures(3).length > 0 && (
+                {getShareNextDepartures(3).length > 0 && (
                   <div className="share-preview-times">
-                    🕐 Ближайшие: {getNextDepartures(3).join(', ')}
+                    🕐 Ближайшие: {getShareNextDepartures(3).join(', ')}
                   </div>
                 )}
               </div>
