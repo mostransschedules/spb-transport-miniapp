@@ -335,30 +335,38 @@
 
 /* Цветные бейджи маршрутов в поиске остановок */
 .stop-search-route-chip {
-  font-size: 13px;
-  font-weight: 800;
-  padding: 5px 10px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  color: #fff !important;
-  background: #27ae60;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  white-space: nowrap;
-  line-height: 1.4;
-  text-decoration: none;
-  min-height: 28px;
-  -webkit-font-smoothing: antialiased;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  padding: 5px 10px !important;
+  border-radius: 8px !important;
+  border: none !important;
+  cursor: pointer !important;
+  color: #ffffff !important;
+  background: #27ae60 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 3px !important;
+  white-space: nowrap !important;
+  line-height: 1.4 !important;
+  min-height: 28px !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-shadow: none !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+.stop-search-route-chip * {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
 }
 .stop-search-route-chip .chip-arrow {
-  opacity: 0.85;
+  opacity: 0.8;
   font-size: 11px;
 }
-.stop-search-route-chip.route-type-bus { background: #27ae60; }
-.stop-search-route-chip.route-type-tram { background: #e74c3c; }
-.stop-search-route-chip.route-type-trolley { background: #3498db; }
+.stop-search-route-chip.route-type-bus,
+.stop-search-route-chip.route-type-bus:hover { background: #27ae60 !important; color: #fff !important; }
+.stop-search-route-chip.route-type-tram,
+.stop-search-route-chip.route-type-tram:hover { background: #e74c3c !important; color: #fff !important; }
+.stop-search-route-chip.route-type-trolley,
+.stop-search-route-chip.route-type-trolley:hover { background: #3498db !important; color: #fff !important; }
 .stop-search-route-group {
   display: inline-flex;
   gap: 3px;

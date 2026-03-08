@@ -1,5 +1,10 @@
 // =============================================================================
-// LIVEMAP — Живая карта транспорта (GTFS-RT) v4
+// LIVEMAP — Живая карта транспорта (GTFS-RT) v5
+// =============================================================================
+// Логика определения типа ТС:
+//   ПРИОРИТЕТ: label → vehicle_id → license_plate из GTFS → plate из JSON
+//   + transport_type из GTFS (обогащается в backend по route_id)
+//   Автобус = есть гос.номер (license_plate непустой)
 // =============================================================================
 
 import { useState, useEffect, useRef, useCallback } from 'react'
@@ -11,49 +16,88 @@ import vehiclesDb from '../vehicles.json'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
+// =============================================================================
+// vehicles.json теперь структурирован: { bus: {...}, tram: {...}, trolley: {...} }
+// =============================================================================
 const normPlate = (s) => (s || '').replace(/\s+/g, '').toUpperCase()
 
-let _plateIndex = null
-const getPlateIndex = () => {
-  if (_plateIndex) return _plateIndex
-  _plateIndex = {}
-  for (const info of Object.values(vehiclesDb)) {
-    if (info.plate) {
-      const key = normPlate(info.plate)
-      if (key) _plateIndex[key] = info
-    }
+// Plate → info (только автобусы, строится один раз)
+let _plateIdx = null
+const getPlateIdx = () => {
+  if (_plateIdx) return _plateIdx
+  _plateIdx = {}
+  const busDb = vehiclesDb.bus || vehiclesDb // fallback: старый формат (flat)
+  for (const [id, info] of Object.entries(busDb)) {
+    if (info.plate) _plateIdx[normPlate(info.plate)] = { ...info, id }
   }
-  return _plateIndex
+  return _plateIdx
 }
 
-// ПРИОРИТЕТ: license_plate из GTFS → plate из JSON → vehicle_id → label
-const lookupVehicle = (vehicleId, label, licensePlate) => {
+// Поиск по бортовому номеру с учётом типа ТС
+const lookupByLabel = (label, typeHint) => {
+  if (!label) return null
+  const key = String(label).trim()
+  const stripped = key.replace(/^0+/, '') || key
+
+  // Новый формат: { bus: {...}, tram: {...}, trolley: {...} }
+  if (vehiclesDb.bus) {
+    // Если есть подсказка типа — ищем только в нём
+    const order = typeHint
+      ? [typeHint, ...['bus','tram','trolley'].filter(t=>t!==typeHint)]
+      : ['bus','tram','trolley']
+    for (const t of order) {
+      const db = vehiclesDb[t] || {}
+      if (db[key]) return db[key]
+      if (db[stripped]) return db[stripped]
+    }
+    return null
+  }
+  // Старый формат flat
+  return vehiclesDb[key] || vehiclesDb[stripped] || null
+}
+
+// =============================================================================
+// ПРИОРИТЕТ: label → vehicle_id → license_plate из GTFS → plate из JSON
+// transport_type из backend (уже обогащён по route_id)
+// =============================================================================
+const lookupVehicle = (vehicleId, label, licensePlate, typeHint) => {
+  // 1. По бортовому номеру с hint типа
+  const byLabel = lookupByLabel(label, typeHint) || lookupByLabel(vehicleId, typeHint)
+  if (byLabel) return byLabel
+
+  // 2. По гос.номеру из GTFS (только автобусы)
   if (licensePlate) {
     const norm = normPlate(licensePlate)
-    if (norm && norm.length > 3) {
-      const found = getPlateIndex()[norm]
+    if (norm.length > 3) {
+      const found = getPlateIdx()[norm]
       if (found) return found
     }
-  }
-  for (const id of [label, vehicleId].filter(Boolean)) {
-    const key = String(id).trim()
-    if (vehiclesDb[key]) return vehiclesDb[key]
-    const stripped = key.replace(/^0+/, '')
-    if (stripped && vehiclesDb[stripped]) return vehiclesDb[stripped]
   }
   return null
 }
 
 const COLORS = { bus: '#27ae60', trolley: '#3498db', tram: '#e74c3c' }
 
-const resolveTransportType = (v, fallback) => {
-  // Гос.номер длиннее 3 символов — это автобус (у трамваев/троллей нет гос.номеров)
-  if (v.license_plate && normPlate(v.license_plate).length > 3) return 'bus'
-  const info = lookupVehicle(v.vehicle_id, v.label, v.license_plate)
+// Определяем тип ТС
+const resolveType = (v) => {
+  // transport_type из backend (обогащён по route_id из GTFS) — самый надёжный источник
+  if (v.transport_type && v.transport_type !== 'bus') return v.transport_type
+
+  // Ищем в vehicles.json
+  const typeHint = v.transport_type || null
+  const info = lookupVehicle(v.vehicle_id, v.label, v.license_plate, typeHint)
   if (info?.type) return info.type
-  return fallback || 'bus'
+
+  // Если есть непустой гос.номер → автобус
+  if (v.license_plate && normPlate(v.license_plate).length > 3) return 'bus'
+
+  // Фоллбэк на transport_type из backend
+  return v.transport_type || 'bus'
 }
 
+// =============================================================================
+// Иконка маркера с номером маршрута
+// =============================================================================
 const createVehicleIcon = (type, bearing = 0, selected = false, routeNum = '', dimmed = false) => {
   const color = COLORS[type] || COLORS.bus
   const size = selected ? 36 : 28
@@ -77,15 +121,16 @@ const createVehicleIcon = (type, bearing = 0, selected = false, routeNum = '', d
 
 function MapFitBounds({ positions }) {
   const map = useMap()
+  const key = positions ? `${positions[0]}-${positions[positions.length-1]}` : ''
   useEffect(() => {
     if (!positions || positions.length < 2) return
     try { map.fitBounds(L.latLngBounds(positions), { padding: [40, 40], maxZoom: 15 }) } catch {}
-  }, [JSON.stringify(positions?.slice(0,2))]) // eslint-disable-line
+  }, [key]) // eslint-disable-line
   return null
 }
 
 function VehiclePopup({ v, resolvedType }) {
-  const info = lookupVehicle(v.vehicle_id, v.label, v.license_plate)
+  const info = lookupVehicle(v.vehicle_id, v.label, v.license_plate, resolvedType)
   const plate = v.license_plate || info?.plate || ''
   const typeLabel = { tram: 'Трамвай', trolley: 'Троллейбус', bus: 'Автобус' }[resolvedType] || 'Автобус'
   return (
@@ -93,19 +138,22 @@ function VehiclePopup({ v, resolvedType }) {
       <div className="vehicle-popup-id">{v.label || v.vehicle_id}</div>
       {v.route_short_name && <div className="vehicle-popup-route">Маршрут {v.route_short_name}</div>}
       <div className="vehicle-popup-speed">{v.speed} км/ч · ▲{Math.round(v.bearing||0)}°</div>
-      {info?.model && <div className="vehicle-popup-model">{info.model}</div>}
+      <div className="vehicle-popup-model">{info?.model || 'Неизвестно'}</div>
       {plate && <div className="vehicle-popup-plate">{plate}</div>}
       <div className="vehicle-popup-type">{typeLabel}</div>
     </div>
   )
 }
 
+// =============================================================================
+// Основной компонент
+// =============================================================================
 function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose, direction = 0 }) {
   const [vehicles, setVehicles] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [selectedVehicle, setSelectedVehicle] = useState(null)
-  const [filterRoute, setFilterRoute] = useState(null) // { num, stops, shape }
+  const [filterRoute, setFilterRoute] = useState(null)
   const [filterLoading, setFilterLoading] = useState(false)
   const [lastUpdate, setLastUpdate] = useState(null)
   const [autoRefresh, setAutoRefresh] = useState(true)
@@ -164,8 +212,6 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
     }
   }, [filterRoute])
 
-  const clearFilter = () => { setFilterRoute(null); setSelectedVehicle(null) }
-
   const secAgo = lastUpdate ? Math.floor((Date.now() - lastUpdate.getTime()) / 1000) : null
   const displayVehicles = filterRoute
     ? vehicles.filter(v => (v.route_short_name || '') === filterRoute.num)
@@ -177,12 +223,9 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
 
   const visibleStops = filterRoute?.stops?.length > 0 ? filterRoute.stops : (propStops || [])
 
-  const filterTypeVehicle = filterRoute
-    ? vehicles.find(v => v.route_short_name === filterRoute.num)
-    : null
-  const lineColor = filterTypeVehicle
-    ? COLORS[resolveTransportType(filterTypeVehicle, 'bus')]
-    : COLORS[transportType] || COLORS.bus
+  const lineColor = filterRoute
+    ? (COLORS[resolveType(vehicles.find(v => v.route_short_name === filterRoute.num) || {})] || COLORS.bus)
+    : (COLORS[transportType] || COLORS.bus)
 
   const defaultCenter = [59.9343, 30.3351]
   const mapCenter = vehicles.length > 0
@@ -211,7 +254,7 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           {filterRoute && (
-            <button className="livemap-filter-reset" onClick={clearFilter}>
+            <button className="livemap-filter-reset" onClick={() => setFilterRoute(null)}>
               ✕ Все маршруты
             </button>
           )}
@@ -223,9 +266,7 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
       </div>
 
       {filterLoading && (
-        <div className="livemap-filter-loading">
-          Загружаем маршрут {filterRoute?.num}...
-        </div>
+        <div className="livemap-filter-loading">Загружаем маршрут {filterRoute?.num}...</div>
       )}
 
       {loading ? (
@@ -240,7 +281,6 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
           scrollWheelZoom
           touchZoom
           dragging
-          zoomControl
         >
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
@@ -252,8 +292,7 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
           )}
 
           {visibleStops.map((stop, i) => (
-            <Marker
-              key={`stop-${stop.stop_id || i}`}
+            <Marker key={`stop-${stop.stop_id || i}`}
               position={[stop.stop_lat, stop.stop_lon]}
               icon={L.divIcon({
                 html: `<div style="width:8px;height:8px;border-radius:50%;background:rgba(91,155,247,0.75);border:1.5px solid rgba(91,155,247,0.4)"></div>`,
@@ -265,19 +304,16 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
           ))}
 
           {vehicles.map(v => {
-            const type = resolveTransportType(v, transportType)
+            const type = resolveType(v)
             const vId = v.entity_id || v.vehicle_id
             const routeNum = v.route_short_name || routeName || ''
             const dimmed = !!filterRoute && routeNum !== filterRoute.num
             const isSelected = selectedVehicle === vId
             return (
-              <Marker
-                key={vId}
-                position={[v.lat, v.lon]}
+              <Marker key={vId} position={[v.lat, v.lon]}
                 icon={createVehicleIcon(type, v.bearing, isSelected, routeNum, dimmed)}
                 eventHandlers={{ click: () => {
                   setSelectedVehicle(isSelected ? null : vId)
-                  // Фильтр только на общей карте (без привязанного routeId)
                   if (!routeId && routeNum) handleFilterByRoute(routeNum, v.route_id || '')
                 }}}
               >
@@ -299,8 +335,8 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
             {filterRoute ? ` · маршрут ${filterRoute.num}` : ''})
           </div>
           {displayVehicles.slice(0, 20).map(v => {
-            const info = lookupVehicle(v.vehicle_id, v.label, v.license_plate)
-            const type = resolveTransportType(v, transportType)
+            const info = lookupVehicle(v.vehicle_id, v.label, v.license_plate, resolveType(v))
+            const type = resolveType(v)
             const vId = v.entity_id || v.vehicle_id
             return (
               <div key={vId}
@@ -314,7 +350,7 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
                     {v.route_short_name || routeName}
                   </span>
                 )}
-                {info?.model && <span className="livemap-vehicle-model">{info.model}</span>}
+                <span className="livemap-vehicle-model">{info?.model || 'Неизвестно'}</span>
                 <span className="livemap-vehicle-speed">{v.speed} км/ч</span>
               </div>
             )
