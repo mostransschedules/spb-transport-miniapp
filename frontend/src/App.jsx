@@ -1842,15 +1842,12 @@ function App() {
                               <span className="nearby-card-chevron"> ›</span>
                             </span>
                           </div>
-                          {stop.stop_id && (
-                            <NearbyGpsRow
-                              stopId={String(stop.stop_id)}
-                              routeId={String(route.route_id)}
-                              direction={route.direction}
-                              schedDep={dep}
-                              transportType={route.transport_type}
-                            />
-                          )}
+                          <NearbyGpsRow
+                            stopId={stop.stop_id ? String(stop.stop_id) : 'none'}
+                            routeId={String(route.route_id)}
+                            direction={route.direction}
+                            transportType={route.transport_type}
+                          />
                         </div>
                       )
                     })}

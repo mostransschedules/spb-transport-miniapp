@@ -1,4 +1,4 @@
-// NearbyGpsRow — GPS/РАСПИСАНИЕ строка (дизайн по мокапу)
+// NearbyGpsRow — GPS/РАСПИСАНИЕ строка точно по мокапу
 import { useState, useEffect } from 'react'
 import vehiclesDb from '../vehicles.json'
 
@@ -31,34 +31,55 @@ const subscribe = (stopId, cb) => {
   return () => { _listeners[stopId]?.delete(cb); clearInterval(iv) }
 }
 
-// Ищем модель ТС по бортовому номеру
-const getVehicleModel = (vehicleId, typeHint) => {
+const getModel = (vehicleId, typeHint) => {
   if (!vehicleId) return ''
   const id = String(vehicleId).trim()
-  // Пробуем по типу
   const dicts = typeHint === 'tram' ? [vehiclesDb.tram]
     : typeHint === 'trolley' ? [vehiclesDb.trolley]
     : [vehiclesDb.bus, vehiclesDb.tram, vehiclesDb.trolley]
   for (const d of dicts) {
-    if (d && d[id]) return d[id].model || ''
+    if (d?.[id]?.model) return d[id].model
   }
   return ''
 }
 
-function NearbyGpsRow({ stopId, routeId, direction, schedDep, transportType }) {
-  const [forecasts, setForecasts] = useState(undefined)
+function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
+  const [forecasts, setForecasts] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [, setTick] = useState(0)
 
   useEffect(() => {
     if (!stopId || stopId === 'undefined') return
-    const unsub = subscribe(stopId, setForecasts)
+    setLoading(true)
+    const unsub = subscribe(stopId, (data) => {
+      setForecasts(data)
+      setLoading(false)
+    })
     const iv = setInterval(() => setTick(t => t + 1), 1000)
     return () => { unsub(); clearInterval(iv) }
   }, [stopId])
 
   const now = Math.floor(Date.now() / 1000)
 
-  if (forecasts === undefined || forecasts === null) {
+  // Ищем GPS рейс для этого маршрута
+  const gpsReis = (!loading && forecasts)
+    ? forecasts.filter(f => {
+        if (f.arrival_time <= now) return false
+        if (String(f.route_id) !== String(routeId)) return false
+        if (direction !== undefined && direction !== null
+            && f.direction_id !== undefined && f.direction_id !== null) {
+          if (Number(f.direction_id) !== Number(direction)) return false
+        }
+        return true
+      }).sort((a, b) => a.arrival_time - b.arrival_time)
+    : []
+
+  const hasGps = gpsReis.length > 0
+  const first = hasGps ? gpsReis[0] : null
+  const vehicleId = first?.vehicle_id || ''
+  const model = getModel(vehicleId, transportType)
+
+  if (!hasGps) {
     return (
       <div className="ngps-row sched">
         <span className="ngps-tag sched">РАСПИСАНИЕ</span>
@@ -66,38 +87,18 @@ function NearbyGpsRow({ stopId, routeId, direction, schedDep, transportType }) {
       </div>
     )
   }
-
-  const gpsReis = forecasts
-    .filter(f => {
-      if (f.arrival_time <= now) return false
-      if (String(f.route_id) !== String(routeId)) return false
-      if (direction !== undefined && direction !== null
-          && f.direction_id !== undefined && f.direction_id !== null) {
-        if (Number(f.direction_id) !== Number(direction)) return false
-      }
-      return true
-    })
-    .sort((a, b) => a.arrival_time - b.arrival_time)
-
-  if (gpsReis.length === 0) {
-    return (
-      <div className="ngps-row sched">
-        <span className="ngps-tag sched">РАСПИСАНИЕ</span>
-        <span className="ngps-label">по графику</span>
-      </div>
-    )
-  }
-
-  const first = gpsReis[0]
-  const vehicleId = first.vehicle_id || ''
-  const model = getVehicleModel(vehicleId, transportType)
 
   return (
     <div className="ngps-row gps">
       <span className="ngps-dot" />
-      {vehicleId && <span className="ngps-vehicle">{vehicleId}</span>}
-      {model && <span className="ngps-sep">·</span>}
-      {model && <span className="ngps-model">{model}</span>}
+      {vehicleId
+        ? <span className="ngps-vehicle">{vehicleId}</span>
+        : null
+      }
+      {vehicleId && model
+        ? <><span className="ngps-sep">·</span><span className="ngps-model">{model}</span></>
+        : null
+      }
       <span className="ngps-tag gps">GPS</span>
     </div>
   )

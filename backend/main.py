@@ -353,6 +353,20 @@ async def get_stops_nearby(
             raise HTTPException(status_code=400, detail="Некорректные координаты")
         radius = min(radius, 2000)  # максимум 2 км
         results = get_nearby_stops(lat, lon, radius)
+        # Восстанавливаем stop_id (database.py его удаляет как служебное поле)
+        try:
+            from database import get_connection
+            con = get_connection()
+            for stop in results:
+                row = con.execute(
+                    "SELECT CAST(stop_id AS VARCHAR) FROM stops WHERE stop_name = ? LIMIT 1",
+                    [stop["stop_name"]]
+                ).fetchone()
+                if row:
+                    stop["stop_id"] = row[0]
+            con.close()
+        except Exception as e2:
+            print(f"⚠️ stop_id restore error: {e2}")
         return {"stops": results, "lat": lat, "lon": lon, "radius": radius}
     except HTTPException:
         raise
