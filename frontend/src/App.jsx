@@ -11,6 +11,7 @@ import { getSavedTheme, saveTheme, applyTheme, watchSystemTheme, THEMES } from '
 import { getHistory, addRouteToHistory, addStopToHistory, clearHistory, formatHistoryTime } from './utils/history'
 import StatsTabs from './components/StatsTabs'
 import ThemeSelector from './components/ThemeSelector'
+import LiveMap from './components/LiveMap'
 import './App.css'
 import './themes.css'
 import './animations.css'
@@ -160,6 +161,10 @@ function App() {
   const [visibleRoutesCount, setVisibleRoutesCount] = useState(50)
   const [visibleStopsCount, setVisibleStopsCount] = useState(10)
   const [routeTypeFilter, setRouteTypeFilter] = useState('all')
+  const [showLiveMap, setShowLiveMap] = useState(false)
+  const [liveMapRouteId, setLiveMapRouteId] = useState(null)
+  const [liveMapRouteName, setLiveMapRouteName] = useState(null)
+  const [liveMapTransportType, setLiveMapTransportType] = useState(null)
 
   // Обработчик смены темы
   const handleThemeChange = (theme) => {
@@ -1464,21 +1469,16 @@ function App() {
                           routeMap.get(r.route_id).directions.push(r.direction)
                         })
                         return [...routeMap.values()].slice(0, 8).map(route => {
+                          const typeClass = getRouteTypeClass(route)
                           const dirs = route.directions.filter((v, i, a) => a.indexOf(v) === i)
                           if (dirs.length > 1) {
                             return (
                               <span key={route.route_id} className="stop-search-route-group">
                                 <button
-                                  className="stop-search-route-chip"
+                                  className={`stop-search-route-chip ${typeClass}`}
                                   onClick={() => { setSearchOpen(false); setSearchQuery(''); navigateToStopSchedule(stop.stop_name, route, 0) }}
                                 >
-                                  {route.route_short_name} →
-                                </button>
-                                <button
-                                  className="stop-search-route-chip stop-search-route-chip--reverse"
-                                  onClick={() => { setSearchOpen(false); setSearchQuery(''); navigateToStopSchedule(stop.stop_name, route, 1) }}
-                                >
-                                  {route.route_short_name} ←
+                                  {route.route_short_name} →{route.route_short_name} ←
                                 </button>
                               </span>
                             )
@@ -1486,7 +1486,7 @@ function App() {
                           return (
                             <button
                               key={route.route_id}
-                              className="stop-search-route-chip"
+                              className={`stop-search-route-chip ${typeClass}`}
                               onClick={() => { setSearchOpen(false); setSearchQuery(''); navigateToStopSchedule(stop.stop_name, route, dirs[0]) }}
                             >
                               {route.route_short_name}
@@ -1850,6 +1850,17 @@ function App() {
               </div>
             )}
           </div>
+        )}
+
+        {/* Живая карта (таб) */}
+        {activeTab === 'livemap' && !selectedRoute && !selectedStop && !searchOpen && (
+          <LiveMap
+            routeId={liveMapRouteId}
+            routeName={liveMapRouteName}
+            transportType={liveMapTransportType}
+            stops={null}
+            onClose={() => handleTabChange('routes')}
+          />
         )}
 
         {/* Список остановок */}
@@ -2322,6 +2333,19 @@ function App() {
                 >
                   <span className="bottom-tab-icon">📍</span>
                   <span className="bottom-tab-label">Рядом</span>
+                </button>
+                <button
+                  className={`bottom-tab ${activeTab === 'livemap' ? 'active' : ''}`}
+                  onClick={() => {
+                    handleTabChange('livemap')
+                    setShowLiveMap(true)
+                    setLiveMapRouteId(null)
+                    setLiveMapRouteName(null)
+                    setLiveMapTransportType(null)
+                  }}
+                >
+                  <span className="bottom-tab-icon">🛰️</span>
+                  <span className="bottom-tab-label">Карта</span>
                 </button>
                 <button
                   className={`bottom-tab ${activeTab === 'history' ? 'active' : ''}`}

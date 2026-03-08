@@ -50,7 +50,7 @@ async def fetch_vehicle_positions(route_ids: str = None, transports: str = None,
         if bbox:
             params["bbox"] = bbox
 
-        async with httpx.AsyncClient(timeout=15) as client:
+        async with httpx.AsyncClient(timeout=15, verify=False) as client:
             resp = await client.get(VEHICLE_URL, params=params)
             resp.raise_for_status()
 
@@ -108,7 +108,7 @@ async def fetch_stop_forecast(stop_id: str) -> List[dict]:
         List[dict]: Список прогнозов прибытия
     """
     try:
-        async with httpx.AsyncClient(timeout=15) as client:
+        async with httpx.AsyncClient(timeout=15, verify=False) as client:
             resp = await client.get(FORECAST_URL, params={"stopID": stop_id})
             resp.raise_for_status()
 
@@ -164,7 +164,7 @@ async def fetch_vehicle_trips(vehicle_ids: str) -> List[dict]:
         List[dict]: Маршрутные листы
     """
     try:
-        async with httpx.AsyncClient(timeout=15) as client:
+        async with httpx.AsyncClient(timeout=15, verify=False) as client:
             resp = await client.get(VEHICLETRIPS_URL, params={"vehicleIDs": vehicle_ids})
             resp.raise_for_status()
 

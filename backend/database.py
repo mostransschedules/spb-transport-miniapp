@@ -546,6 +546,8 @@ def search_stops(query: str, limit: int = 30) -> List[Dict]:
                 r.route_short_name,
                 r.route_id,
                 r.route_long_name,
+                r.route_type,
+                r.transport_type,
                 t.direction_id
             FROM stops s
             JOIN stop_times st ON CAST(st.stop_id AS VARCHAR) = CAST(s.stop_id AS VARCHAR)
@@ -573,6 +575,8 @@ def search_stops(query: str, limit: int = 30) -> List[Dict]:
                 'route_short_name': str(row['route_short_name']),
                 'route_id': str(row['route_id']),
                 'route_long_name': str(row['route_long_name']) if row['route_long_name'] else '',
+                'route_type': int(row['route_type']) if row.get('route_type') is not None else 3,
+                'transport_type': str(row.get('transport_type', 'bus')),
                 'direction': int(row['direction_id'])
             }
             # Добавляем только уникальные маршруты
