@@ -338,120 +338,91 @@
 .stop-search-route-chip {
   font-size: 12px;
   font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 6px;
+  padding: 4px 9px;
+  border-radius: 7px;
   border: none;
   cursor: pointer;
   color: #fff !important;
   background: #27ae60;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   white-space: nowrap;
-  line-height: 1.3;
+  line-height: 1.4;
+  text-decoration: none;
+  min-height: 26px;
 }
-.stop-search-route-chip.route-type-bus {
-  background: #27ae60;
-}
-.stop-search-route-chip.route-type-tram {
-  background: #e74c3c;
-}
-.stop-search-route-chip.route-type-trolley {
-  background: #3498db;
-}
-.stop-search-route-group {
-  display: inline-flex;
-  gap: 2px;
-}
-/* =============================================================================
-   APP.CSS PATCH — Бейджи маршрутов в поиске остановок (п.3)
-   Добавить в конец App.css
-   ============================================================================= */
-
-/* ── Бейджи маршрутов в результатах поиска остановок ── */
-/* Приводим к стилю sv2-route-badge из страницы расписания */
-
-.stop-search-route-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 10px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  color: #fff !important;
-  transition: opacity 0.15s, transform 0.1s;
-  letter-spacing: 0.2px;
-  min-width: 32px;
-  text-align: center;
-  line-height: 1.3;
-}
-
-.stop-search-route-chip:active {
-  transform: scale(0.95);
+.stop-search-route-chip .chip-arrow {
   opacity: 0.85;
+  font-size: 11px;
 }
-
-/* Цвета по типу транспорта — идентичны sv2-route-badge */
-.stop-search-route-chip.route-type-bus {
-  background: #27ae60;
-}
-
-.stop-search-route-chip.route-type-tram {
-  background: #e74c3c;
-}
-
-.stop-search-route-chip.route-type-trolley {
-  background: #3498db;
-}
-
-/* Контейнер группы маршрутов (прямой + обратный) */
+.stop-search-route-chip.route-type-bus { background: #27ae60; }
+.stop-search-route-chip.route-type-tram { background: #e74c3c; }
+.stop-search-route-chip.route-type-trolley { background: #3498db; }
 .stop-search-route-group {
   display: inline-flex;
-  gap: 4px;
+  gap: 3px;
   align-items: center;
 }
-
-/* Обёртка всех бейджей для одной остановки */
 .stop-search-routes {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 6px;
+  padding: 4px 16px 12px;
+  align-items: center;
 }
 
-/* Название остановки */
-.stop-search-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--tg-text);
-  line-height: 1.3;
+
+/* ── Избранное: расписание + GPS строчки ── */
+.fav-with-gps {
+  align-items: flex-start !important;
+  padding: 8px 12px !important;
+  gap: 10px !important;
+}
+.fav-with-gps .favorite-route-number {
+  margin-top: 2px;
 }
 
-/* Карточка остановки */
-.stop-search-item {
-  padding: 10px 12px;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.1);
+/* ── Рядом: чип с GPS ── */
+.nearby-chip-with-gps {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  height: auto !important;
+  padding: 6px 10px !important;
+  gap: 2px !important;
 }
-
-.stop-search-item:last-child {
-  border-bottom: none;
+.nearby-route-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-
-/* Заголовок секции (🚌 Маршруты / 📍 Остановки) */
-.stop-search-header {
-  padding: 8px 12px;
+.nearby-sched {
   font-size: 12px;
-  font-weight: 600;
-  color: var(--tg-hint);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  background: rgba(128, 128, 128, 0.06);
-  border-radius: 8px;
-  margin-bottom: 4px;
+  color: rgba(255,255,255,0.7);
 }
-
-/* Блок результатов */
-.stop-search-results {
-  margin-top: 8px;
+.nearby-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: rgba(255,255,255,0.3);
+  margin-right: 4px;
+}
+.gps-label {
+  color: #4caf50 !important;
+  background: rgba(39,174,96,0.08);
+  border-radius: 3px;
+  padding: 0 3px;
+  border: 1px solid rgba(39,174,96,0.2);
+}
+.nearby-gps-inline {
+  font-size: 12px;
+  color: #4caf74;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nearby-gps-countdown {
+  color: rgba(255,255,255,0.4);
+  font-size: 10px;
 }

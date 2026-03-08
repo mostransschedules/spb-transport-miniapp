@@ -160,6 +160,78 @@ async def get_stops(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка получения остановок: {str(e)}")
 
+@app.get("/api/route/{route_short_name}/shape")
+async def get_route_shape(
+    route_short_name: str,
+    direction: int = Query(0),
+    route_id: str = Query(None)
+):
+    """Линия маршрута: сначала из таблицы shapes, если нет - из координат остановок"""
+    try:
+        from database import get_connection
+        con = get_connection()
+
+        # Resolve route_id
+        if not route_id:
+            r = con.execute("SELECT route_id FROM routes WHERE route_short_name = ?", [route_short_name]).fetchone()
+            if not r:
+                con.close()
+                return {"coordinates": []}
+            route_id = str(r[0])
+
+        # Попробуем получить shape_id из trips
+        shape_row = con.execute("""
+            SELECT shape_id FROM trips
+            WHERE CAST(route_id AS VARCHAR) = ? AND CAST(direction_id AS VARCHAR) = ?
+              AND shape_id IS NOT NULL AND shape_id != ''
+            LIMIT 1
+        """, [route_id, str(direction)]).fetchone()
+
+        if shape_row and shape_row[0]:
+            # Есть shapes — берём из таблицы
+            try:
+                df = con.execute("""
+                    SELECT shape_pt_lat, shape_pt_lon
+                    FROM shapes
+                    WHERE shape_id = ?
+                    ORDER BY shape_pt_sequence
+                """, [shape_row[0]]).df()
+                con.close()
+                if not df.empty:
+                    coords = [[row["shape_pt_lat"], row["shape_pt_lon"]] for _, row in df.iterrows()]
+                    return {"coordinates": coords, "source": "shapes"}
+            except Exception:
+                pass  # Таблицы shapes нет — идём дальше
+
+        # Fallback: линия через остановки по порядку
+        df = con.execute("""
+            WITH route_trips AS (
+                SELECT DISTINCT trip_id FROM trips
+                WHERE CAST(route_id AS VARCHAR) = ? AND CAST(direction_id AS VARCHAR) = ?
+            ),
+            stop_seqs AS (
+                SELECT st.stop_id, MIN(st.stop_sequence) as seq
+                FROM stop_times st
+                WHERE st.trip_id IN (SELECT trip_id FROM route_trips)
+                GROUP BY st.stop_id
+            )
+            SELECT s.stop_lat, s.stop_lon
+            FROM stop_seqs ss
+            JOIN stops s ON CAST(ss.stop_id AS VARCHAR) = CAST(s.stop_id AS VARCHAR)
+            ORDER BY ss.seq
+        """, [route_id, str(direction)]).df()
+        con.close()
+
+        if df.empty:
+            return {"coordinates": [], "source": "none"}
+
+        coords = [[row["stop_lat"], row["stop_lon"]] for _, row in df.iterrows()]
+        return {"coordinates": coords, "source": "stops"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @app.get("/api/route/{route_short_name}/schedule")
 async def get_schedule(
     route_short_name: str,
@@ -322,26 +394,6 @@ async def rt_vehicles(
         vehicles = realtime.get_vehicles_for_route(route_id)
     else:
         vehicles = realtime.get_all_vehicles()
-
-    # Обогащаем route_short_name из БД по route_id
-    try:
-        from database import get_connection
-        con = get_connection()
-        route_ids = list({v["route_id"] for v in vehicles if v.get("route_id")})
-        if route_ids:
-            placeholders = ",".join(["?" for _ in route_ids])
-            df = con.execute(
-                f"SELECT route_id, route_short_name FROM routes WHERE CAST(route_id AS VARCHAR) IN ({placeholders})",
-                route_ids
-            ).df()
-            con.close()
-            rmap = {str(row["route_id"]): str(row["route_short_name"]) for _, row in df.iterrows()}
-            for v in vehicles:
-                if v.get("route_id") and str(v["route_id"]) in rmap:
-                    v["route_short_name"] = rmap[str(v["route_id"])]
-    except Exception as e:
-        print(f"⚠️ route_short_name enrich error: {e}")
-
     return {
         "vehicles": vehicles,
         "count": len(vehicles),
