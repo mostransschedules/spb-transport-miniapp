@@ -1,4 +1,6 @@
 // NearbyGpsRow — GPS/РАСПИСАНИЕ строка точно по мокапу
+// label = бортовой номер (из vehicle_positions кэша)
+// model = модель ТС (из vehicles.json по label)
 import { useState, useEffect } from 'react'
 import vehiclesDb from '../vehicles.json'
 
@@ -31,9 +33,10 @@ const subscribe = (stopId, cb) => {
   return () => { _listeners[stopId]?.delete(cb); clearInterval(iv) }
 }
 
-const getModel = (vehicleId, typeHint) => {
-  if (!vehicleId) return ''
-  const id = String(vehicleId).trim()
+// Ищем модель по бортовому номеру (label) в vehicles.json
+const getModel = (label, typeHint) => {
+  if (!label) return ''
+  const id = String(label).trim()
   const dicts = typeHint === 'tram' ? [vehiclesDb.tram]
     : typeHint === 'trolley' ? [vehiclesDb.trolley]
     : [vehiclesDb.bus, vehiclesDb.tram, vehiclesDb.trolley]
@@ -49,8 +52,10 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
   const [, setTick] = useState(0)
 
   useEffect(() => {
-    if (!stopId || stopId === 'undefined') return
-    setLoading(true)
+    if (!stopId || stopId === 'undefined' || stopId === 'none') {
+      setLoading(false)
+      return
+    }
     const unsub = subscribe(stopId, (data) => {
       setForecasts(data)
       setLoading(false)
@@ -61,7 +66,6 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
 
   const now = Math.floor(Date.now() / 1000)
 
-  // Ищем GPS рейс для этого маршрута
   const gpsReis = (!loading && forecasts)
     ? forecasts.filter(f => {
         if (f.arrival_time <= now) return false
@@ -76,8 +80,10 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
 
   const hasGps = gpsReis.length > 0
   const first = hasGps ? gpsReis[0] : null
-  const vehicleId = first?.vehicle_id || ''
-  const model = getModel(vehicleId, transportType)
+
+  // label = бортовой номер (обогащён в main.py)
+  const label = first?.label || ''
+  const model = getModel(label, transportType)
 
   if (!hasGps) {
     return (
@@ -91,14 +97,9 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
   return (
     <div className="ngps-row gps">
       <span className="ngps-dot" />
-      {vehicleId
-        ? <span className="ngps-vehicle">{vehicleId}</span>
-        : null
-      }
-      {vehicleId && model
-        ? <><span className="ngps-sep">·</span><span className="ngps-model">{model}</span></>
-        : null
-      }
+      {label && <span className="ngps-vehicle">{label}</span>}
+      {label && model && <span className="ngps-sep">·</span>}
+      {model && <span className="ngps-model">{model}</span>}
       <span className="ngps-tag gps">GPS</span>
     </div>
   )

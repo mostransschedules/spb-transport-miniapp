@@ -535,6 +535,19 @@ async def rt_forecast(stop_id: str):
         except Exception as e2:
             print(f"⚠️ direction enrich error: {e2}")
 
+        # Обогащаем label (бортовой номер) из кэша vehicle_positions
+        veh_pos = realtime.vehicle_positions  # dict keyed by entity_id
+        # Строим индекс vehicle_id → label из кэша
+        vid_to_label = {
+            str(veh.get("vehicle_id", "")): str(veh.get("label", ""))
+            for veh in veh_pos.values()
+            if veh.get("label")
+        }
+        for f in forecasts:
+            vid = str(f.get("vehicle_id", ""))
+            if vid and vid in vid_to_label:
+                f["label"] = vid_to_label[vid]
+
         return {
             "stop_id": stop_id,
             "forecasts": forecasts,
