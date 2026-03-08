@@ -25,11 +25,15 @@ const subscribeToForecast = (stopId, cb) => {
     }
     try {
       const resp = await fetch(`${API_URL}/api/realtime/forecast/${stopId}`)
-      if (!resp.ok) throw new Error()
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
       const data = await resp.json()
-      forecastCache[stopId] = { data: data.forecasts || [], ts: Date.now() }
+      const forecasts = data.forecasts || []
+      console.debug(`[FavForecast] stop=${stopId} → ${forecasts.length} рейсов`)
+      forecastCache[stopId] = { data: forecasts, ts: Date.now() }
       cacheListeners[stopId]?.forEach(fn => fn(forecastCache[stopId].data))
-    } catch {
+    } catch (e) {
+      console.debug(`[FavForecast] stop=${stopId} error:`, e.message)
+      forecastCache[stopId] = { data: [], ts: Date.now() - 25000 } // retry soon
       cacheListeners[stopId]?.forEach(fn => fn([]))
     }
   }
@@ -57,8 +61,12 @@ function FavForecastLabeled({ stopId, routeId, inline = false }) {
 
   const now = Math.floor(Date.now() / 1000)
   const upcoming = forecasts
-    .filter(f => f.arrival_time > now)
-    .filter(f => !routeId || String(f.route_id) === String(routeId))
+    .filter(f => {
+      if (f.arrival_time <= now) return false
+      if (!routeId) return true
+      // Сравниваем числово — route_id может быть "123" или 123
+      return String(f.route_id) === String(routeId)
+    })
     .sort((a, b) => a.arrival_time - b.arrival_time)
     .slice(0, 2)
     .map(f => {
