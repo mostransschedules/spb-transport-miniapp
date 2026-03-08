@@ -467,3 +467,308 @@
   gap: 4px;
   white-space: nowrap;
 }
+
+
+/* ── Остановки рядом: дизайн мокапа (прибытие) ─────────────────────────── */
+.nearby-arrival-list {
+  display: flex;
+  flex-direction: column;
+}
+.nearby-arrival-card {
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.nearby-arrival-card:last-child { border-bottom: none; }
+.nearby-arrival-card:active { background: rgba(255,255,255,0.04); border-radius: 8px; }
+
+.nearby-arrival-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nearby-arrival-badge {
+  font-size: 13px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 32px;
+  text-align: center;
+}
+.nearby-arrival-badge.route-type-bus    { background: #27ae60; }
+.nearby-arrival-badge.route-type-tram   { background: #e74c3c; }
+.nearby-arrival-badge.route-type-trolley { background: #3498db; }
+
+.nearby-arrival-dest {
+  flex: 1;
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+.nearby-arrival-min {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.nearby-arrival-chevron {
+  color: rgba(255,255,255,0.3);
+  font-size: 16px;
+  font-weight: 400;
+  margin-left: 2px;
+}
+
+/* GPS строчка под маршрутом */
+.nearby-gps-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  padding-left: 2px;
+}
+.nearby-gps-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4caf50;
+  box-shadow: 0 0 4px #4caf5088;
+  flex-shrink: 0;
+}
+.nearby-gps-vehicle {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  font-weight: 500;
+}
+.nearby-gps-sep {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+}
+.nearby-gps-time {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  font-weight: 600;
+}
+.nearby-gps-tag {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.nearby-gps-tag.gps-tag {
+  color: #4caf50;
+  background: rgba(39,174,96,0.12);
+  border: 1px solid rgba(39,174,96,0.25);
+}
+.nearby-gps-row.sched .nearby-gps-tag {
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.nearby-gps-row.sched { opacity: 0.75; }
+.nearby-gps-row .nearby-gps-tag.sched { /* same as .sched above */ }
+.nearby-gps-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+}
+
+
+/* ── Остановки рядом: новый дизайн по мокапу ──────────────────────────────── */
+.nearby-screen {
+  padding: 0;
+}
+.nearby-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 8px;
+}
+.nearby-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+.nearby-refresh-btn {
+  background: rgba(255,255,255,0.08);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(255,255,255,0.7);
+  transition: background 0.15s;
+}
+.nearby-refresh-btn:active { background: rgba(255,255,255,0.15); }
+
+.nearby-stops-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.nearby-stop-section {
+  padding: 0 0 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 4px;
+}
+.nearby-stop-section:last-child { border-bottom: none; }
+
+.nearby-stop-header2 {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 14px 16px 2px;
+}
+.nearby-stop-name2 {
+  font-size: 15px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.nearby-stop-dist2 {
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+.nearby-card-subtitle {
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  padding: 0 16px 8px;
+  letter-spacing: 0.2px;
+}
+
+.nearby-routes-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  margin: 0 12px;
+  overflow: hidden;
+}
+.nearby-route-card {
+  background: var(--card-bg, #1a1a2e);
+  padding: 12px 14px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: background 0.12s;
+}
+.nearby-route-card:last-child { border-bottom: none; }
+.nearby-route-card:active { background: rgba(255,255,255,0.06); }
+
+.nearby-route-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nearby-route-badge {
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 3px 8px;
+  min-width: 36px;
+  text-align: center;
+  flex-shrink: 0;
+  color: #fff;
+}
+.nearby-route-dest {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.85);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nearby-route-min {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.nearby-route-chevron {
+  font-size: 16px;
+  color: rgba(255,255,255,0.3);
+  font-weight: 400;
+}
+
+/* GPS/РАСПИСАНИЕ строки под маршрутом */
+.nearby-gps-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+  padding-left: 2px;
+}
+.nearby-gps-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4caf50;
+  box-shadow: 0 0 5px #4caf5099;
+  flex-shrink: 0;
+}
+.nearby-gps-vehicle {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.6);
+}
+.nearby-gps-sep {
+  font-size: 11px;
+  color: rgba(255,255,255,0.2);
+}
+.nearby-gps-time {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+}
+.nearby-gps-tag {
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 1px 6px;
+  letter-spacing: 0.5px;
+}
+.nearby-gps-tag.gps-tag {
+  background: rgba(76,175,80,0.2);
+  color: #4caf50;
+}
+.nearby-gps-row.sched .nearby-gps-tag {
+  background: rgba(255,152,0,0.18);
+  color: #ff9800;
+}
+.nearby-gps-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+}
+
+.nearby-show-more {
+  background: none;
+  border: none;
+  color: var(--accent, #42a5f5);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px 16px 0;
+  display: block;
+  width: 100%;
+  text-align: center;
+}

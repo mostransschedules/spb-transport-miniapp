@@ -372,6 +372,27 @@ async def get_stop_transfers(
     """
     try:
         transfers = get_transfers_at_stop(stop_name, exclude_route_id, day_type)
+        # Обогащаем: находим конкретный stop_id для каждого route+direction
+        # чтобы GPS прогноз запрашивался для правильной остановки
+        try:
+            from database import get_connection
+            con = get_connection()
+            for tr in transfers:
+                rows = con.execute("""
+                    SELECT CAST(s.stop_id AS VARCHAR)
+                    FROM stops s
+                    JOIN stop_times st ON CAST(st.stop_id AS VARCHAR) = CAST(s.stop_id AS VARCHAR)
+                    JOIN trips t ON t.trip_id = st.trip_id
+                    WHERE s.stop_name = ?
+                      AND CAST(t.route_id AS VARCHAR) = ?
+                      AND t.direction_id = ?
+                    LIMIT 1
+                """, [stop_name, str(tr["route_id"]), tr["direction"]]).fetchone()
+                if rows:
+                    tr["stop_id"] = rows[0]
+            con.close()
+        except Exception as e2:
+            print(f"⚠️ stop_id enrich error: {e2}")
         return {
             "stop_name": stop_name,
             "transfers": transfers,
