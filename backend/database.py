@@ -801,6 +801,7 @@ def get_transfers_at_stop(stop_name: str, exclude_route_id: str = None, day_type
                 r.route_short_name,
                 r.route_id,
                 r.route_type,
+                r.transport_type,
                 r.route_long_name,
                 t.direction_id
             FROM stops s
@@ -870,6 +871,7 @@ def get_transfers_at_stop(stop_name: str, exclude_route_id: str = None, day_type
                 'route_short_name': route_name,
                 'route_id': rid,
                 'route_type': int(row['route_type']) if row['route_type'] is not None else 3,
+                'transport_type': str(row.get('transport_type', 'bus')),
                 'route_long_name': route_long,
                 'direction': direction,
                 'next_times': upcoming

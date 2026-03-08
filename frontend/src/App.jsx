@@ -12,6 +12,7 @@ import { getHistory, addRouteToHistory, addStopToHistory, clearHistory, formatHi
 import StatsTabs from './components/StatsTabs'
 import ThemeSelector from './components/ThemeSelector'
 import LiveMap from './components/LiveMap'
+import ForecastBlock from './components/ForecastBlock'
 import './App.css'
 import './themes.css'
 import './animations.css'
@@ -1478,7 +1479,13 @@ function App() {
                                   className={`stop-search-route-chip ${typeClass}`}
                                   onClick={() => { setSearchOpen(false); setSearchQuery(''); navigateToStopSchedule(stop.stop_name, route, 0) }}
                                 >
-                                  {route.route_short_name} →{route.route_short_name} ←
+                                  {route.route_short_name} →
+                                </button>
+                                <button
+                                  className={`stop-search-route-chip ${typeClass}`}
+                                  onClick={() => { setSearchOpen(false); setSearchQuery(''); navigateToStopSchedule(stop.stop_name, route, 1) }}
+                                >
+                                  →{route.route_short_name} ←
                                 </button>
                               </span>
                             )
@@ -2101,6 +2108,11 @@ function App() {
                   ) : null
                 })()}
 
+                {/* 🆕 Прогноз прибытия GTFS-RT */}
+                {selectedStop?.stop_id && (
+                  <ForecastBlock stopId={selectedStop.stop_id} />
+                )}
+
                 {/* Расписание по часам — компактная сетка */}
                 <div className="sv2-section-label" style={{marginTop: '16px'}}>РАСПИСАНИЕ ПО ЧАСАМ</div>
                 <div className="sv2-hour-grid">
@@ -2183,8 +2195,8 @@ function App() {
                         <div className="transfers-empty">Других маршрутов через эту остановку нет</div>
                       )}
                       {displayTransfers.map((tr, idx) => {
-                        const bgClass = tr.route_type === 0 ? 'transfer-badge-tram'
-                          : tr.route_type === 5 ? 'transfer-badge-trolley'
+                        const bgClass = tr.transport_type === 'tram' || tr.route_type === 0 ? 'transfer-badge-tram'
+                          : tr.transport_type === 'trolley' ? 'transfer-badge-trolley'
                           : 'transfer-badge-bus'
                         let destination = tr.route_long_name || ''
                         if (destination.includes(' - ')) { const parts = destination.split(' - '); destination = parts[parts.length - 1] }
