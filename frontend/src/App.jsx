@@ -682,6 +682,30 @@ function App() {
     return { time: next.time, diffMin }
   }
 
+  // Возвращает массив из N ближайших рейсов
+  const getNextDepartures = (scheduleData, count = 3) => {
+    if (!scheduleData || scheduleData.length === 0) return []
+    const now = new Date()
+    const nowH = now.getHours(), nowM = now.getMinutes()
+    const normalizedNow = nowH < 4 ? (nowH + 24) * 60 + nowM : nowH * 60 + nowM
+    const allTimes = scheduleData
+      .map(time => {
+        const str = String(time).substring(0, 5)
+        const parts = str.split(':')
+        if (parts.length < 2) return null
+        const h = parseInt(parts[0], 10), m = parseInt(parts[1], 10)
+        if (isNaN(h) || isNaN(m)) return null
+        const totalMin = h < 4 ? (h + 24) * 60 + m : h * 60 + m
+        return { time: str, totalMin }
+      })
+      .filter(Boolean)
+    allTimes.sort((a, b) => a.totalMin - b.totalMin)
+    return allTimes
+      .filter(t => t.totalMin >= normalizedNow)
+      .slice(0, count)
+      .map(t => ({ time: t.time, diffMin: t.totalMin - normalizedNow }))
+  }
+
   // Кэш ближайших рейсов для остановок {stopName: {time, diffMin}}
   const [nextDepartures, setNextDepartures] = useState({})
   const [stopSchedules, setStopSchedules] = useState({}) // для пересчёта таймером
@@ -1646,7 +1670,7 @@ function App() {
                                         {visibleFavRoutes.map(fav => {
                                     const next = favNextDepartures[fav.id]
                                     return (
-                                      <div key={fav.id} className="favorite-route-item fav-with-gps" onClick={() => {
+                                      <div key={fav.id} className="fav-transfer-row" onClick={() => {
                                         const route = routes.find(r => String(r.route_id) === String(fav.routeId) || r.route_short_name === fav.routeName)
                                         if (route) {
                                           handleTabChange('routes')
@@ -1654,36 +1678,32 @@ function App() {
                                         }
                                       }}>
                                         {(() => {
-                                          const rr = fav.routeId ? routes.find(r => String(r.route_id) === String(fav.routeId)) : null
-                                          // fav.transportType сохранён в момент добавления — приоритет над данными БД
                                           const typeClass = fav.transportType
                                             ? getTypeClassByMeta(fav.routeType, fav.transportType)
-                                            : rr ? getRouteTypeClass(rr) : 'route-type-bus'
-                                          return <span className={`favorite-route-number ${typeClass}`}>{fav.routeName}</span>
+                                            : 'route-type-bus'
+                                          return <span className={`transfer-badge ${typeClass}`} style={{color:'#fff'}}>{fav.routeName}</span>
                                         })()}
-                                        <div style={{flex: 1, minWidth: 0}}>
-                                          {/* Расписание */}
-                                          {next !== undefined && (
-                                            <div style={{display:'flex', alignItems:'center', gap:6}}>
-                                              <span style={{fontSize:10, color:'rgba(255,255,255,0.3)', fontWeight:600, minWidth:70, textTransform:'uppercase', letterSpacing:'0.3px'}}>расписание</span>
-                                              {next ? (
-                                                <span style={{fontSize:13}}>
-                                                  <span style={{color:'rgba(255,255,255,0.85)', fontWeight:500}}>{next.time}</span>
-                                                  {next.diffMin === 0
-                                                    ? <span style={{color:'rgba(255,255,255,0.4)'}}> · сейчас</span>
-                                                    : next.diffMin <= 90
-                                                      ? <span style={{color:'rgba(255,255,255,0.4)'}}> · {next.diffMin} мин</span>
-                                                      : null}
-                                                </span>
-                                              ) : (
-                                                <span style={{color:'rgba(255,255,255,0.25)', fontSize:12}}>нет рейсов</span>
-                                              )}
-                                            </div>
-                                          )}
+                                        <div className="fav-transfer-info">
+                                          {/* 3 ближайших рейса по расписанию */}
+                                          {favSchedules[fav.id] && (() => {
+                                            const times = getNextDepartures(favSchedules[fav.id], 3)
+                                            if (!times.length) return <span style={{color:'rgba(255,255,255,0.25)',fontSize:12}}>нет рейсов</span>
+                                            return (
+                                              <div className="fav-transfer-times">
+                                                {times.map((t, i) => (
+                                                  <span key={i} className={`transfer-time-chip ${i===0?'first':''}`}>{t.time}</span>
+                                                ))}
+                                              </div>
+                                            )
+                                          })()}
                                           {/* GPS */}
                                           {fav.stopId && (
-                                            <FavForecastLabeled stopId={String(fav.stopId)} routeId={String(fav.routeId)} />
+                                            <FavForecast stopId={String(fav.stopId)} routeId={String(fav.routeId)} direction={fav.direction} compact={true} />
                                           )}
+                                        </div>
+                                        <div className="fav-transfer-right">
+                                          {next && <span className="transfer-wait">{next.diffMin === 0 ? 'сейчас' : `${next.diffMin} мин`}</span>}
+                                          <span className="transfer-arrow">›</span>
                                         </div>
                                         <button className="favorite-route-remove" onClick={(e) => {
                                           e.stopPropagation()
@@ -2272,7 +2292,7 @@ function App() {
                                 ))}
                               </div>
                               {stopId && (
-                                <FavForecast stopId={String(stopId)} routeId={String(tr.route_id)} compact={true} />
+                                <FavForecast stopId={String(stopId)} routeId={String(tr.route_id)} direction={tr.direction} compact={true} />
                               )}
                             </div>
                             <span className="transfer-wait">{displayTimes[0]?.diff_min === 0 ? 'сейчас' : `${displayTimes[0]?.diff_min} мин`}</span>

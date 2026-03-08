@@ -470,13 +470,36 @@ async def rt_forecast(stop_id: str):
             finally:
                 con.close()
         
-        # Добавляем имена маршрутов
+        # Обогащаем route_short_name и transport_type
         for f in forecasts:
             info = route_names.get(str(f["route_id"]), {})
             f["route_short_name"] = info.get("name", "")
             f["route_type"] = info.get("route_type", 3)
             f["transport_type"] = info.get("transport_type", "bus")
-        
+
+        # Обогащаем direction_id из БД по trip_id
+        try:
+            from database import get_connection
+            con2 = get_connection()
+            trip_ids = list({f["trip_id"] for f in forecasts if f.get("trip_id")})
+            if trip_ids:
+                placeholders2 = ",".join(["?" for _ in trip_ids])
+                dir_rows = con2.execute(
+                    f"SELECT CAST(trip_id AS VARCHAR), direction_id FROM trips "
+                    f"WHERE CAST(trip_id AS VARCHAR) IN ({placeholders2})",
+                    trip_ids
+                ).fetchall()
+                con2.close()
+                dir_map = {r[0]: int(r[1]) for r in dir_rows if r[1] is not None}
+                for f in forecasts:
+                    tid = str(f.get("trip_id", ""))
+                    if tid in dir_map:
+                        f["direction_id"] = dir_map[tid]
+            else:
+                con2.close()
+        except Exception as e2:
+            print(f"⚠️ direction enrich error: {e2}")
+
         return {
             "stop_id": stop_id,
             "forecasts": forecasts,

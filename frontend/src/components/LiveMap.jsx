@@ -21,17 +21,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 // =============================================================================
 const normPlate = (s) => (s || '').replace(/\s+/g, '').toUpperCase()
 
-// Plate → info (только автобусы, строится один раз)
-let _plateIdx = null
-const getPlateIdx = () => {
-  if (_plateIdx) return _plateIdx
-  _plateIdx = {}
-  const busDb = vehiclesDb.bus || vehiclesDb // fallback: старый формат (flat)
-  for (const [id, info] of Object.entries(busDb)) {
-    if (info.plate) _plateIdx[normPlate(info.plate)] = { ...info, id }
-  }
-  return _plateIdx
-}
+// Plate → info: используем предвычисленный индекс из vehicles.json
+const getPlateIdx = () => vehiclesDb.bus_plates || {}
 
 // Поиск по бортовому номеру с учётом типа ТС
 const lookupByLabel = (label, typeHint) => {
@@ -195,7 +186,8 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
   }, [fetchVehicles, autoRefresh])
 
   const handleFilterByRoute = useCallback(async (num, rId) => {
-    if (filterRoute?.num === num) { setFilterRoute(null); return }
+    // Если тот же num И тот же rId — снимаем фильтр
+    if (filterRoute?.num === num && filterRoute?.routeId === rId) { setFilterRoute(null); return }
     setFilterLoading(true)
     try {
       const [sr, sh] = await Promise.all([
@@ -204,9 +196,10 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
       ])
       const stops = sr.ok ? await sr.json() : []
       const shapeData = sh.ok ? await sh.json() : { coordinates: [] }
-      setFilterRoute({ num, stops: Array.isArray(stops) ? stops : [], shape: shapeData.coordinates || [] })
+      // Сохраняем routeId для точной фильтрации ТС
+      setFilterRoute({ num, routeId: rId || null, stops: Array.isArray(stops) ? stops : [], shape: shapeData.coordinates || [] })
     } catch {
-      setFilterRoute({ num, stops: [], shape: [] })
+      setFilterRoute({ num, routeId: rId || null, stops: [], shape: [] })
     } finally {
       setFilterLoading(false)
     }
@@ -214,7 +207,10 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
 
   const secAgo = lastUpdate ? Math.floor((Date.now() - lastUpdate.getTime()) / 1000) : null
   const displayVehicles = filterRoute
-    ? vehicles.filter(v => (v.route_short_name || '') === filterRoute.num)
+    ? vehicles.filter(v => {
+        if (filterRoute.routeId) return String(v.route_id) === String(filterRoute.routeId)
+        return (v.route_short_name || '') === filterRoute.num
+      })
     : vehicles
 
   const routeLine = filterRoute?.shape?.length > 0 ? filterRoute.shape
@@ -307,7 +303,11 @@ function LiveMap({ routeId, routeName, transportType, stops: propStops, onClose,
             const type = resolveType(v)
             const vId = v.entity_id || v.vehicle_id
             const routeNum = v.route_short_name || routeName || ''
-            const isFiltered = !!filterRoute && routeNum !== filterRoute.num
+            const isFiltered = !!filterRoute && (
+              filterRoute.routeId
+                ? String(v.route_id) !== String(filterRoute.routeId)
+                : routeNum !== filterRoute.num
+            )
             const isSelected = selectedVehicle === vId
             // Полностью скрываем ТС других маршрутов при фильтре
             if (isFiltered) return null

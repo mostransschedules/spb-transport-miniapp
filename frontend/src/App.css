@@ -434,3 +434,36 @@
   color: rgba(255,255,255,0.4);
   font-size: 10px;
 }
+
+
+/* ── Избранное: дизайн как у пересадок ─────────────────────────────────── */
+.fav-transfer-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.fav-transfer-row:last-child { border-bottom: none; }
+.fav-transfer-row:active { background: rgba(255,255,255,0.04); }
+.fav-transfer-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.fav-transfer-times {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.fav-transfer-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
