@@ -1,0 +1,214 @@
+/* =============================================================================
+   LIVEMAP STYLES — Живая карта транспорта
+   ============================================================================= */
+
+.livemap-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 100vh;
+  background: #0d0d12;
+}
+
+/* Header */
+.livemap-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.livemap-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.livemap-back {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 16px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.livemap-title {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.livemap-subtitle {
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.livemap-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #4caf50;
+  display: inline-block;
+  box-shadow: 0 0 6px #4caf50;
+  animation: livePulse 2s infinite;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.livemap-refresh-btn {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.livemap-refresh-btn.active {
+  background: rgba(76,175,80,0.1);
+  border-color: rgba(76,175,80,0.3);
+}
+
+/* Map */
+.livemap-map {
+  flex: 1;
+  min-height: 400px;
+  z-index: 1;
+}
+
+/* Loading / Error */
+.livemap-loading, .livemap-error {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: rgba(255,255,255,0.5);
+  min-height: 300px;
+}
+
+.livemap-error button {
+  background: #5b9bf7;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Vehicle list */
+.livemap-vehicles-list {
+  background: rgba(255,255,255,0.03);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.livemap-list-header {
+  padding: 10px 16px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.livemap-vehicle-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.livemap-vehicle-item:hover,
+.livemap-vehicle-item.selected {
+  background: rgba(255,255,255,0.04);
+}
+
+.livemap-vehicle-id {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.livemap-vehicle-speed {
+  color: rgba(255,255,255,0.5);
+  font-size: 12px;
+  margin-right: 12px;
+}
+
+.livemap-vehicle-bearing {
+  color: rgba(255,255,255,0.3);
+  font-size: 11px;
+}
+
+/* Vehicle popup */
+.vehicle-popup {
+  text-align: center;
+  padding: 4px;
+}
+
+.vehicle-popup-id {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.vehicle-popup-speed {
+  font-size: 12px;
+  color: #888;
+}
+
+.vehicle-popup-plate {
+  font-size: 11px;
+  color: #aaa;
+  margin-top: 4px;
+  font-family: monospace;
+}
+
+/* Marker overrides */
+.vehicle-marker-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.stop-dot-icon {
+  background: none !important;
+  border: none !important;
+}
+
+/* Leaflet dark theme overrides */
+.livemap-map .leaflet-popup-content-wrapper {
+  background: #1a1a2e;
+  color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+.livemap-map .leaflet-popup-tip {
+  background: #1a1a2e;
+}
+
+.livemap-map .leaflet-control-zoom a {
+  background: rgba(26,26,46,0.9);
+  color: #fff;
+  border-color: rgba(255,255,255,0.1);
+}

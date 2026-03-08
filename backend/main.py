@@ -11,6 +11,7 @@ from typing import Optional, List
 import duckdb
 import os
 from datetime import datetime
+import time
 
 # Импортируем функции для работы с БД
 from database import (
@@ -24,6 +25,9 @@ from database import (
     get_transfers_at_stop
 )
 
+# Импортируем GTFS-RT модуль
+import realtime
+
 # =============================================================================
 # Создание приложения FastAPI
 # =============================================================================
@@ -36,7 +40,8 @@ app = FastAPI(
 
 @app.on_event("startup")
 async def startup_event():
-    """Создаём индексы при старте если их нет"""
+    """Создаём индексы и запускаем GTFS-RT polling при старте"""
+    # Индексы
     try:
         import duckdb
         from database import DB_PATH
@@ -50,6 +55,14 @@ async def startup_event():
         print("✅ Индексы созданы")
     except Exception as e:
         print(f"⚠️ Не удалось создать индексы: {e}")
+    
+    # Запуск GTFS-RT polling в фоне
+    import asyncio
+    try:
+        asyncio.create_task(realtime.start_polling(interval_seconds=15))
+        print("✅ GTFS-RT polling запущен")
+    except Exception as e:
+        print(f"⚠️ GTFS-RT polling не запущен: {e}")
 
 # =============================================================================
 # CORS (Cross-Origin Resource Sharing)
@@ -294,6 +307,107 @@ async def get_stop_transfers(
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ошибка получения пересадок: {str(e)}")
+
+
+# =============================================================================
+# GTFS-RT ENDPOINTS (Реальное время)
+# =============================================================================
+
+@app.get("/api/realtime/vehicles")
+async def rt_vehicles(
+    route_id: str = Query(None, description="ID маршрута для фильтрации"),
+):
+    """Позиции транспорта (из кэша polling, обновляется каждые 15 сек)"""
+    if route_id:
+        vehicles = realtime.get_vehicles_for_route(route_id)
+    else:
+        vehicles = realtime.get_all_vehicles()
+    return {
+        "vehicles": vehicles,
+        "count": len(vehicles),
+        "last_update": realtime.last_update["vehicle"],
+    }
+
+@app.get("/api/realtime/vehicles/live")
+async def rt_vehicles_live(
+    route_id: str = Query(None, description="ID маршрута"),
+    transports: str = Query(None, description="bus,trolley,tram"),
+    bbox: str = Query(None, description="lon_min,lat_min,lon_max,lat_max"),
+):
+    """Позиции транспорта (свежий запрос к ORGP, не из кэша)"""
+    positions = await realtime.fetch_vehicle_positions(
+        route_ids=route_id, transports=transports, bbox=bbox
+    )
+    return {
+        "vehicles": list(positions.values()) if isinstance(positions, dict) else positions,
+        "count": len(positions),
+        "timestamp": time.time(),
+    }
+
+@app.get("/api/realtime/forecast/{stop_id}")
+async def rt_forecast(stop_id: str):
+    """Прогноз прибытия на остановку (запрос к ORGP stopforecast)"""
+    try:
+        forecasts = await realtime.fetch_stop_forecast(stop_id)
+        
+        # Обогащаем данными из routes (имя маршрута, тип)
+        from database import get_connection
+        route_names = {}
+        if forecasts:
+            con = get_connection()
+            try:
+                route_ids = list(set(f["route_id"] for f in forecasts if f["route_id"]))
+                if route_ids:
+                    placeholders = ",".join(["?" for _ in route_ids])
+                    rows = con.execute(f"""
+                        SELECT CAST(route_id AS VARCHAR) as route_id, 
+                               route_short_name, route_type, transport_type
+                        FROM routes 
+                        WHERE CAST(route_id AS VARCHAR) IN ({placeholders})
+                    """, route_ids).fetchall()
+                    route_names = {
+                        r[0]: {"name": r[1], "route_type": r[2], "transport_type": r[3]}
+                        for r in rows
+                    }
+            finally:
+                con.close()
+        
+        # Добавляем имена маршрутов
+        for f in forecasts:
+            info = route_names.get(str(f["route_id"]), {})
+            f["route_short_name"] = info.get("name", "")
+            f["route_type"] = info.get("route_type", 3)
+            f["transport_type"] = info.get("transport_type", "bus")
+        
+        return {
+            "stop_id": stop_id,
+            "forecasts": forecasts,
+            "count": len(forecasts),
+            "timestamp": time.time(),
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ошибка прогноза: {str(e)}")
+
+@app.get("/api/realtime/vehicletrips")
+async def rt_vehicletrips(
+    vehicle_ids: str = Query(..., description="ID ТС через запятую"),
+):
+    """Маршрутный лист конкретных ТС"""
+    try:
+        trips = await realtime.fetch_vehicle_trips(vehicle_ids)
+        return {"trips": trips, "count": len(trips)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Ошибка: {str(e)}")
+
+@app.get("/api/realtime/status")
+async def rt_status():
+    """Статус GTFS-RT фидов"""
+    return {
+        "vehicle_count": len(realtime.vehicle_positions),
+        "last_vehicle_update": realtime.last_update["vehicle"],
+        "last_forecast_update": realtime.last_update["forecast"],
+        "polling_active": True,
+    }
 
 
 # =============================================================================
