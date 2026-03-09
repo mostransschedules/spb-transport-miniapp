@@ -522,3 +522,129 @@
   display: inline-flex;
   gap: 2px;
 }
+.scroll-top-btn { position: fixed; bottom: calc(112px + env(safe-area-inset-bottom)); right: 12px; width: 60px; height: 44px; border-radius: 22px; background: var(--tg-secondary-bg, #1a1a1a); color: var(--tg-text, #fff); border: 1px solid rgba(128,128,128,0.12); font-size: 16px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 101; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08); transition: transform 0.15s ease; -webkit-tap-highlight-color: transparent; }
+.scroll-top-btn:active { transform: scale(0.9) !important; }
+
+/* ── Cache Warning ─────────────────────────────────────────────────────────── */
+.cache-warning {
+  background: rgba(245,166,35,0.1);
+  border: 1px solid rgba(245,166,35,0.2);
+  color: #f5c842;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cache-warning-close {
+  background: none;
+  border: none;
+  color: #f5c842;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px 8px;
+  opacity: 0.7;
+}
+.cache-warning-close:hover { opacity: 1; }
+
+/* ── ForecastBlock ─────────────────────────────────────────────────────────── */
+.fb-wrap { margin-top: 16px; }
+.fb-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.fb-live-dot {
+  width: 6px; height: 6px;
+  border-radius: 3px;
+  background: #4caf50;
+  box-shadow: 0 0 4px #4caf50;
+  display: inline-block;
+}
+.fb-gtfs-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  font-weight: 400;
+}
+.fb-list { display: flex; flex-direction: column; gap: 6px; }
+.fb-row {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.fb-row-first {
+  background: rgba(39,174,96,0.06);
+  border-color: rgba(39,174,96,0.15);
+}
+.fb-row-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.fb-chip {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.fb-time {
+  color: #fff;
+  font-size: 13px;
+  flex: 1;
+}
+.fb-min {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+}
+.fb-min.fb-min-now {
+  color: #4caf74;
+  font-size: 20px;
+}
+.fb-min-label {
+  color: rgba(255,255,255,0.5);
+  font-size: 11px;
+}
+.fb-row-bot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+.fb-dot {
+  width: 5px; height: 5px;
+  border-radius: 3px;
+  background: #4caf50;
+  display: inline-block;
+}
+.fb-tag {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+.fb-tag.gps {
+  background: rgba(39,174,96,0.12);
+  color: #4caf74;
+}
+.fb-tag.sched {
+  background: rgba(243,156,18,0.12);
+  color: #f39c12;
+}
+.fb-vehicle {
+  color: rgba(255,255,255,0.3);
+  font-size: 10px;
+}
+.fb-delay {
+  color: #f39c12;
+  font-size: 10px;
+}

@@ -1558,52 +1558,24 @@ html.theme-black-glass {
 
 /* Кнопка "наверх" в стеклянных темах */
 .theme-glass .scroll-top-btn {
-  background: rgba(255, 255, 255, 0.2) !important;
-  border: 1px solid transparent !important;
-  background-clip: padding-box;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5), 0 4px 16px rgba(0,0,0,0.15) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+  border: 1px solid rgba(255,255,255,0.3) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.4) !important;
   color: #ffffff !important;
-  position: fixed !important;
-  bottom: 24px !important;
-  right: 16px !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
 }
-.theme-glass .scroll-top-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.6) 0%, rgba(180,160,255,0.3) 50%, rgba(255,255,255,0.5) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  animation: borderShimmer 3s linear infinite;
-}
+.theme-glass .scroll-top-btn::before { display: none; }
 
 .theme-black-glass .scroll-top-btn {
-  background: rgba(0, 0, 0, 0.4) !important;
-  border: 1px solid transparent !important;
-  background-clip: padding-box;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 4px 16px rgba(0,0,0,0.3) !important;
+  background: rgba(0, 0, 0, 0.45) !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.08) !important;
   color: #ffffff !important;
-  position: fixed !important;
-  bottom: 24px !important;
-  right: 16px !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
 }
-.theme-black-glass .scroll-top-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(120,100,200,0.2) 50%, rgba(180,160,255,0.25) 100%);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-  animation: borderShimmer 4s linear infinite;
-}
+.theme-black-glass .scroll-top-btn::before { display: none; }
 
 /* ============================================================
    ЦВЕТА ТИПОВ ТРАНСПОРТА — перекрытие для всех тем
@@ -2621,3 +2593,212 @@ html.theme-black-glass {
   backdrop-filter: blur(20px) !important;
   -webkit-backdrop-filter: blur(20px) !important;
 }
+
+/* ============================================================
+   ОСТАНОВКИ РЯДОМ (НОВЫЙ РЕДИЗАЙН) — темы
+   nearby-card, nearby-cards, nearby-section, nearby-section-name, etc.
+   ============================================================ */
+
+/* --- BLACK --- */
+.theme-black .nearby-screen { background: #000 !important; }
+.theme-black .nearby-title { color: #ffffff !important; }
+.theme-black .nearby-section-name { color: #ffffff !important; }
+.theme-black .nearby-section-sub  { color: #666666 !important; }
+.theme-black .nearby-section-dist { color: #666666 !important; }
+.theme-black .nearby-card {
+  background: #1a1a1a !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+.theme-black .nearby-card:active { background: #222 !important; }
+.theme-black .nearby-card-dest { color: #ffffff !important; }
+.theme-black .nearby-card-min  { color: #ffffff !important; }
+.theme-black .nearby-card-chevron { color: rgba(255,255,255,0.3) !important; }
+.theme-black .nearby-more-btn  { color: #3390ec !important; }
+.theme-black .ngps-vehicle { color: rgba(255,255,255,0.55) !important; }
+.theme-black .ngps-model   { color: rgba(255,255,255,0.35) !important; }
+.theme-black .ngps-label   { color: rgba(255,255,255,0.45) !important; }
+
+/* --- WHITE --- */
+.theme-white .nearby-screen { background: #f5f5f5 !important; }
+.theme-white .nearby-title { color: #000000 !important; }
+.theme-white .nearby-section-name { color: #000000 !important; }
+.theme-white .nearby-section-sub  { color: #666666 !important; }
+.theme-white .nearby-section-dist { color: #999999 !important; }
+.theme-white .nearby-card {
+  background: #ffffff !important;
+  border-color: rgba(0,0,0,0.07) !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+.theme-white .nearby-card:active { background: #f0f0f0 !important; }
+.theme-white .nearby-card-dest { color: #000000 !important; }
+.theme-white .nearby-card-min  { color: #000000 !important; }
+.theme-white .nearby-card-chevron { color: rgba(0,0,0,0.25) !important; }
+.theme-white .nearby-more-btn  { color: #3390ec !important; }
+.theme-white .ngps-dot    { box-shadow: 0 0 5px rgba(76,175,80,0.5) !important; }
+.theme-white .ngps-vehicle { color: rgba(0,0,0,0.5) !important; }
+.theme-white .ngps-model   { color: rgba(0,0,0,0.35) !important; }
+.theme-white .ngps-label   { color: rgba(0,0,0,0.4) !important; }
+.theme-white .ngps-tag.gps { background: rgba(76,175,80,0.12) !important; color: #2e7d32 !important; }
+.theme-white .ngps-row.sched .ngps-tag { background: rgba(255,152,0,0.12) !important; color: #e65100 !important; }
+.theme-white .nearby-refresh { background: rgba(0,0,0,0.06) !important; color: #333 !important; }
+
+/* --- GLASS --- */
+.theme-glass .nearby-screen { background: transparent !important; }
+.theme-glass .nearby-title { color: #ffffff !important; }
+.theme-glass .nearby-section-name { color: #ffffff !important; }
+.theme-glass .nearby-section-sub  { color: rgba(255,255,255,0.6) !important; }
+.theme-glass .nearby-section-dist { color: rgba(255,255,255,0.5) !important; }
+.theme-glass .nearby-card {
+  background: rgba(255,255,255,0.1) !important;
+  border-color: rgba(255,255,255,0.14) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.2) !important;
+}
+.theme-glass .nearby-card:active { background: rgba(255,255,255,0.18) !important; }
+.theme-glass .nearby-card-dest { color: #ffffff !important; }
+.theme-glass .nearby-card-min  { color: #ffffff !important; }
+.theme-glass .nearby-card-chevron { color: rgba(255,255,255,0.4) !important; }
+.theme-glass .nearby-more-btn  { color: rgba(255,255,255,0.8) !important; }
+.theme-glass .nearby-refresh {
+  background: rgba(255,255,255,0.15) !important;
+  border-color: rgba(255,255,255,0.2) !important;
+  color: #ffffff !important;
+}
+.theme-glass .ngps-vehicle { color: rgba(255,255,255,0.65) !important; }
+.theme-glass .ngps-model   { color: rgba(255,255,255,0.45) !important; }
+.theme-glass .ngps-label   { color: rgba(255,255,255,0.55) !important; }
+.theme-glass .ngps-sep     { color: rgba(255,255,255,0.3) !important; }
+.theme-glass .ngps-tag.gps { background: rgba(76,175,80,0.22) !important; color: #a5d6a7 !important; }
+.theme-glass .ngps-row.sched .ngps-tag { background: rgba(255,152,0,0.2) !important; color: #ffcc80 !important; }
+
+/* --- BLACK GLASS --- */
+.theme-black-glass .nearby-screen { background: transparent !important; }
+.theme-black-glass .nearby-title { color: #ffffff !important; }
+.theme-black-glass .nearby-section-name { color: #ffffff !important; }
+.theme-black-glass .nearby-section-sub  { color: rgba(255,255,255,0.5) !important; }
+.theme-black-glass .nearby-section-dist { color: rgba(255,255,255,0.4) !important; }
+.theme-black-glass .nearby-card {
+  background: rgba(0,0,0,0.28) !important;
+  border-color: rgba(255,255,255,0.07) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+.theme-black-glass .nearby-card:active { background: rgba(0,0,0,0.4) !important; }
+.theme-black-glass .nearby-card-dest { color: #ffffff !important; }
+.theme-black-glass .nearby-card-min  { color: #ffffff !important; }
+.theme-black-glass .nearby-card-chevron { color: rgba(255,255,255,0.25) !important; }
+.theme-black-glass .nearby-more-btn  { color: rgba(255,255,255,0.7) !important; }
+.theme-black-glass .nearby-refresh {
+  background: rgba(0,0,0,0.3) !important;
+  border-color: rgba(255,255,255,0.1) !important;
+  color: #ffffff !important;
+}
+.theme-black-glass .ngps-vehicle { color: rgba(255,255,255,0.5) !important; }
+.theme-black-glass .ngps-model   { color: rgba(255,255,255,0.35) !important; }
+.theme-black-glass .ngps-label   { color: rgba(255,255,255,0.45) !important; }
+.theme-black-glass .ngps-sep     { color: rgba(255,255,255,0.2) !important; }
+.theme-black-glass .ngps-tag.gps { background: rgba(76,175,80,0.15) !important; color: #81c784 !important; }
+.theme-black-glass .ngps-row.sched .ngps-tag { background: rgba(255,152,0,0.14) !important; color: #ffb74d !important; }
+
+/* ============================================================
+   CACHE WARNING — темы
+   ============================================================ */
+
+.theme-white .cache-warning {
+  background: rgba(245,166,35,0.08) !important;
+  border-color: rgba(245,166,35,0.2) !important;
+  color: #b8860b !important;
+}
+.theme-white .cache-warning-close { color: #b8860b !important; }
+
+.theme-glass .cache-warning {
+  background: rgba(245,166,35,0.12) !important;
+  border-color: rgba(245,166,35,0.25) !important;
+  color: #ffe082 !important;
+  backdrop-filter: blur(8px);
+}
+.theme-glass .cache-warning-close { color: #ffe082 !important; }
+
+.theme-black-glass .cache-warning {
+  background: rgba(180,120,0,0.18) !important;
+  border-color: rgba(245,166,35,0.2) !important;
+  color: #ffd54f !important;
+  backdrop-filter: blur(8px);
+}
+.theme-black-glass .cache-warning-close { color: #ffd54f !important; }
+
+/* ============================================================
+   FORECAST BLOCK — темы
+   ============================================================ */
+
+/* --- BLACK --- */
+.theme-black .fb-row {
+  background: #1a1a1a !important;
+  border-color: rgba(255,255,255,0.06) !important;
+}
+.theme-black .fb-row-first {
+  background: rgba(39,174,96,0.08) !important;
+  border-color: rgba(39,174,96,0.18) !important;
+}
+.theme-black .fb-time  { color: #ffffff !important; }
+.theme-black .fb-min   { color: #ffffff !important; }
+.theme-black .fb-min.fb-min-now { color: #4caf74 !important; }
+.theme-black .fb-min-label { color: rgba(255,255,255,0.45) !important; }
+.theme-black .fb-vehicle   { color: rgba(255,255,255,0.3) !important; }
+.theme-black .fb-gtfs-label { color: rgba(255,255,255,0.3) !important; }
+
+/* --- WHITE --- */
+.theme-white .fb-wrap .sv2-section-label { color: #666666 !important; }
+.theme-white .fb-gtfs-label { color: rgba(0,0,0,0.35) !important; }
+.theme-white .fb-row {
+  background: #f8f8f8 !important;
+  border-color: rgba(0,0,0,0.06) !important;
+}
+.theme-white .fb-row-first {
+  background: rgba(39,174,96,0.06) !important;
+  border-color: rgba(39,174,96,0.15) !important;
+}
+.theme-white .fb-time  { color: #000000 !important; }
+.theme-white .fb-min   { color: #000000 !important; }
+.theme-white .fb-min.fb-min-now { color: #2e7d32 !important; }
+.theme-white .fb-min-label { color: rgba(0,0,0,0.45) !important; }
+.theme-white .fb-vehicle   { color: rgba(0,0,0,0.35) !important; }
+.theme-white .fb-tag.gps   { background: rgba(39,174,96,0.1) !important; color: #2e7d32 !important; }
+.theme-white .fb-tag.sched { background: rgba(243,156,18,0.1) !important; color: #e65100 !important; }
+.theme-white .fb-delay     { color: #e65100 !important; }
+
+/* --- GLASS --- */
+.theme-glass .fb-gtfs-label { color: rgba(255,255,255,0.4) !important; }
+.theme-glass .fb-row {
+  background: rgba(255,255,255,0.08) !important;
+  border-color: rgba(255,255,255,0.12) !important;
+}
+.theme-glass .fb-row-first {
+  background: rgba(39,174,96,0.1) !important;
+  border-color: rgba(39,174,96,0.2) !important;
+}
+.theme-glass .fb-time  { color: #ffffff !important; }
+.theme-glass .fb-min   { color: #ffffff !important; }
+.theme-glass .fb-min.fb-min-now { color: #a5d6a7 !important; }
+.theme-glass .fb-min-label { color: rgba(255,255,255,0.5) !important; }
+.theme-glass .fb-vehicle   { color: rgba(255,255,255,0.35) !important; }
+.theme-glass .fb-tag.gps   { background: rgba(76,175,80,0.18) !important; color: #a5d6a7 !important; }
+.theme-glass .fb-tag.sched { background: rgba(255,152,0,0.16) !important; color: #ffcc80 !important; }
+.theme-glass .fb-delay     { color: #ffcc80 !important; }
+
+/* --- BLACK GLASS --- */
+.theme-black-glass .fb-gtfs-label { color: rgba(255,255,255,0.3) !important; }
+.theme-black-glass .fb-row {
+  background: rgba(0,0,0,0.25) !important;
+  border-color: rgba(255,255,255,0.07) !important;
+}
+.theme-black-glass .fb-row-first {
+  background: rgba(39,174,96,0.08) !important;
+  border-color: rgba(39,174,96,0.15) !important;
+}
+.theme-black-glass .fb-time  { color: #ffffff !important; }
+.theme-black-glass .fb-min   { color: #ffffff !important; }
+.theme-black-glass .fb-min.fb-min-now { color: #81c784 !important; }
+.theme-black-glass .fb-min-label { color: rgba(255,255,255,0.4) !important; }
+.theme-black-glass .fb-vehicle   { color: rgba(255,255,255,0.3) !important; }
+.theme-black-glass .fb-tag.gps   { background: rgba(76,175,80,0.13) !important; color: #81c784 !important; }
+.theme-black-glass .fb-tag.sched { background: rgba(255,152,0,0.12) !important; color: #ffb74d !important; }
+.theme-black-glass .fb-delay     { color: #ffb74d !important; }
