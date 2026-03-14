@@ -30,11 +30,6 @@ jobs:
       - name: Install build dependencies
         run: pip install duckdb==1.4.3
 
-      - name: Enable swap
-        run: |
-          sudo swapon --show
-          echo "✅ Swap активен: $(free -h | grep Swap)"
-
       - name: Build DB (force)
         if: inputs.force_rebuild == true
         id: build_force
