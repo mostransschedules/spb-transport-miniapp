@@ -123,6 +123,7 @@ function App() {
 
   // Кнопка "наверх"
   const [showScrollTop, setShowScrollTop] = useState(false)
+  const [contextMenuRef] = useState({ transfers: null, stats: null })
 
   const [error, setError] = useState(null)
   const [showError, setShowError] = useState(true)
@@ -1278,7 +1279,7 @@ function App() {
                 onClick={() => setShowError(false)}
                 aria-label="Закрыть"
               >
-                ✕
+                &times;
               </button>
             </div>
           </div>
@@ -1943,30 +1944,7 @@ function App() {
         {/* Список остановок */}
         {selectedRoute && !selectedStop && (
           <div className="stops-list">
-            <div className="inline-buttons mb-3">
-              <button className="action-button" onClick={() => setSelectedRoute(null)}>
-                ← Назад
-              </button>
-              <button
-                className="action-button"
-                onClick={async () => {
-                  setLoading(true)
-                  setNextDepartures({})
-                  try {
-                    const data = await getStops(selectedRoute.route_short_name, direction, selectedRoute.route_id)
-                    setStops(data)
-                    loadAllNextDepartures(data, selectedRoute.route_short_name, direction, dayType, selectedRoute.route_id)
-                  } catch (err) {
-                    setError('Не удалось обновить остановки')
-                  } finally {
-                    setLoading(false)
-                  }
-                }}
-                disabled={loading}
-              >
-                🔄 Обновить
-              </button>
-            </div>
+            {/* inline-buttons убраны — функции перенесены в контекстное меню */}
             
             <div className="sv2-route-info" style={{marginBottom: '4px'}}>
               <span className={`sv2-route-badge ${getRouteTypeClass(selectedRoute)}`} style={{color: '#fff'}}>
@@ -2074,17 +2052,7 @@ function App() {
           <div className="schedule-v2">
             {/* Верхняя панель */}
             <div className="sv2-topbar">
-              <span className="sv2-back" onClick={() => setSelectedStop(null)}>‹</span>
               <span className="sv2-topbar-title">Расписание</span>
-              <div className="sv2-topbar-actions">
-                <span className="sv2-topbar-btn" onClick={() => setShowShareModal(true)}>↗</span>
-                <span
-                  className={`sv2-topbar-btn ${isFavorite(selectedRoute.route_short_name, selectedStop.stop_name, direction, dayType) ? 'sv2-fav-active' : ''}`}
-                  onClick={handleToggleFavorite}
-                >
-                  {isFavorite(selectedRoute.route_short_name, selectedStop.stop_name, direction, dayType) ? '★' : '☆'}
-                </span>
-              </div>
             </div>
 
             {/* Маршрут и направление */}
@@ -2248,7 +2216,7 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="transfers-section">
+                  <div id="transfers-anchor" className="transfers-section">
                     <div className="transfers-header" onClick={() => setTransfersExpanded(prev => !prev)} style={{cursor: 'pointer'}}>
                       <div className="transfers-title">
                         <span className="transfers-icon">🔄</span>
@@ -2307,7 +2275,7 @@ function App() {
                 )}
 
                 {/* Статистика и графики */}
-                <StatsTabs route={selectedRoute} stop={selectedStop} direction={direction} dayType={dayType} schedule={schedule} stops={stops} onStopClick={handleStopSelect} />
+                <div id="stats-anchor" /><StatsTabs route={selectedRoute} stop={selectedStop} direction={direction} dayType={dayType} schedule={schedule} stops={stops} onStopClick={handleStopSelect} />
               </> 
             ) : (
               <div className="info">ℹ️ Нет расписания для выбранных параметров</div>
@@ -2457,6 +2425,77 @@ function App() {
             </>
           )}
         </div>
+      )}
+
+      
+      {/* ── Контекстное меню: список остановок маршрута ──────────────────── */}
+      {selectedRoute && !selectedStop && (
+        <nav className="ctx-menu-bar">
+          <button className="ctx-btn" onClick={() => setSelectedRoute(null)}>
+            <span className="ctx-icon">‹</span>
+            <span className="ctx-label">Назад</span>
+          </button>
+          <button className="ctx-btn" onClick={() => setShowShareModal(true)}>
+            <span className="ctx-icon ctx-share-icon">↑</span>
+            <span className="ctx-label">Поделиться</span>
+          </button>
+          <button
+            className={`ctx-btn ${isFavoriteRoute(selectedRoute.route_short_name, selectedRoute.route_id) ? 'ctx-btn-active' : ''}`}
+            onClick={(e) => handleToggleFavoriteRoute(selectedRoute, e)}
+          >
+            <span className="ctx-icon">
+              {isFavoriteRoute(selectedRoute.route_short_name, selectedRoute.route_id) ? '♥' : '♡'}
+            </span>
+            <span className="ctx-label">Избранное</span>
+          </button>
+          <button className="ctx-btn" onClick={async () => {
+            try {
+              const data = await getStops(selectedRoute.route_short_name, direction, selectedRoute.route_id)
+              setStops(data)
+              loadAllNextDepartures(data, selectedRoute.route_short_name, direction, dayType, selectedRoute.route_id)
+            } catch (err) { setError('Не удалось обновить') }
+          }} disabled={loading}>
+            <span className="ctx-icon">↺</span>
+            <span className="ctx-label">Обновить</span>
+          </button>
+        </nav>
+      )}
+
+      {/* ── Контекстное меню: расписание остановки ───────────────────────── */}
+      {selectedStop && (
+        <nav className="ctx-menu-bar">
+          <button className="ctx-btn" onClick={() => setSelectedStop(null)}>
+            <span className="ctx-icon">‹</span>
+            <span className="ctx-label">Назад</span>
+          </button>
+          <button className="ctx-btn" onClick={() => setShowShareModal(true)}>
+            <span className="ctx-icon ctx-share-icon">↑</span>
+            <span className="ctx-label">Поделиться</span>
+          </button>
+          <button
+            className={`ctx-btn ${isFavorite(selectedRoute.route_short_name, selectedStop.stop_name, direction, dayType) ? 'ctx-btn-active' : ''}`}
+            onClick={handleToggleFavorite}
+          >
+            <span className="ctx-icon">
+              {isFavorite(selectedRoute.route_short_name, selectedStop.stop_name, direction, dayType) ? '♥' : '♡'}
+            </span>
+            <span className="ctx-label">Избранное</span>
+          </button>
+          <button className="ctx-btn" onClick={() => {
+            const el = document.getElementById('transfers-anchor')
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }}>
+            <span className="ctx-icon">⇄</span>
+            <span className="ctx-label">Пересадки</span>
+          </button>
+          <button className="ctx-btn" onClick={() => {
+            const el = document.getElementById('stats-anchor')
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+          }}>
+            <span className="ctx-icon">📊</span>
+            <span className="ctx-label">Статистика</span>
+          </button>
+        </nav>
       )}
 
       {/* Кнопка наверх — fixed, над кнопкой поиска */}

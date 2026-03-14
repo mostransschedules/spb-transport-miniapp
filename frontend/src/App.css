@@ -82,7 +82,7 @@
 .route-type-electrobus::after { content: ' 🔋'; font-style: normal; }
 
 /* ═══ STOPS LIST — timeline dots ═══ */
-.stops-list { padding: 0; }
+.stops-list { padding: 0; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
 .stops-list h2 { font-size: 20px; font-weight: 700; padding: 0 20px 4px; }
 .route-description { font-size: 13px; color: rgba(255,255,255,0.6); padding: 0 20px 12px; line-height: 1.4; }
 
@@ -648,3 +648,96 @@
   color: #f39c12;
   font-size: 10px;
 }
+
+/* ── Error & Cache Warning ──────────────────────────────────────────────────── */
+.error { background: rgba(255,92,92,0.1); border: 1px solid rgba(255,92,92,0.2); color: #ff8a8a; padding: 10px 16px; border-radius: 10px; font-size: 14px; margin: 8px 16px; }
+.error-content { display: flex; align-items: center; justify-content: space-between; }
+.error-close { background: none; border: none; color: #ff8a8a; font-size: 18px; cursor: pointer; padding: 4px 8px; opacity: 0.8; line-height: 1; }
+.error-close:hover { opacity: 1; }
+
+/* ── Context Menu Bar ──────────────────────────────────────────────────────── */
+.ctx-menu-bar {
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  left: 12px;
+  right: 12px;
+  z-index: 100;
+  height: 56px;
+  background: var(--tg-secondary-bg, #1a1a1a);
+  border: 1px solid rgba(128,128,128,0.12);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: stretch;
+  overflow: hidden;
+}
+.ctx-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 4px;
+  position: relative;
+  transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1);
+  -webkit-tap-highlight-color: transparent;
+}
+.ctx-btn:active { transform: scale(0.88) !important; }
+.ctx-btn:disabled { opacity: 0.4; }
+.ctx-icon {
+  font-size: 20px;
+  line-height: 1;
+  color: var(--tg-hint, #888);
+  transition: color 0.15s;
+}
+.ctx-share-icon {
+  font-size: 22px;
+  display: inline-block;
+  background: var(--tg-hint, #888);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* fallback */
+  color: var(--tg-hint, #888);
+}
+/* SVG-style share icon via border trick */
+.ctx-btn .ctx-share-icon {
+  font-size: 22px;
+  font-weight: 300;
+  transform: translateY(1px);
+  background: none;
+  -webkit-text-fill-color: var(--tg-hint, #888);
+  color: var(--tg-hint, #888);
+}
+.ctx-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--tg-hint, #666);
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+.ctx-btn-active .ctx-icon {
+  color: #e74c3c;
+}
+.ctx-btn-active .ctx-label {
+  color: #e74c3c;
+}
+/* Разделитель между кнопками */
+.ctx-btn + .ctx-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 1px;
+  background: rgba(128,128,128,0.12);
+}
+
+/* Отступ снизу под ctx-menu-bar */
+.stops-list { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+
+/* Отступ снизу под ctx-menu-bar */
+.schedule-v2 { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }

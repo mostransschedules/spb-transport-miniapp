@@ -2802,3 +2802,59 @@ html.theme-black-glass {
 .theme-black-glass .fb-tag.gps   { background: rgba(76,175,80,0.13) !important; color: #81c784 !important; }
 .theme-black-glass .fb-tag.sched { background: rgba(255,152,0,0.12) !important; color: #ffb74d !important; }
 .theme-black-glass .fb-delay     { color: #ffb74d !important; }
+
+/* ============================================================
+   CONTEXT MENU BAR — темы
+   ============================================================ */
+
+/* --- BLACK --- */
+.theme-black .ctx-menu-bar {
+  background: #111111 !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+.theme-black .ctx-icon { color: rgba(255,255,255,0.6) !important; -webkit-text-fill-color: rgba(255,255,255,0.6) !important; }
+.theme-black .ctx-label { color: rgba(255,255,255,0.4) !important; }
+.theme-black .ctx-btn-active .ctx-icon { color: #e74c3c !important; -webkit-text-fill-color: #e74c3c !important; }
+.theme-black .ctx-btn-active .ctx-label { color: #e74c3c !important; }
+.theme-black .ctx-btn + .ctx-btn::before { background: rgba(255,255,255,0.08) !important; }
+
+/* --- WHITE --- */
+.theme-white .ctx-menu-bar {
+  background: rgba(255,255,255,0.95) !important;
+  border-color: rgba(0,0,0,0.08) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
+}
+.theme-white .ctx-icon { color: rgba(0,0,0,0.45) !important; -webkit-text-fill-color: rgba(0,0,0,0.45) !important; }
+.theme-white .ctx-label { color: rgba(0,0,0,0.4) !important; }
+.theme-white .ctx-btn-active .ctx-icon { color: #e74c3c !important; -webkit-text-fill-color: #e74c3c !important; }
+.theme-white .ctx-btn-active .ctx-label { color: #e74c3c !important; }
+.theme-white .ctx-btn + .ctx-btn::before { background: rgba(0,0,0,0.08) !important; }
+
+/* --- GLASS --- */
+.theme-glass .ctx-menu-bar {
+  background: rgba(100,80,160,0.4) !important;
+  border-color: rgba(255,255,255,0.15) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+.theme-glass .ctx-icon { color: rgba(255,255,255,0.7) !important; -webkit-text-fill-color: rgba(255,255,255,0.7) !important; }
+.theme-glass .ctx-label { color: rgba(255,255,255,0.55) !important; }
+.theme-glass .ctx-btn-active .ctx-icon { color: #ff8a80 !important; -webkit-text-fill-color: #ff8a80 !important; }
+.theme-glass .ctx-btn-active .ctx-label { color: #ff8a80 !important; }
+.theme-glass .ctx-btn + .ctx-btn::before { background: rgba(255,255,255,0.12) !important; }
+
+/* --- BLACK GLASS --- */
+.theme-black-glass .ctx-menu-bar {
+  background: rgba(0,0,0,0.6) !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+}
+.theme-black-glass .ctx-icon { color: rgba(255,255,255,0.55) !important; -webkit-text-fill-color: rgba(255,255,255,0.55) !important; }
+.theme-black-glass .ctx-label { color: rgba(255,255,255,0.38) !important; }
+.theme-black-glass .ctx-btn-active .ctx-icon { color: #ef9a9a !important; -webkit-text-fill-color: #ef9a9a !important; }
+.theme-black-glass .ctx-btn-active .ctx-label { color: #ef9a9a !important; }
+.theme-black-glass .ctx-btn + .ctx-btn::before { background: rgba(255,255,255,0.07) !important; }
