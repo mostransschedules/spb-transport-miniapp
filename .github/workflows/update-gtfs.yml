@@ -1,0 +1,125 @@
+name: Update GTFS Database
+
+on:
+  schedule:
+    # Каждый день в 03:00 UTC (06:00 МСК)
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    # Ручной запуск через GitHub UI
+    inputs:
+      force_rebuild:
+        description: 'Пересобрать БД даже если фид не изменился'
+        type: boolean
+        default: false
+
+jobs:
+  check-and-build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # нужно для коммита hash-файла и создания релиза
+
+    steps:
+      # 1. Получаем код репозитория
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. Python для сборки БД
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 3. Устанавливаем только то что нужно для сборки
+      - name: Install build dependencies
+        run: pip install duckdb==1.4.3
+
+      # 4. Проверяем изменился ли фид (без скачивания полного архива — только хэш)
+      - name: Check GTFS feed
+        id: check
+        run: |
+          if [ "${{ inputs.force_rebuild }}" = "true" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "🔄 Принудительная пересборка"
+          else
+            python build_db.py --check-only 2>&1 || true
+          fi
+
+      # 5. Собираем БД (только если фид изменился)
+      - name: Build DuckDB
+        if: steps.check.outputs.changed == 'true' || inputs.force_rebuild == 'true'
+        id: build
+        run: |
+          echo "🏗️ Запускаем сборку..."
+          python build_db.py \
+            --output gtfs_spb.duckdb \
+            --hash-file gtfs_hash.txt \
+            ${{ inputs.force_rebuild == 'true' && '--force' || '' }}
+
+      # 6. Получаем дату для тега релиза
+      - name: Get release date
+        if: steps.build.outputs.changed == 'true'
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      # 7. Удаляем старый релиз если есть (чтобы не копились)
+      - name: Delete old release
+        if: steps.build.outputs.changed == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete gtfs-latest --yes 2>/dev/null || true
+          git push origin :refs/tags/gtfs-latest 2>/dev/null || true
+
+      # 8. Создаём новый релиз с актуальной БД
+      - name: Create GitHub Release
+        if: steps.build.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DB_SIZE=$(du -h gtfs_spb.duckdb | cut -f1)
+          DB_HASH=$(cat gtfs_hash.txt)
+
+          gh release create gtfs-latest \
+            gtfs_spb.duckdb \
+            --title "GTFS Database — ${{ steps.date.outputs.date }}" \
+            --notes "## Автообновление GTFS
+
+          **Дата сборки:** ${{ steps.date.outputs.date }}
+          **Размер БД:** ${DB_SIZE}
+          **SHA-256 фида:** \`${DB_HASH:0:16}...\`
+
+          Собрано автоматически из [GTFS-фида Петербурга](https://transport.orgp.spb.ru/Portal/transport/internalapi/gtfs/feed.zip)" \
+            --latest
+
+      # 9. Коммитим обновлённый хэш-файл
+      - name: Commit hash file
+        if: steps.build.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add gtfs_hash.txt
+          git commit -m "chore: update GTFS hash [${{ steps.date.outputs.date }}]" || echo "Нечего коммитить"
+          git push
+
+      # 10. Тригерим редеплой на Render (если настроен хук)
+      - name: Trigger Render deploy
+        if: steps.build.outputs.changed == 'true' && env.RENDER_DEPLOY_HOOK_URL != ''
+        env:
+          RENDER_DEPLOY_HOOK_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          curl -s "$RENDER_DEPLOY_HOOK_URL" | echo "Render deploy triggered"
+
+      # 11. Итог — что произошло
+      - name: Summary
+        run: |
+          if [ "${{ steps.build.outputs.changed }}" = "true" ]; then
+            echo "### ✅ БД обновлена" >> $GITHUB_STEP_SUMMARY
+            echo "Новая версия залита в релиз **gtfs-latest**" >> $GITHUB_STEP_SUMMARY
+            echo "Render получит обновление при следующем старте." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ⏭️ Обновление не требуется" >> $GITHUB_STEP_SUMMARY
+            echo "GTFS-фид не изменился с прошлого запуска." >> $GITHUB_STEP_SUMMARY
+          fi
