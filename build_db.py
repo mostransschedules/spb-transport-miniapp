@@ -72,11 +72,10 @@ def build_database(zip_bytes: bytes, output_path: str):
 
     con = duckdb.connect(output_path)
     # Ограничиваем память — важно для VPS с малым RAM
-    # DuckDB будет сбрасывать данные на диск вместо краша
     con.execute("SET memory_limit='512MB'")
     con.execute("SET threads=1")
     con.execute("SET temp_directory='/tmp/duckdb_tmp'")
-    import os; os.makedirs('/tmp/duckdb_tmp', exist_ok=True)
+    os.makedirs('/tmp/duckdb_tmp', exist_ok=True)
 
     with zipfile.ZipFile(io.BytesIO(zip_bytes)) as zf:
         available = {name.split("/")[-1]: name for name in zf.namelist()}
