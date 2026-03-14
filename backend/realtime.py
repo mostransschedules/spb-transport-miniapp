@@ -9,9 +9,9 @@ import traceback
 from typing import Dict, List
 from google.transit import gtfs_realtime_pb2
 
-BASE_URL = "https://transport.orgp.spb.ru/Portal/transport/internalapi/gtfs/realtime"
+BASE_URL = "http://195.133.146.87:8001"
 VEHICLE_URL = f"{BASE_URL}/vehicle"
-FORECAST_URL = f"{BASE_URL}/stopforecast"
+FORECAST_URL = f"{BASE_URL}/forecast"
 VEHICLETRIPS_URL = f"{BASE_URL}/vehicletrips"
 
 vehicle_positions: Dict[str, dict] = {}
