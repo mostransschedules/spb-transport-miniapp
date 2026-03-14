@@ -30,6 +30,11 @@ jobs:
       - name: Install build dependencies
         run: pip install duckdb==1.4.3
 
+      - name: Enable swap
+        run: |
+          sudo swapon --show
+          echo "✅ Swap активен: $(free -h | grep Swap)"
+
       - name: Build DB (force)
         if: inputs.force_rebuild == true
         id: build_force
@@ -40,20 +45,22 @@ jobs:
         id: build_auto
         run: python build_db.py
 
-      - name: Get release date
-        id: date
-        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
-
       - name: Check if DB was built
         id: check_built
         run: |
-          if [ -f "gtfs_spb.duckdb" ] && [ "$(stat -c%s gtfs_spb.duckdb 2>/dev/null || echo 0)" -gt "50000000" ]; then
+          SIZE=$(stat -c%s "gtfs_spb.duckdb" 2>/dev/null || echo 0)
+          if [ "$SIZE" -gt "50000000" ]; then
             echo "built=true" >> $GITHUB_OUTPUT
-            echo "✅ БД найдена: $(du -h gtfs_spb.duckdb | cut -f1)"
+            echo "✅ БД: $(du -h gtfs_spb.duckdb | cut -f1)"
           else
             echo "built=false" >> $GITHUB_OUTPUT
             echo "⏭️ БД не собиралась"
           fi
+
+      - name: Get release date
+        if: steps.check_built.outputs.built == 'true'
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
       - name: Delete old release
         if: steps.check_built.outputs.built == 'true'
@@ -74,13 +81,7 @@ jobs:
           gh release create gtfs-latest \
             gtfs_spb.duckdb \
             --title "GTFS Database — ${{ steps.date.outputs.date }}" \
-            --notes "## Автообновление GTFS
-
-          **Дата сборки:** ${{ steps.date.outputs.date }}
-          **Размер БД:** ${DB_SIZE}
-          **SHA-256 фида:** \`${DB_HASH:0:16}...\`
-
-          Собрано автоматически из [GTFS-фида Петербурга](https://transport.orgp.spb.ru/Portal/transport/internalapi/gtfs/feed.zip)" \
+            --notes "**Дата:** ${{ steps.date.outputs.date }} | **Размер:** ${DB_SIZE} | **Hash:** \`${DB_HASH:0:16}...\`" \
             --latest
 
       - name: Commit hash file
