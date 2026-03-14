@@ -2205,6 +2205,7 @@ function App() {
                 </div>
 
                 {/* Пересадки на остановке */}
+                <div id="transfers-anchor" style={{scrollMarginTop: '16px'}} />
                 {!transfersLoading && displayTransfers.length === 0 && !transfersLoaded ? (
                   <div className="transfers-section">
                     <div className="transfers-header" onClick={() => loadTransfers(selectedStop.stop_name, selectedRoute.route_id, dayType)}>
@@ -2216,7 +2217,7 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div id="transfers-anchor" className="transfers-section">
+                  <div className="transfers-section">
                     <div className="transfers-header" onClick={() => setTransfersExpanded(prev => !prev)} style={{cursor: 'pointer'}}>
                       <div className="transfers-title">
                         <span className="transfers-icon">🔄</span>
@@ -2275,7 +2276,7 @@ function App() {
                 )}
 
                 {/* Статистика и графики */}
-                <div id="stats-anchor" /><StatsTabs route={selectedRoute} stop={selectedStop} direction={direction} dayType={dayType} schedule={schedule} stops={stops} onStopClick={handleStopSelect} />
+                <div id="stats-anchor" style={{scrollMarginTop: '16px'}} /><StatsTabs route={selectedRoute} stop={selectedStop} direction={direction} dayType={dayType} schedule={schedule} stops={stops} onStopClick={handleStopSelect} />
               </> 
             ) : (
               <div className="info">ℹ️ Нет расписания для выбранных параметров</div>
@@ -2483,14 +2484,20 @@ function App() {
           </button>
           <button className="ctx-btn" onClick={() => {
             const el = document.getElementById('transfers-anchor')
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            if (el) {
+              const top = el.getBoundingClientRect().top + window.scrollY - 80
+              window.scrollTo({ top, behavior: 'smooth' })
+            }
           }}>
             <span className="ctx-icon">⇄</span>
             <span className="ctx-label">Пересадки</span>
           </button>
           <button className="ctx-btn" onClick={() => {
             const el = document.getElementById('stats-anchor')
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            if (el) {
+              const top = el.getBoundingClientRect().top + window.scrollY - 80
+              window.scrollTo({ top, behavior: 'smooth' })
+            }
           }}>
             <span className="ctx-icon">📊</span>
             <span className="ctx-label">Статистика</span>

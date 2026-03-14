@@ -658,7 +658,7 @@
 /* ── Context Menu Bar ──────────────────────────────────────────────────────── */
 .ctx-menu-bar {
   position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 12px);
+  bottom: calc(42px + env(safe-area-inset-bottom));
   left: 12px;
   right: 12px;
   z-index: 100;
@@ -726,15 +726,7 @@
   color: #e74c3c;
 }
 /* Разделитель между кнопками */
-.ctx-btn + .ctx-btn::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 20%;
-  height: 60%;
-  width: 1px;
-  background: rgba(128,128,128,0.12);
-}
+/* разделители убраны */
 
 /* Отступ снизу под ctx-menu-bar */
 .stops-list { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
