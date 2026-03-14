@@ -115,7 +115,8 @@ function App() {
   const [selectedStop, setSelectedStop] = useState(null)
   const [schedule, setSchedule] = useState([])
   const [direction, setDirection] = useState(0)
-  const [dayType, setDayType] = useState('weekday')
+  const getAutoDayType = () => [0, 6].includes(new Date().getDay()) ? 'weekend' : 'weekday'
+  const [dayType, setDayType] = useState(getAutoDayType())
   const [loading, setLoading] = useState(false)
   const [loadingType, setLoadingType] = useState(null) // 'routes' | 'stops' | 'schedule'
   const [pullRefreshing, setPullRefreshing] = useState(false)
@@ -375,6 +376,7 @@ function App() {
 
   // Загрузить остановки при выборе маршрута
   const handleRouteSelect = async (route) => {
+    setDayType(getAutoDayType())
     setSelectedRoute(route)
     setSelectedStop(null)
     setSchedule([])
@@ -413,7 +415,7 @@ function App() {
     }
 
     // Определяем dayType: переданный > авто по дню недели
-    const effectiveDayType = dayTypeOverride || ([0, 6].includes(new Date().getDay()) ? 'weekend' : 'weekday')
+    const effectiveDayType = dayTypeOverride || getAutoDayType()
 
     setSearchQuery('')
     setStopResults([])
