@@ -29,6 +29,45 @@ from database import (
 import realtime
 
 # =============================================================================
+# Справочник ТС: бортовой номер → модель
+# =============================================================================
+import json as _json
+
+def _load_vehicles_db():
+    """Загружаем vehicles.json — ищем рядом с main.py"""
+    for path in ["vehicles.json", "src/vehicles.json", "../frontend/src/vehicles.json"]:
+        try:
+            with open(path, encoding="utf-8") as f:
+                db = _json.load(f)
+            print(f"✅ vehicles.json загружен из {path}")
+            return db
+        except FileNotFoundError:
+            continue
+    print("⚠️ vehicles.json не найден — модели ТС недоступны")
+    return {}
+
+_VEHICLES_DB = _load_vehicles_db()
+
+def _get_model(label: str, transport_type: str = "") -> str:
+    """Получить модель ТС по бортовому номеру из vehicles.json"""
+    if not label or not _VEHICLES_DB:
+        return ""
+    label = str(label).strip()
+    # Ищем в нужном разделе сначала, потом во всех
+    sections = []
+    if transport_type == "tram":
+        sections = ["tram", "bus", "trolley"]
+    elif transport_type == "trolley":
+        sections = ["trolley", "bus", "tram"]
+    else:
+        sections = ["bus", "tram", "trolley"]
+    for section in sections:
+        entry = _VEHICLES_DB.get(section, {}).get(label)
+        if entry and entry.get("model"):
+            return entry["model"]
+    return ""
+
+# =============================================================================
 # Создание приложения FastAPI
 # =============================================================================
 
@@ -455,40 +494,10 @@ async def rt_vehicles(
     except Exception as e:
         print(f"⚠️ vehicle enrich error: {e}")
 
-    # Обогащаем label (бортовой) и model из vehicles.json
-    try:
-        import json, os
-        vj_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'src', 'vehicles.json')
-        if not os.path.exists(vj_path):
-            vj_path = os.path.join(os.path.dirname(__file__), 'vehicles.json')
-        if os.path.exists(vj_path):
-            with open(vj_path, encoding='utf-8') as f:
-                vdb = json.load(f)
-            plates_idx = vdb.get('bus_plates', {})
-            type_dicts = {
-                'bus': vdb.get('bus', {}),
-                'tram': vdb.get('tram', {}),
-                'trolley': vdb.get('trolley', {}),
-            }
-            for v in vehicles:
-                lbl = v.get('label', '')
-                tt  = v.get('transport_type', 'bus')
-                model = ''
-                if lbl:
-                    d = type_dicts.get(tt, type_dicts['bus'])
-                    entry = d.get(str(lbl))
-                    if entry:
-                        model = entry.get('model', '')
-                if not model and lbl:
-                    for d in type_dicts.values():
-                        e = d.get(str(lbl))
-                        if e:
-                            model = e.get('model', '')
-                            break
-                if model:
-                    v['model'] = model
-    except Exception as e2:
-        print(f"⚠️ vehicles.json enrich error: {e2}")
+    # Обогащаем model из vehicles.json по бортовому номеру (label)
+    for v in vehicles:
+        if not v.get("model"):
+            v["model"] = _get_model(v.get("label", ""), v.get("transport_type", ""))
 
     return {
         "vehicles": vehicles,
@@ -582,6 +591,12 @@ async def rt_forecast(stop_id: str):
             vid = str(f.get("vehicle_id", ""))
             if vid and vid in vid_to_label:
                 f["label"] = vid_to_label[vid]
+
+        # Обогащаем model из vehicles.json по бортовому номеру (label)
+        for f in forecasts:
+            lbl = f.get("label", "")
+            if lbl and not f.get("model"):
+                f["model"] = _get_model(lbl, f.get("transport_type", ""))
 
         return {
             "stop_id": stop_id,

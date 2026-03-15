@@ -1,6 +1,6 @@
 // NearbyGpsRow — GPS/РАСПИСАНИЕ строка точно по мокапу
 // label = бортовой номер (из vehicle_positions кэша)
-// model = модель ТС (из vehicles.json по label)
+// model = модель ТС (из vehicles.json — тот же подход что в LiveMap)
 import { useState, useEffect } from 'react'
 import vehiclesDb from '../vehicles.json'
 
@@ -33,17 +33,33 @@ const subscribe = (stopId, cb) => {
   return () => { _listeners[stopId]?.delete(cb); clearInterval(iv) }
 }
 
-// Ищем модель по бортовому номеру (label) в vehicles.json
-const getModel = (label, typeHint) => {
-  if (!label) return ''
-  const id = String(label).trim()
-  const dicts = typeHint === 'tram' ? [vehiclesDb.tram]
-    : typeHint === 'trolley' ? [vehiclesDb.trolley]
-    : [vehiclesDb.bus, vehiclesDb.tram, vehiclesDb.trolley]
-  for (const d of dicts) {
-    if (d?.[id]?.model) return d[id].model
+// Тот же подход что в LiveMap: ищем по label/vehicle_id с учётом типа ТС
+const lookupByLabel = (label, typeHint) => {
+  if (!label) return null
+  const key = String(label).trim()
+  const stripped = key.replace(/^0+/, '') || key
+  if (vehiclesDb.bus) {
+    const order = typeHint
+      ? [typeHint, ...['bus', 'tram', 'trolley'].filter(t => t !== typeHint)]
+      : ['bus', 'tram', 'trolley']
+    for (const t of order) {
+      const db = vehiclesDb[t] || {}
+      if (db[key]) return db[key]
+      if (db[stripped]) return db[stripped]
+    }
+    return null
   }
-  return ''
+  // Старый flat-формат
+  return vehiclesDb[key] || vehiclesDb[stripped] || null
+}
+
+const lookupVehicle = (vehicleId, label, typeHint) => {
+  return lookupByLabel(label, typeHint) || lookupByLabel(vehicleId, typeHint) || null
+}
+
+const getModel = (vehicleId, label, typeHint) => {
+  const info = lookupVehicle(vehicleId, label, typeHint)
+  return info?.model || ''
 }
 
 function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
@@ -81,9 +97,10 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
   const hasGps = gpsReis.length > 0
   const first = hasGps ? gpsReis[0] : null
 
-  // label = бортовой номер (обогащён в main.py)
+  // label = бортовой номер, vehicle_id = внутренний код — пробуем оба как в LiveMap
   const label = first?.label || ''
-  const model = getModel(label, transportType)
+  const vehicleId = first?.vehicle_id || ''
+  const model = getModel(vehicleId, label, transportType)
 
   if (!hasGps) {
     return (
