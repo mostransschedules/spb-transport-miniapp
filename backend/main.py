@@ -581,16 +581,26 @@ async def rt_forecast(stop_id: str):
 
         # Обогащаем label (бортовой номер) из кэша vehicle_positions
         veh_pos = realtime.vehicle_positions  # dict keyed by entity_id
-        # Строим индекс vehicle_id → label из кэша
-        vid_to_label = {
-            str(veh.get("vehicle_id", "")): str(veh.get("label", ""))
-            for veh in veh_pos.values()
-            if veh.get("label")
-        }
+        # Строим два индекса: vehicle_id → label и entity_id → label
+        vid_to_label = {}
+        eid_to_label = {}
+        for eid, veh in veh_pos.items():
+            lbl = str(veh.get("label", ""))
+            if not lbl:
+                continue
+            vid = str(veh.get("vehicle_id", ""))
+            if vid:
+                vid_to_label[vid] = lbl
+            eid_to_label[str(eid)] = lbl
+
         for f in forecasts:
+            if f.get("label"):
+                continue  # уже есть
             vid = str(f.get("vehicle_id", ""))
-            if vid and vid in vid_to_label:
-                f["label"] = vid_to_label[vid]
+            # Пробуем по vehicle_id, затем по entity_id (иногда совпадают)
+            lbl = vid_to_label.get(vid) or eid_to_label.get(vid)
+            if lbl:
+                f["label"] = lbl
 
         # Обогащаем model из vehicles.json по бортовому номеру (label)
         for f in forecasts:

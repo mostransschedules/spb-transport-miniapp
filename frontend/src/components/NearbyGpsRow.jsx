@@ -1,22 +1,28 @@
-// NearbyGpsRow — GPS/РАСПИСАНИЕ строка точно по мокапу
-// label = бортовой номер (из vehicle_positions кэша)
-// model = модель ТС (из vehicles.json — тот же подход что в LiveMap)
+// NearbyGpsRow — GPS/РАСПИСАНИЕ строка
+// Кэш общий на stopId: один fetch на остановку, все карточки используют его
 import { useState, useEffect } from 'react'
 import vehiclesDb from '../vehicles.json'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-const _cache = {}
-const _listeners = {}
+// ── Кэш и подписки ──────────────────────────────────────────────────────────
+// _loading: защита от параллельных запросов к одному stopId
+const _cache = {}     // stopId → { data, ts }
+const _listeners = {} // stopId → Set<cb>
+const _loading = {}   // stopId → boolean
 
 const _load = async (stopId) => {
+  if (_loading[stopId]) return          // уже грузится — не дублируем запрос
+  _loading[stopId] = true
   try {
     const resp = await fetch(`${API_URL}/api/realtime/forecast/${stopId}`)
-    if (!resp.ok) throw new Error()
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
     const data = await resp.json()
     _cache[stopId] = { data: data.forecasts || [], ts: Date.now() }
   } catch {
-    _cache[stopId] = { data: null, ts: Date.now() - 25000 }
+    _cache[stopId] = { data: null, ts: Date.now() - 5000 }
+  } finally {
+    _loading[stopId] = false
   }
   _listeners[stopId]?.forEach(fn => fn(_cache[stopId].data))
 }
@@ -24,16 +30,22 @@ const _load = async (stopId) => {
 const subscribe = (stopId, cb) => {
   if (!_listeners[stopId]) _listeners[stopId] = new Set()
   _listeners[stopId].add(cb)
-  if (_cache[stopId] && Date.now() - _cache[stopId].ts < 30000) {
-    cb(_cache[stopId].data)
+
+  const cached = _cache[stopId]
+  if (cached && Date.now() - cached.ts < 30000) {
+    cb(cached.data)
   } else {
     _load(stopId)
   }
+
   const iv = setInterval(() => _load(stopId), 30000)
-  return () => { _listeners[stopId]?.delete(cb); clearInterval(iv) }
+  return () => {
+    _listeners[stopId]?.delete(cb)
+    clearInterval(iv)
+  }
 }
 
-// Тот же подход что в LiveMap: ищем по label/vehicle_id с учётом типа ТС
+// ── Поиск модели ТС (как в LiveMap) ─────────────────────────────────────────
 const lookupByLabel = (label, typeHint) => {
   if (!label) return null
   const key = String(label).trim()
@@ -49,45 +61,42 @@ const lookupByLabel = (label, typeHint) => {
     }
     return null
   }
-  // Старый flat-формат
   return vehiclesDb[key] || vehiclesDb[stripped] || null
 }
 
-const lookupVehicle = (vehicleId, label, typeHint) => {
-  return lookupByLabel(label, typeHint) || lookupByLabel(vehicleId, typeHint) || null
-}
-
 const getModel = (vehicleId, label, typeHint) => {
-  const info = lookupVehicle(vehicleId, label, typeHint)
+  const info = lookupByLabel(label, typeHint) || lookupByLabel(vehicleId, typeHint)
   return info?.model || ''
 }
 
+// ── Компонент ────────────────────────────────────────────────────────────────
 function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
-  const [forecasts, setForecasts] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [forecasts, setForecasts] = useState(undefined)
   const [, setTick] = useState(0)
 
   useEffect(() => {
     if (!stopId || stopId === 'undefined' || stopId === 'none') {
-      setLoading(false)
+      setForecasts(null)
       return
     }
-    const unsub = subscribe(stopId, (data) => {
-      setForecasts(data)
-      setLoading(false)
-    })
+    const unsub = subscribe(stopId, setForecasts)
     const iv = setInterval(() => setTick(t => t + 1), 1000)
     return () => { unsub(); clearInterval(iv) }
   }, [stopId])
 
+  if (forecasts === undefined) return null
+
   const now = Math.floor(Date.now() / 1000)
 
-  const gpsReis = (!loading && forecasts)
+  const gpsReis = forecasts
     ? forecasts.filter(f => {
         if (f.arrival_time <= now) return false
         if (String(f.route_id) !== String(routeId)) return false
-        if (direction !== undefined && direction !== null
-            && f.direction_id !== undefined && f.direction_id !== null) {
+        // Фильтр по direction только если direction_id реально пришёл с сервера
+        if (
+          direction !== undefined && direction !== null &&
+          f.direction_id !== undefined && f.direction_id !== null
+        ) {
           if (Number(f.direction_id) !== Number(direction)) return false
         }
         return true
@@ -97,7 +106,6 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
   const hasGps = gpsReis.length > 0
   const first = hasGps ? gpsReis[0] : null
 
-  // label = бортовой номер, vehicle_id = внутренний код — пробуем оба как в LiveMap
   const label = first?.label || ''
   const vehicleId = first?.vehicle_id || ''
   const model = getModel(vehicleId, label, transportType)
