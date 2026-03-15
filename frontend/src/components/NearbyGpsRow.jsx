@@ -86,7 +86,7 @@ const getModel = (vehicleId, label, licensePlate, typeHint) => {
 }
 
 // ── Компонент ────────────────────────────────────────────────────────────────
-function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
+function NearbyGpsRow({ stopId, routeId, direction, transportType, usedVehicles }) {
   const [forecasts, setForecasts] = useState(undefined)
   const [, setTick] = useState(0)
 
@@ -108,7 +108,8 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
     ? forecasts.filter(f => {
         if (f.arrival_time <= now) return false
         if (String(f.route_id) !== String(routeId)) return false
-        // Фильтр по direction только если direction_id реально пришёл с сервера
+        // direction_id из GTFS-RT СПб не приходит (trip_id пустой),
+        // поэтому фильтруем только если он реально есть
         if (
           direction !== undefined && direction !== null &&
           f.direction_id !== undefined && f.direction_id !== null
@@ -119,8 +120,17 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
       }).sort((a, b) => a.arrival_time - b.arrival_time)
     : []
 
-  const hasGps = gpsReis.length > 0
-  const first = hasGps ? gpsReis[0] : null
+  // Берём первый рейс чей vehicle_id ещё не занят другой карточкой этой остановки.
+  // usedVehicles — синхронный Set из App.jsx, общий для всех карточек одной остановки.
+  let first = null
+  for (const f of gpsReis) {
+    const vid = f.vehicle_id || f.label || ''
+    if (usedVehicles && usedVehicles.has(vid)) continue
+    first = f
+    if (usedVehicles && vid) usedVehicles.add(vid)
+    break
+  }
+  const hasGps = first !== null
 
   const label = first?.label || ''
   const vehicleId = first?.vehicle_id || ''
