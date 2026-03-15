@@ -53,18 +53,45 @@ def _get_model(label: str, transport_type: str = "") -> str:
     if not label or not _VEHICLES_DB:
         return ""
     label = str(label).strip()
-    # Ищем в нужном разделе сначала, потом во всех
-    sections = []
-    if transport_type == "tram":
-        sections = ["tram", "bus", "trolley"]
-    elif transport_type == "trolley":
-        sections = ["trolley", "bus", "tram"]
-    else:
-        sections = ["bus", "tram", "trolley"]
+    stripped = label.lstrip("0") or label
+    sections = (
+        ["tram", "bus", "trolley"] if transport_type == "tram"
+        else ["trolley", "bus", "tram"] if transport_type == "trolley"
+        else ["bus", "tram", "trolley"]
+    )
     for section in sections:
-        entry = _VEHICLES_DB.get(section, {}).get(label)
+        db = _VEHICLES_DB.get(section, {})
+        entry = db.get(label) or db.get(stripped)
         if entry and entry.get("model"):
             return entry["model"]
+    return ""
+
+def _get_model_by_plate(plate: str, transport_type: str = "") -> str:
+    """Получить модель ТС по гос.номеру — приоритетный метод (как в LiveMap)"""
+    if not plate or not _VEHICLES_DB:
+        return ""
+    # Нормализация: убираем пробелы, Latin → Cyrillic (как во фронтенде)
+    LATIN_TO_CYR = {"A":"А","B":"В","E":"Е","K":"К","M":"М","H":"Н",
+                    "O":"О","P":"Р","C":"С","T":"Т","Y":"У","X":"Х"}
+    norm = "".join(LATIN_TO_CYR.get(c, c) for c in plate.replace(" ", "").upper())
+    # Ищем в bus_plates индексе если есть
+    bus_plates = _VEHICLES_DB.get("bus_plates", {})
+    if norm in bus_plates:
+        entry = bus_plates[norm]
+        return entry.get("model", "") if isinstance(entry, dict) else ""
+    # Fallback: перебираем все разделы
+    sections = (
+        ["tram", "bus", "trolley"] if transport_type == "tram"
+        else ["trolley", "bus", "tram"] if transport_type == "trolley"
+        else ["bus", "tram", "trolley"]
+    )
+    for section in sections:
+        for entry in _VEHICLES_DB.get(section, {}).values():
+            if isinstance(entry, dict):
+                ep = entry.get("plate", "")
+                ep_norm = "".join(LATIN_TO_CYR.get(c, c) for c in ep.replace(" ", "").upper())
+                if ep_norm == norm and entry.get("model"):
+                    return entry["model"]
     return ""
 
 # =============================================================================
@@ -593,20 +620,33 @@ async def rt_forecast(stop_id: str):
                 vid_to_label[vid] = lbl
             eid_to_label[str(eid)] = lbl
 
-        for f in forecasts:
-            if f.get("label"):
-                continue  # уже есть
-            vid = str(f.get("vehicle_id", ""))
-            # Пробуем по vehicle_id, затем по entity_id (иногда совпадают)
-            lbl = vid_to_label.get(vid) or eid_to_label.get(vid)
-            if lbl:
-                f["label"] = lbl
+        # Строим индекс vehicle_id/entity_id → license_plate тоже
+        vid_to_plate = {}
+        eid_to_plate = {}
+        for eid, veh in veh_pos.items():
+            plate = str(veh.get("license_plate", ""))
+            vid = str(veh.get("vehicle_id", ""))
+            if plate:
+                if vid:
+                    vid_to_plate[vid] = plate
+                eid_to_plate[str(eid)] = plate
 
-        # Обогащаем model из vehicles.json по бортовому номеру (label)
         for f in forecasts:
-            lbl = f.get("label", "")
-            if lbl and not f.get("model"):
-                f["model"] = _get_model(lbl, f.get("transport_type", ""))
+            vid = str(f.get("vehicle_id", ""))
+            lbl = vid_to_label.get(vid) or eid_to_label.get(vid)
+            if lbl and not f.get("label"):
+                f["label"] = lbl
+            plate = vid_to_plate.get(vid) or eid_to_plate.get(vid)
+            if plate and not f.get("license_plate"):
+                f["license_plate"] = plate
+
+        # Обогащаем model из vehicles.json — приоритет: гос.номер → бортовой
+        for f in forecasts:
+            if f.get("model"):
+                continue
+            f["model"] = _get_model_by_plate(
+                f.get("license_plate", ""), f.get("transport_type", "")
+            ) or _get_model(f.get("label", ""), f.get("transport_type", ""))
 
         return {
             "stop_id": stop_id,

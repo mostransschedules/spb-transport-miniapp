@@ -46,6 +46,14 @@ const subscribe = (stopId, cb) => {
 }
 
 // ── Поиск модели ТС (как в LiveMap) ─────────────────────────────────────────
+// Нормализация гос.номера: Latin → Cyrillic, убираем пробелы
+const LATIN_TO_CYR = {A:'А',B:'В',E:'Е',K:'К',M:'М',H:'Н',O:'О',P:'Р',C:'С',T:'Т',Y:'У',X:'Х'}
+const normPlate = (s) => {
+  if (!s) return ''
+  return (s + '').replace(/\s+/g, '').toUpperCase().split('').map(c => LATIN_TO_CYR[c] || c).join('')
+}
+const getPlateIdx = () => vehiclesDb.bus_plates || {}
+
 const lookupByLabel = (label, typeHint) => {
   if (!label) return null
   const key = String(label).trim()
@@ -64,7 +72,15 @@ const lookupByLabel = (label, typeHint) => {
   return vehiclesDb[key] || vehiclesDb[stripped] || null
 }
 
-const getModel = (vehicleId, label, typeHint) => {
+const getModel = (vehicleId, label, licensePlate, typeHint) => {
+  // Приоритет: гос.номер (точная идентификация) → бортовой → vehicleId
+  if (licensePlate) {
+    const norm = normPlate(licensePlate)
+    if (norm.length > 3) {
+      const found = getPlateIdx()[norm]
+      if (found?.model) return found.model
+    }
+  }
   const info = lookupByLabel(label, typeHint) || lookupByLabel(vehicleId, typeHint)
   return info?.model || ''
 }
@@ -108,9 +124,10 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
 
   const label = first?.label || ''
   const vehicleId = first?.vehicle_id || ''
-  const model = getModel(vehicleId, label, transportType)
+  const licensePlate = first?.license_plate || ''
+  const model = getModel(vehicleId, label, licensePlate, transportType)
   // DEBUG — убрать после диагностики
-  if (first) console.log('[NGR]', routeId, { label, vehicleId, model, transport_type: first.transport_type, direction_id: first.direction_id })
+  // DEBUG убрать после диагностики
 
   if (!hasGps) {
     return (
