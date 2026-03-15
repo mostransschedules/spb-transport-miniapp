@@ -109,6 +109,8 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType }) {
   const label = first?.label || ''
   const vehicleId = first?.vehicle_id || ''
   const model = getModel(vehicleId, label, transportType)
+  // DEBUG — убрать после диагностики
+  if (first) console.log('[NGR]', routeId, { label, vehicleId, model, transport_type: first.transport_type, direction_id: first.direction_id })
 
   if (!hasGps) {
     return (
