@@ -455,41 +455,6 @@ async def rt_vehicles(
     except Exception as e:
         print(f"⚠️ vehicle enrich error: {e}")
 
-    # Обогащаем label (бортовой) и model из vehicles.json
-    try:
-        import json, os
-        vj_path = os.path.join(os.path.dirname(__file__), '..', 'frontend', 'src', 'vehicles.json')
-        if not os.path.exists(vj_path):
-            vj_path = os.path.join(os.path.dirname(__file__), 'vehicles.json')
-        if os.path.exists(vj_path):
-            with open(vj_path, encoding='utf-8') as f:
-                vdb = json.load(f)
-            plates_idx = vdb.get('bus_plates', {})
-            type_dicts = {
-                'bus': vdb.get('bus', {}),
-                'tram': vdb.get('tram', {}),
-                'trolley': vdb.get('trolley', {}),
-            }
-            for v in vehicles:
-                lbl = v.get('label', '')
-                tt  = v.get('transport_type', 'bus')
-                model = ''
-                if lbl:
-                    d = type_dicts.get(tt, type_dicts['bus'])
-                    entry = d.get(str(lbl))
-                    if entry:
-                        model = entry.get('model', '')
-                if not model and lbl:
-                    for d in type_dicts.values():
-                        e = d.get(str(lbl))
-                        if e:
-                            model = e.get('model', '')
-                            break
-                if model:
-                    v['model'] = model
-    except Exception as e2:
-        print(f"⚠️ vehicles.json enrich error: {e2}")
-
     return {
         "vehicles": vehicles,
         "count": len(vehicles),
