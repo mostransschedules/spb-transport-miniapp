@@ -1,18 +1,20 @@
 // NearbyGpsRow — GPS/РАСПИСАНИЕ строка
-// Кэш общий на stopId: один fetch на остановку, все карточки используют его
+// Дедупликация бортовых: СПб GTFS-RT не передаёт direction_id/trip_id,
+// поэтому один автобус может появиться в нескольких карточках одной остановки.
+// Решение: модуль-уровневый Map stopId → { cardKey → vehicle_id },
+// каждая карточка берёт первый рейс чей vehicle_id не занят другой карточкой.
 import { useState, useEffect } from 'react'
 import vehiclesDb from '../vehicles.json'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
-// ── Кэш и подписки ──────────────────────────────────────────────────────────
-// _loading: защита от параллельных запросов к одному stopId
-const _cache = {}     // stopId → { data, ts }
-const _listeners = {} // stopId → Set<cb>
-const _loading = {}   // stopId → boolean
+// ── Кэш forecast ─────────────────────────────────────────────────────────────
+const _cache = {}
+const _listeners = {}
+const _loading = {}
 
 const _load = async (stopId) => {
-  if (_loading[stopId]) return          // уже грузится — не дублируем запрос
+  if (_loading[stopId]) return
   _loading[stopId] = true
   try {
     const resp = await fetch(`${API_URL}/api/realtime/forecast/${stopId}`)
@@ -30,14 +32,12 @@ const _load = async (stopId) => {
 const subscribe = (stopId, cb) => {
   if (!_listeners[stopId]) _listeners[stopId] = new Set()
   _listeners[stopId].add(cb)
-
   const cached = _cache[stopId]
   if (cached && Date.now() - cached.ts < 30000) {
     cb(cached.data)
   } else {
     _load(stopId)
   }
-
   const iv = setInterval(() => _load(stopId), 30000)
   return () => {
     _listeners[stopId]?.delete(cb)
@@ -45,8 +45,31 @@ const subscribe = (stopId, cb) => {
   }
 }
 
+// ── Дедупликация: stopId → Map<cardKey, vehicleId> ───────────────────────────
+// Когда карточка выбирает рейс — регистрирует vehicle_id.
+// Следующая карточка той же остановки пропускает занятые vehicle_id.
+const _claimedVehicles = {} // stopId → Map<cardKey, vehicleId>
+
+const claimVehicle = (stopId, cardKey, vehicleId) => {
+  if (!_claimedVehicles[stopId]) _claimedVehicles[stopId] = new Map()
+  _claimedVehicles[stopId].set(cardKey, vehicleId)
+}
+
+const getClaimedVehicles = (stopId, ownCardKey) => {
+  const m = _claimedVehicles[stopId]
+  if (!m) return new Set()
+  const result = new Set()
+  for (const [k, v] of m.entries()) {
+    if (k !== ownCardKey) result.add(v)
+  }
+  return result
+}
+
+const releaseVehicle = (stopId, cardKey) => {
+  _claimedVehicles[stopId]?.delete(cardKey)
+}
+
 // ── Поиск модели ТС (как в LiveMap) ─────────────────────────────────────────
-// Нормализация гос.номера: Latin → Cyrillic, убираем пробелы
 const LATIN_TO_CYR = {A:'А',B:'В',E:'Е',K:'К',M:'М',H:'Н',O:'О',P:'Р',C:'С',T:'Т',Y:'У',X:'Х'}
 const normPlate = (s) => {
   if (!s) return ''
@@ -73,7 +96,6 @@ const lookupByLabel = (label, typeHint) => {
 }
 
 const getModel = (vehicleId, label, licensePlate, typeHint) => {
-  // Приоритет: гос.номер (точная идентификация) → бортовой → vehicleId
   if (licensePlate) {
     const norm = normPlate(licensePlate)
     if (norm.length > 3) {
@@ -86,7 +108,7 @@ const getModel = (vehicleId, label, licensePlate, typeHint) => {
 }
 
 // ── Компонент ────────────────────────────────────────────────────────────────
-function NearbyGpsRow({ stopId, routeId, direction, transportType, usedVehicles }) {
+function NearbyGpsRow({ stopId, routeId, direction, transportType, cardKey }) {
   const [forecasts, setForecasts] = useState(undefined)
   const [, setTick] = useState(0)
 
@@ -97,47 +119,43 @@ function NearbyGpsRow({ stopId, routeId, direction, transportType, usedVehicles 
     }
     const unsub = subscribe(stopId, setForecasts)
     const iv = setInterval(() => setTick(t => t + 1), 1000)
-    return () => { unsub(); clearInterval(iv) }
-  }, [stopId])
+    return () => {
+      unsub()
+      clearInterval(iv)
+      // Освобождаем vehicle_id когда карточка размонтируется
+      if (cardKey) releaseVehicle(stopId, cardKey)
+    }
+  }, [stopId, cardKey])
 
   if (forecasts === undefined) return null
 
   const now = Math.floor(Date.now() / 1000)
 
-  const gpsReis = forecasts
+  const candidates = forecasts
     ? forecasts.filter(f => {
         if (f.arrival_time <= now) return false
         if (String(f.route_id) !== String(routeId)) return false
-        // direction_id из GTFS-RT СПб не приходит (trip_id пустой),
-        // поэтому фильтруем только если он реально есть
-        if (
-          direction !== undefined && direction !== null &&
-          f.direction_id !== undefined && f.direction_id !== null
-        ) {
-          if (Number(f.direction_id) !== Number(direction)) return false
-        }
         return true
       }).sort((a, b) => a.arrival_time - b.arrival_time)
     : []
 
-  // Берём первый рейс чей vehicle_id ещё не занят другой карточкой этой остановки.
-  // usedVehicles — синхронный Set из App.jsx, общий для всех карточек одной остановки.
+  // Берём первый рейс чей vehicle_id не занят другой карточкой этой остановки
+  const claimed = cardKey ? getClaimedVehicles(stopId, cardKey) : new Set()
   let first = null
-  for (const f of gpsReis) {
+  for (const f of candidates) {
     const vid = f.vehicle_id || f.label || ''
-    if (usedVehicles && usedVehicles.has(vid)) continue
+    if (vid && claimed.has(vid)) continue
     first = f
-    if (usedVehicles && vid) usedVehicles.add(vid)
+    // Регистрируем выбор
+    if (cardKey && vid) claimVehicle(stopId, cardKey, vid)
     break
   }
-  const hasGps = first !== null
 
+  const hasGps = first !== null
   const label = first?.label || ''
   const vehicleId = first?.vehicle_id || ''
   const licensePlate = first?.license_plate || ''
   const model = getModel(vehicleId, label, licensePlate, transportType)
-  // DEBUG — убрать после диагностики
-  // DEBUG убрать после диагностики
 
   if (!hasGps) {
     return (

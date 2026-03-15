@@ -1829,39 +1829,32 @@ function App() {
 
                   {/* Карточки маршрутов — каждая отдельно */}
                   <div className="nearby-cards">
-                    {(() => {
-                      // usedVehicles: синхронный Set занятых vehicle_id для этой остановки.
-                      // СПб GTFS-RT не передаёт direction_id/trip_id, поэтому один автобус
-                      // может появиться в нескольких карточках. Передаём Set в каждую карточку
-                      // чтобы она взяла следующий незанятый рейс и зарегистрировала свой выбор.
-                      const usedVehicles = new Set()
-                      return visibleRoutes.map(route => {
-                        const key = `${stop.stop_name}|${route.route_id}|${route.direction}`
-                        const dep = nearbyDepartures[key]
-                        const diffMin = dep?.diffMin ?? null
-                        const typeClass = getRouteTypeClass(route)
-                        return (
-                          <div key={key} className="nearby-card"
-                            onClick={() => navigateToStopSchedule(stop.stop_name, route, route.direction)}>
-                            <div className="nearby-card-top">
-                              <span className={`nearby-chip ${typeClass}`}>{route.route_short_name}</span>
-                              <span className="nearby-card-dest">→ {route.gKey}</span>
-                              <span className="nearby-card-min">
-                                {diffMin === null ? '' : diffMin === 0 ? 'сейчас' : `${diffMin} мин`}
-                                <span className="nearby-card-chevron"> ›</span>
-                              </span>
-                            </div>
-                            <NearbyGpsRow
-                              stopId={stop.stop_id ? String(stop.stop_id) : 'none'}
-                              routeId={String(route.route_id)}
-                              direction={route.direction}
-                              transportType={route.transport_type}
-                              usedVehicles={usedVehicles}
-                            />
+                    {visibleRoutes.map(route => {
+                      const key = `${stop.stop_name}|${route.route_id}|${route.direction}`
+                      const dep = nearbyDepartures[key]
+                      const diffMin = dep?.diffMin ?? null
+                      const typeClass = getRouteTypeClass(route)
+                      return (
+                        <div key={key} className="nearby-card"
+                          onClick={() => navigateToStopSchedule(stop.stop_name, route, route.direction)}>
+                          <div className="nearby-card-top">
+                            <span className={`nearby-chip ${typeClass}`}>{route.route_short_name}</span>
+                            <span className="nearby-card-dest">→ {route.gKey}</span>
+                            <span className="nearby-card-min">
+                              {diffMin === null ? '' : diffMin === 0 ? 'сейчас' : `${diffMin} мин`}
+                              <span className="nearby-card-chevron"> ›</span>
+                            </span>
                           </div>
-                        )
-                      })
-                    })()}
+                          <NearbyGpsRow
+                            stopId={stop.stop_id ? String(stop.stop_id) : 'none'}
+                            routeId={String(route.route_id)}
+                            direction={route.direction}
+                            transportType={route.transport_type}
+                            cardKey={key}
+                          />
+                        </div>
+                      )
+                    })}
                   </div>
 
                   {allRoutes.length > MAX_ROUTES && !isExpanded && (
